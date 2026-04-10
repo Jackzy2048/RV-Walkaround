@@ -92,6 +92,17 @@
     .help-badge.red{border-color:#4a1010;color:var(--red)}
     .help-badge.green{border-color:var(--green-dim);color:var(--green)}
 
+    /* SPLASH SCREEN */
+    #splash{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .5s ease}
+    #splash.hidden{opacity:0;pointer-events:none}
+    .splash-emoji{font-size:72px;animation:splash-bounce .6s ease}
+    @keyframes splash-bounce{0%{transform:scale(.7);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+    .splash-title{font-family:var(--display);font-size:52px;letter-spacing:4px;color:#fff;line-height:1}
+    .splash-sub{font-family:var(--mono);font-size:11px;letter-spacing:3px;color:var(--amber);text-transform:uppercase}
+    .splash-bar{width:120px;height:2px;background:var(--border);margin-top:8px;overflow:hidden;border-radius:2px}
+    .splash-bar-fill{height:100%;background:var(--amber);animation:splash-load 1.2s ease forwards}
+    @keyframes splash-load{from{width:0}to{width:100%}}
+
     /* WAKE LOCK BUTTON */
     .wake-btn{padding:10px 16px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
     .wake-btn.active{border-color:var(--amber);color:var(--amber)}
@@ -215,37 +226,38 @@
     .sub-card.morning .sub-tag{border-color:var(--amber-dim);color:var(--amber)}
 
     /* BREADCRUMB */
-    .breadcrumb{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+    .breadcrumb{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:2px;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
     .breadcrumb span{color:var(--amber)}
 
     /* STATUS BAR */
     .status-bar{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:1.5rem}
     .stat{background:var(--panel);border:1px solid var(--border);padding:10px 12px;position:relative}
-    .stat-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+    .stat-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
     .stat-value{font-family:var(--display);font-size:22px;color:var(--amber);line-height:1}
     .stat-value.green{color:var(--green)} .stat-value.red{color:var(--red)}
     .stat-dot{position:absolute;top:8px;right:8px;width:6px;height:6px;border-radius:50%;background:var(--amber);animation:blink 2s infinite}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
     /* SECTION LABEL */
-    .section-label{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--amber);text-transform:uppercase;padding:6px 0 6px 2px;margin-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-    .section-label::before{content:'▶';font-size:7px}
+    .section-label{font-family:var(--mono);font-size:11px;letter-spacing:3px;color:var(--amber);text-transform:uppercase;padding:6px 0 6px 2px;margin-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+    .section-label::before{content:'▶';font-size:8px}
 
     /* ITEM */
     .item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-left:3px solid transparent;background:var(--panel);margin-bottom:6px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;touch-action:pan-y;user-select:none}
     .item:hover{background:#161e28;border-color:#2a3d52;border-left-color:var(--amber)}
     .item.checked{border-color:var(--green-dim);border-left-color:var(--green);background:rgba(0,230,118,.04)}
     .item.swiping{background:rgba(0,230,118,.08)}
-    .item-num{font-family:var(--mono);font-size:10px;color:var(--muted);min-width:22px;flex-shrink:0}
+    .item.swiping-left{background:rgba(255,68,68,.08)}
+    .item-num{font-family:var(--mono);font-size:11px;color:var(--muted);min-width:22px;flex-shrink:0}
     .item.checked .item-num{color:var(--green-dim)}
-    .check-box{width:20px;height:20px;border:1px solid var(--muted);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+    .check-box{width:22px;height:22px;border:1px solid var(--muted);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
     .item.checked .check-box{border-color:var(--green);background:var(--green)}
     .check-icon{display:none} .item.checked .check-icon{display:block}
     .item-body{flex:1;min-width:0}
-    .label{font-size:13px;color:var(--text);letter-spacing:.3px;text-transform:uppercase;font-family:var(--mono)}
+    .label{font-size:14px;color:var(--text);letter-spacing:.3px;text-transform:uppercase;font-family:var(--mono)}
     .item.checked .label{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--green-dim)}
-    .item-note{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .item-status{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);flex-shrink:0}
+    .item-note{font-size:12px;color:var(--muted);font-family:var(--mono);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .item-status{font-family:var(--mono);font-size:11px;letter-spacing:1px;color:var(--muted);flex-shrink:0}
     .note-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:4px 6px;transition:color .15s;flex-shrink:0;-webkit-tap-highlight-color:transparent}
     .note-btn:hover{color:var(--amber)}
 
@@ -351,6 +363,14 @@
 <body>
 
 <canvas id="confetti-canvas"></canvas>
+
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <div class="splash-emoji">🚐</div>
+  <div class="splash-title">RV WALKAROUND</div>
+  <div class="splash-sub">NZ South Island Expedition</div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
 
 <!-- NOTE MODAL -->
 <div class="modal-overlay" id="noteModal">
@@ -480,7 +500,7 @@
     <div class="home-btns">
       <div class="home-btn" onclick="showScreen('screen-log')">📋 Trip Log</div>
       <div class="home-btn" onclick="showScreen('screen-stats')">📊 Stats</div>
-      <div class="home-btn" onclick="showScreen('screen-editor')">✏️ Edit Lists</div>
+      <div class="home-btn" onclick="showScreen('screen-editor')">✏️ Customise</div>
       <div class="home-btn" onclick="showScreen('screen-help')">❓ Help</div>
       <div class="home-btn" style="border-color:#4a1010;color:var(--red)" onclick="openConfirmReset()">⚠️ Factory Reset</div>
     </div>
@@ -604,7 +624,7 @@
   <div class="cockpit">
     <div class="header">
       <div class="airline-tag">Checklist Editor</div>
-      <div class="header-title">EDIT LISTS</div>
+      <div class="header-title">CUSTOMISE</div>
       <div class="header-sub">ADD · REMOVE · REORDER YOUR CHECKLIST ITEMS</div>
       <div class="header-rv">✏️</div>
     </div>
@@ -697,7 +717,7 @@
       </div>
       <div class="help-item">
         <div class="help-item-title"><b>Required items ★</b></div>
-        <div class="help-item-desc">Items marked with a <b>★</b> in red are critical — the checklist won't show as complete until every required item is ticked. You can change which items are required in Edit Lists.</div>
+        <div class="help-item-desc">Items marked with a <b>★</b> in red are critical — the checklist won't show as complete until every required item is ticked. You can change which items are required in Customise.</div>
       </div>
       <div class="help-item">
         <div class="help-item-title"><b>Item notes</b></div>
@@ -726,10 +746,10 @@
     </div>
 
     <div class="help-section">
-      <div class="help-section-title">✏️ Edit Lists</div>
+      <div class="help-section-title">✏️ Customise</div>
       <div class="help-item">
         <div class="help-item-title"><b>Customising checklists</b></div>
-        <div class="help-item-desc">Go to <b>Edit Lists</b> from the home screen. Pick a checklist from the dropdown, then edit any item text, delete items with ✕, or add new ones with <b>+ Add item</b>. Hit <b>💾 Save changes</b> when done.</div>
+        <div class="help-item-desc">Go to <b>Customise</b> from the home screen. Pick a checklist from the dropdown, then edit any item text, delete items with ✕, or add new ones with <b>+ Add item</b>. Hit <b>💾 Save changes</b> when done.</div>
       </div>
       <div class="help-item">
         <div class="help-item-title"><b>Setting required items</b></div>
@@ -1140,19 +1160,31 @@ function setupSwipe(div, label) {
   div.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; tracking = true; }, {passive:true});
   div.addEventListener('touchmove', e => {
     if (!tracking) return;
-    if (Math.abs(e.touches[0].clientY - startY) > 20) { tracking = false; div.classList.remove('swiping'); return; }
-    if (e.touches[0].clientX - startX > 20) div.classList.add('swiping');
-    else div.classList.remove('swiping');
+    if (Math.abs(e.touches[0].clientY - startY) > 20) { tracking = false; div.classList.remove('swiping'); div.classList.remove('swiping-left'); return; }
+    const dx = e.touches[0].clientX - startX;
+    if (dx > 20) { div.classList.add('swiping'); div.classList.remove('swiping-left'); }
+    else if (dx < -20) { div.classList.add('swiping-left'); div.classList.remove('swiping'); }
+    else { div.classList.remove('swiping'); div.classList.remove('swiping-left'); }
   }, {passive:true});
   div.addEventListener('touchend', e => {
-    div.classList.remove('swiping');
-    if (tracking && e.changedTouches[0].clientX - startX > 60 && !itemState[label]) {
+    div.classList.remove('swiping'); div.classList.remove('swiping-left');
+    const dx = e.changedTouches[0].clientX - startX;
+    if (tracking && dx > 60 && !itemState[label]) {
+      // Swipe right → check
       itemState[label] = true;
       div.className = itemClass(label, true);
       const num = div.querySelector('.item-num').textContent;
       div.innerHTML = itemInnerHTML(label, num, true);
       setupItemEvents(div, label);
       playDing(); updateStats(); saveToStorage();
+    } else if (tracking && dx < -60 && itemState[label]) {
+      // Swipe left → uncheck
+      itemState[label] = false;
+      div.className = itemClass(label, false);
+      const num = div.querySelector('.item-num').textContent;
+      div.innerHTML = itemInnerHTML(label, num, false);
+      setupItemEvents(div, label);
+      haptic('light'); updateStats(); saveToStorage();
     }
     tracking = false;
   }, {passive:true});
@@ -1238,7 +1270,7 @@ function renderChecklist() {
     CHECKLISTS[currentType].title + ' <span>›</span> ' + sm.label;
 
   const hasTouch = navigator.maxTouchPoints > 0;
-  let html = hasTouch ? '<div class="swipe-hint">← swipe right on any item to check it</div>' : '';
+  let html = hasTouch ? '<div class="swipe-hint">→ swipe right to check · swipe left to uncheck</div>' : '';
   let globalNum = 1;
   Object.entries(sm.sections).forEach(([sec, items]) => {
     const secId = 'sec_' + sec.replace(/\s+/g,'_');
@@ -1327,7 +1359,10 @@ function checkAllSection(sec) {
   const sm = CHECKLISTS[currentType].submodes[currentSubmode];
   const items = sm.sections[sec];
   if (!items) return;
-  items.forEach(label => { itemState[label] = true; });
+  const required = sm.required || [];
+  items.forEach(label => {
+    if (!required.includes(label)) itemState[label] = true;
+  });
   haptic('light');
   saveToStorage();
   renderChecklist();
@@ -1568,7 +1603,7 @@ const TUTORIAL_STEPS = [
     screen: 'screen-type',
     tag: 'Home Screen · 6 of 11',
     title: 'HOME BUTTONS',
-    body: `<b>📋 Trip Log</b> — every completed checklist, with journal entries, ratings and notes.<br><b>📊 Stats</b> — deeper breakdown of your trip data.<br><b>✏️ Edit Lists</b> — customise any checklist item, or toggle required items.<br><b>❓ Help</b> — this guide, anytime.<br><br><span class="tut-tip">💡 Factory Reset is there too — wipes everything for a fresh start.</span>`
+    body: `<b>📋 Trip Log</b> — every completed checklist, with journal entries, ratings and notes.<br><b>📊 Stats</b> — deeper breakdown of your trip data.<br><b>✏️ Customise</b> — customise any checklist item, or toggle required items.<br><b>❓ Help</b> — this guide, anytime.<br><br><span class="tut-tip">💡 Factory Reset is there too — wipes everything for a fresh start.</span>`
   },
   {
     target: '.theme-toggle',
@@ -1906,9 +1941,16 @@ renderHomeStats();
 renderGasBtn();
 fetchWeather();
 
+// Dismiss splash after 1.4s (matches loading bar animation)
+setTimeout(() => {
+  const splash = document.getElementById('splash');
+  splash.classList.add('hidden');
+  setTimeout(() => splash.style.display = 'none', 500);
+}, 1400);
+
 // Show tutorial on first launch
 if (!localStorage.getItem('rv_tutorial_done')) {
-  setTimeout(startTutorial, 600);
+  setTimeout(startTutorial, 2000);
 }
 
 // ── PWA SERVICE WORKER (inline — no extra file needed) ──
