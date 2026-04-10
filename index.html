@@ -52,6 +52,46 @@
     .gas-btn.off{border-color:var(--green);background:rgba(0,230,118,.06);color:var(--green)}
     .gas-status{font-size:10px;letter-spacing:3px;display:block;margin-top:4px;opacity:.8}
 
+    /* TUTORIAL SPOTLIGHT */
+    .tut-backdrop{display:none;position:fixed;inset:0;z-index:490;pointer-events:none}
+    .tut-backdrop.open{display:block}
+    .tut-highlight{position:fixed;border-radius:6px;border:2px solid var(--amber);z-index:492;pointer-events:none;opacity:0;transition:opacity .25s ease, left .3s ease, top .3s ease, width .3s ease, height .3s ease;box-shadow:0 0 0 9999px rgba(0,0,0,.82)}
+    .tut-highlight.visible{opacity:1}
+    .tut-pulse-ring{position:absolute;inset:-3px;border-radius:7px;border:2px solid var(--amber);animation:tut-pulse 1.4s infinite;pointer-events:none}
+    @keyframes tut-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.04)}}
+    .tut-arrow{position:fixed;width:0;height:0;z-index:494;opacity:0;transition:opacity .22s ease}
+    .tut-arrow.visible{opacity:1}
+    .tut-arrow.down{border-left:10px solid transparent;border-right:10px solid transparent;border-top:12px solid var(--amber)}
+    .tut-arrow.up{border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:12px solid var(--amber)}
+    .tut-card{position:fixed;left:50%;transform:translateX(-50%);z-index:495;width:calc(100% - 2rem);max-width:520px;max-height:55vh;overflow-y:auto;background:var(--panel);border:1px solid var(--border);border-top:3px solid var(--amber);padding:1.25rem 1.25rem 1rem;display:none;opacity:0;transition:opacity .25s ease}
+    .tut-card.open{display:block}
+    .tut-card.visible{opacity:1}
+    /* suppress screen transition animation while tutorial is running */
+    body.tutorial-active .screen.active{animation:none !important}
+    .tut-step-tag{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--amber);text-transform:uppercase;margin-bottom:6px}
+    .tut-title{font-family:var(--display);font-size:26px;color:#fff;letter-spacing:2px;margin-bottom:8px;line-height:1.1}
+    .tut-body{font-family:var(--mono);font-size:11px;color:var(--text);letter-spacing:.4px;line-height:1.85;margin-bottom:1rem}
+    .tut-body b{color:var(--amber)}
+    .tut-tip{display:block;margin-top:8px;padding:6px 10px;border-left:2px solid var(--amber);color:var(--muted);font-size:10px;font-family:var(--mono)}
+    .tut-dots{display:flex;gap:5px;justify-content:center;margin-bottom:.85rem}
+    .tut-dot{width:5px;height:5px;border-radius:50%;background:var(--border);transition:background .2s}
+    .tut-dot.active{background:var(--amber)}
+    .tut-btns{display:flex;gap:8px}
+    .tut-next{flex:1;padding:10px;border:1px solid var(--amber);background:transparent;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+    .tut-next:hover{background:rgba(245,166,35,.1)}
+    .tut-skip{padding:10px 14px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent}
+
+    /* HELP SCREEN */
+    .help-section{margin-bottom:1.75rem}
+    .help-section-title{font-family:var(--display);font-size:22px;color:var(--amber);letter-spacing:2px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+    .help-item{margin-bottom:12px}
+    .help-item-title{font-family:var(--mono);font-size:11px;color:var(--text);letter-spacing:1px;margin-bottom:3px}
+    .help-item-title b{color:var(--amber)}
+    .help-item-desc{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.5px;line-height:1.8}
+    .help-badge{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:2px 7px;border:1px solid var(--amber-dim);color:var(--amber);margin-right:4px;margin-bottom:4px}
+    .help-badge.red{border-color:#4a1010;color:var(--red)}
+    .help-badge.green{border-color:var(--green-dim);color:var(--green)}
+
     /* WAKE LOCK BUTTON */
     .wake-btn{padding:10px 16px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
     .wake-btn.active{border-color:var(--amber);color:var(--amber)}
@@ -441,6 +481,7 @@
       <div class="home-btn" onclick="showScreen('screen-log')">📋 Trip Log</div>
       <div class="home-btn" onclick="showScreen('screen-stats')">📊 Stats</div>
       <div class="home-btn" onclick="showScreen('screen-editor')">✏️ Edit Lists</div>
+      <div class="home-btn" onclick="showScreen('screen-help')">❓ Help</div>
       <div class="home-btn" style="border-color:#4a1010;color:var(--red)" onclick="openConfirmReset()">⚠️ Factory Reset</div>
     </div>
     <div class="theme-toggle">
@@ -579,6 +620,147 @@
     </div>
     <div id="editor-body"></div>
     <button class="back-btn" style="width:100%;margin-top:1rem" onclick="showScreen('screen-type')">← Back</button>
+    <div class="footer">RV-SI · SOUTH ISLAND EXPEDITION</div>
+  </div>
+</div>
+
+<!-- TUTORIAL SPOTLIGHT -->
+<div class="tut-backdrop" id="tut-backdrop"></div>
+<div class="tut-highlight" id="tut-highlight"><div class="tut-pulse-ring"></div></div>
+<div class="tut-arrow" id="tut-arrow"></div>
+<div class="tut-card" id="tut-card">
+  <div class="tut-step-tag" id="tut-tag"></div>
+  <div class="tut-title" id="tut-title"></div>
+  <div class="tut-body" id="tut-body"></div>
+  <div class="tut-dots" id="tut-dots"></div>
+  <div class="tut-btns">
+    <button class="tut-skip" id="tut-skip" onclick="closeTutorial()">Skip</button>
+    <button class="tut-next" id="tut-next" onclick="tutorialNext()">Next →</button>
+  </div>
+</div>
+
+<!-- SCREEN 7: HELP -->
+<div class="screen" id="screen-help">
+  <div class="cockpit">
+    <div class="header">
+      <div class="airline-tag">RV Walkaround</div>
+      <div class="header-title">HELP & GUIDE</div>
+      <div class="header-sub">EVERYTHING YOU NEED TO KNOW</div>
+      <div class="header-rv">❓</div>
+    </div>
+
+    <div class="help-section">
+      <div class="help-section-title">🏠 Home Screen</div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Rego plate</b></div>
+        <div class="help-item-desc">Enter your RV's plate number. It shows in the header and appears in shared trip logs.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Gas status button</b></div>
+        <div class="help-item-desc">Tap when you turn the gas on — it glows amber. Tap again when you turn it off — it turns green. Always know your gas state before doing a night or departure checklist.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Weather strip</b></div>
+        <div class="help-item-desc">Shows live conditions, wind speed, and whether the awning is safe to put out. Also shows today's sunrise and sunset times. Uses your GPS location automatically — or type a town name in the search bar to look it up manually.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Trip Day / Streak / Total</b></div>
+        <div class="help-item-desc">Trip Day counts up from your first ever completed checklist. Depart Streak tracks how many days in a row you've done a departure or pull-out check. Total is every checklist you've ever completed.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Dark / Light mode</b></div>
+        <div class="help-item-desc">Toggle between dark cockpit mode and light mode. Your preference is saved — dark is recommended at night to protect your eyes.</div>
+      </div>
+    </div>
+
+    <div class="help-section">
+      <div class="help-section-title">✅ Checklists</div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Campsite to Campsite</b></div>
+        <div class="help-item-desc">Four modes for a full campsite stay:<br>
+          <span class="help-badge green">ARRIVE & SET UP</span> — pull up and get settled in.<br>
+          <span class="help-badge red">PACK UP & DEPART</span> — full check before rolling.<br>
+          <span class="help-badge">SECURE FOR NIGHT</span> — lock up and wind down.<br>
+          <span class="help-badge">MORNING START UP</span> — rise, open up, get going.
+        </div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Quick Stop</b></div>
+        <div class="help-item-desc">For fuel stops, food breaks, or stretch legs.<br>
+          <span class="help-badge">PULLING IN</span> — park and let everyone out.<br>
+          <span class="help-badge">PULLING OUT</span> — quick check before moving again.
+        </div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Checking items off</b></div>
+        <div class="help-item-desc">Tap any item to check it off. On mobile you can also <b>swipe right</b> to check. Tap a checked item to uncheck it. Use <b>Check all</b> on a section header to tick the whole section at once.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Required items ★</b></div>
+        <div class="help-item-desc">Items marked with a <b>★</b> in red are critical — the checklist won't show as complete until every required item is ticked. You can change which items are required in Edit Lists.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Item notes</b></div>
+        <div class="help-item-desc">Tap the 📝 button on any item to add a note — useful for things like "site power is on pole 3" or "awning arm is stiff." Notes are saved and show as a preview under the item label.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Keep screen awake</b></div>
+        <div class="help-item-desc">Tap <b>☀️ Keep Awake</b> in the checklist button bar to stop your phone screen from locking mid-checklist. It turns off automatically when you leave the checklist.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Auto-reset pairing</b></div>
+        <div class="help-item-desc">When you complete a checklist, its pair automatically resets and is ready to go. Arrive resets Depart and vice versa. Secure for Night resets Morning. Pull In resets Pull Out.</div>
+      </div>
+    </div>
+
+    <div class="help-section">
+      <div class="help-section-title">📓 Trip Log & Journal</div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Logging a stop</b></div>
+        <div class="help-item-desc">When you complete a checklist, tap <b>📓 Log Stop</b> on the completion screen. You can record the location name, site number, power type (powered/unpowered), a star rating, and notes. All saved to your trip log.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Sharing & exporting</b></div>
+        <div class="help-item-desc">From the Trip Log screen, tap <b>Share</b> to send your log via messages or copy it. Tap <b>Export CSV</b> to download a spreadsheet of every stop — great for keeping a record after the trip.</div>
+      </div>
+    </div>
+
+    <div class="help-section">
+      <div class="help-section-title">✏️ Edit Lists</div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Customising checklists</b></div>
+        <div class="help-item-desc">Go to <b>Edit Lists</b> from the home screen. Pick a checklist from the dropdown, then edit any item text, delete items with ✕, or add new ones with <b>+ Add item</b>. Hit <b>💾 Save changes</b> when done.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Setting required items</b></div>
+        <div class="help-item-desc">Each item has a <b>Req</b> button — tap it to toggle whether the item is required (★). Required items must be checked before the checklist can complete.</div>
+      </div>
+    </div>
+
+    <div class="help-section">
+      <div class="help-section-title">⚙️ Other features</div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Trip Stats</b></div>
+        <div class="help-item-desc">See your average checklist time, most used checklist, stops tagged, and a breakdown of campsite vs quick stop checks.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Offline use</b></div>
+        <div class="help-item-desc">Once loaded, the app works completely offline. All your data is stored on your device. Only weather and sunrise/sunset need an internet connection.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Factory Reset</b></div>
+        <div class="help-item-desc">Wipes everything — all progress, logs, notes, custom lists, rego plate, and gas status. Only use this at the very start of a new trip or if something goes wrong.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-item-title"><b>Install as an app</b></div>
+        <div class="help-item-desc"><b>iPhone:</b> Open in Safari → tap Share → "Add to Home Screen."<br><b>Android:</b> Open in Chrome → tap the three dots menu → "Add to Home Screen." Once installed it runs fullscreen like a native app.</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:1rem">
+      <button class="back-btn" style="flex:1" onclick="showScreen('screen-type')">← Back</button>
+      <button class="reset-btn" onclick="startTutorial()">▶ Replay Tutorial</button>
+    </div>
     <div class="footer">RV-SI · SOUTH ISLAND EXPEDITION</div>
   </div>
 </div>
@@ -1285,6 +1467,7 @@ function doFactoryReset() {
   document.getElementById('plate-input').value = '';
   document.getElementById('plate-display').textContent = 'CHECKLIST SYSTEM · SELECT MODE TO CONTINUE';
   renderGasBtn();
+  renderHomeStats();
   closeConfirmReset();
   showScreen('screen-type');
 }
@@ -1333,6 +1516,297 @@ function releaseWakeLock() {
   const btn = document.getElementById('wake-btn');
   if (btn) { btn.textContent = '☀️ Keep Awake'; btn.classList.remove('active'); }
 }
+
+// ── TUTORIAL SPOTLIGHT ──
+// Each step: target = CSS selector to highlight (null = no highlight, full dim)
+// position = 'above' | 'below' — where the card sits relative to the target
+// screen = screen id to navigate to before showing (null = stay put)
+const TUTORIAL_STEPS = [
+  {
+    target: null,
+    position: 'centre',
+    screen: 'screen-type',
+    tag: 'Welcome · 1 of 11',
+    title: 'WELCOME TO RV WALKAROUND',
+    body: `Your complete checklist system for the <b>NZ South Island</b> road trip.<br><br>This tour highlights each part of the app as we go. Tap <b>Next</b> to move through it — takes about 2 minutes.<br><br><span class="tut-tip">💡 Your data is saved on this device and works offline once loaded.</span>`
+  },
+  {
+    target: '#weather-home',
+    position: 'below',
+    screen: 'screen-type',
+    tag: 'Home Screen · 2 of 11',
+    title: 'WEATHER & SUNRISE',
+    body: `Shows <b>live conditions, wind speed</b>, and whether the awning is safe. Also shows today's <b>sunrise and sunset times</b>.<br><br>Use the <b>search bar below it</b> to look up any NZ town manually if GPS isn't working.<br><br><span class="tut-tip">💡 Weather needs internet — everything else works offline.</span>`
+  },
+  {
+    target: '#gas-btn',
+    position: 'below',
+    screen: 'screen-type',
+    tag: 'Home Screen · 3 of 11',
+    title: 'GAS STATUS',
+    body: `Tap this when you <b>turn the gas on</b> — it glows amber. Tap again when you <b>turn it off</b> — it turns green.<br><br>Always check this before doing a night or departure checklist so you know exactly where the gas is at.<br><br><span class="tut-tip">💡 State is saved even when you close the app.</span>`
+  },
+  {
+    target: '.home-stats',
+    position: 'below',
+    screen: 'screen-type',
+    tag: 'Home Screen · 4 of 11',
+    title: 'TRIP STATS',
+    body: `<b>Trip Day</b> — counts up from your first ever completed checklist.<br><b>Depart Streak</b> — days in a row you've done a departure check.<br><b>Total Checks</b> — every checklist completed on the trip.<br><br><span class="tut-tip">💡 Streak resets if you skip a day without departing.</span>`
+  },
+  {
+    target: '.type-cards',
+    position: 'below',
+    screen: 'screen-type',
+    tag: 'Checklists · 5 of 11',
+    title: 'CHOOSE YOUR CHECKLIST',
+    body: `<b>Campsite to Campsite</b> — full campsite stay. Four modes: Arrive, Depart, Secure for Night, Morning Start Up.<br><br><b>Quick Stop</b> — short breaks. Pull In and Pull Out. Designed to take under 3 minutes.<br><br><span class="tut-tip">💡 When you finish one checklist, its pair resets automatically.</span>`
+  },
+  {
+    target: '.home-btns',
+    position: 'above',
+    screen: 'screen-type',
+    tag: 'Home Screen · 6 of 11',
+    title: 'HOME BUTTONS',
+    body: `<b>📋 Trip Log</b> — every completed checklist, with journal entries, ratings and notes.<br><b>📊 Stats</b> — deeper breakdown of your trip data.<br><b>✏️ Edit Lists</b> — customise any checklist item, or toggle required items.<br><b>❓ Help</b> — this guide, anytime.<br><br><span class="tut-tip">💡 Factory Reset is there too — wipes everything for a fresh start.</span>`
+  },
+  {
+    target: '.theme-toggle',
+    position: 'above',
+    screen: 'screen-type',
+    tag: 'Home Screen · 7 of 11',
+    title: 'DARK & LIGHT MODE',
+    body: `Toggle between <b>dark cockpit mode</b> and <b>light mode</b>. Your preference is saved.<br><br>Dark is recommended at night — much easier on the eyes at a campsite.<br><br><span class="tut-tip">💡 The app remembers your choice between sessions.</span>`
+  },
+  {
+    target: '.item',
+    position: 'auto',
+    screen: 'screen-checklist',
+    prepScreen: () => { currentType='campsite'; currentSubmode='arrive'; loadFromStorage('campsite','arrive'); startTime=Date.now(); renderChecklist(); },
+    tag: 'Checklists · 8 of 11',
+    title: 'CHECKING ITEMS OFF',
+    body: `<b>Tap any item</b> to check it off. Tap again to uncheck.<br><b>Swipe right</b> on mobile to check quickly.<br><b>★ red items are required</b> — must be ticked before completion.<br><span class="tut-tip">💡 Tap 📝 on any item to add a note.</span>`
+  },
+  {
+    target: '.status-bar',
+    position: 'auto',
+    screen: 'screen-checklist',
+    prepScreen: null,
+    tag: 'Checklists · 9 of 11',
+    title: 'PROGRESS BAR',
+    body: `Tracks <b>checked, remaining, percentage</b> and elapsed time.<br><br>The blinking dot means the checklist is active.<br><span class="tut-tip">💡 Confetti fires when you hit 100%!</span>`
+  },
+  {
+    target: '.btn-row',
+    position: 'auto',
+    screen: 'screen-checklist',
+    prepScreen: null,
+    tag: 'Checklists · 10 of 11',
+    title: 'CHECKLIST CONTROLS',
+    body: `<b>← Back</b> — return to mode selection.<br><b>☀️ Keep Awake</b> — stops screen locking mid-checklist.<br><b>Reset</b> — clears all ticks and starts fresh.<br><span class="tut-tip">💡 Keep Awake turns off when you leave.</span>`
+  },
+  {
+    target: null,
+    position: 'centre',
+    screen: 'screen-type',
+    tag: 'Done · 11 of 11',
+    title: "YOU'RE ALL SET! 🚐",
+    body: `Tap <b>❓ Help</b> on the home screen anytime to revisit this guide.<br><br><b>Install as an app:</b><br>• iPhone: Safari → Share → "Add to Home Screen"<br>• Android: Chrome → three dots → "Add to Home Screen"<br><br>Once installed it runs fullscreen like a native app and works fully offline.<br><br><span class="tut-tip">💡 Have an amazing South Island trip! 🏔️</span>`
+  }
+];
+
+let tutorialStep = 0;
+let tutorialActive = false;
+
+function startTutorial() {
+  showScreen('screen-type');
+  tutorialStep = 0;
+  tutorialActive = true;
+  document.body.classList.add('tutorial-active');
+  const card = document.getElementById('tut-card');
+  const highlight = document.getElementById('tut-highlight');
+  const arrow = document.getElementById('tut-arrow');
+
+  // Reset everything
+  card.classList.remove('visible');
+  card.classList.add('open');
+  highlight.classList.remove('visible');
+  arrow.classList.remove('visible');
+  document.getElementById('tut-backdrop').classList.add('open');
+
+  // Disable transition temporarily so highlight starts in place, not top-left
+  highlight.style.transition = 'opacity .25s ease';
+  highlight.style.left = '50vw'; highlight.style.top = '50vh';
+  highlight.style.width = '1px'; highlight.style.height = '1px';
+
+  setTimeout(() => {
+    // Re-enable full transition then render
+    highlight.style.transition = 'opacity .25s ease, left .3s ease, top .3s ease, width .3s ease, height .3s ease';
+    renderTutorialStep(true);
+  }, 200);
+}
+
+function closeTutorial() {
+  tutorialActive = false;
+  document.body.classList.remove('tutorial-active');
+  const card = document.getElementById('tut-card');
+  const highlight = document.getElementById('tut-highlight');
+  const arrow = document.getElementById('tut-arrow');
+  card.classList.remove('visible');
+  highlight.classList.remove('visible');
+  arrow.classList.remove('visible');
+  setTimeout(() => {
+    card.classList.remove('open');
+    document.getElementById('tut-backdrop').classList.remove('open');
+  }, 260);
+  localStorage.setItem('rv_tutorial_done', '1');
+  if (document.getElementById('screen-checklist').classList.contains('active')) {
+    setTimeout(() => showScreen('screen-type'), 270);
+  }
+}
+
+function tutorialNext() {
+  if (tutorialStep >= TUTORIAL_STEPS.length - 1) { closeTutorial(); return; }
+
+  const card = document.getElementById('tut-card');
+  const arrow = document.getElementById('tut-arrow');
+  const highlight = document.getElementById('tut-highlight');
+
+  card.classList.remove('visible');
+  arrow.classList.remove('visible');
+
+  const nextStep = tutorialStep + 1;
+  const step = TUTORIAL_STEPS[nextStep];
+
+  setTimeout(() => {
+    tutorialStep = nextStep;
+    if (step.prepScreen) step.prepScreen();
+    if (step.screen) {
+      // Snap highlight to centre instantly (no transition) during screen swap
+      highlight.style.transition = 'opacity .25s ease';
+      highlight.style.left = '50vw'; highlight.style.top = '50vh';
+      highlight.style.width = '1px'; highlight.style.height = '1px';
+      showScreen(step.screen);
+      setTimeout(() => {
+        highlight.style.transition = 'opacity .25s ease, left .3s ease, top .3s ease, width .3s ease, height .3s ease';
+        renderTutorialStep(true);
+      }, 320);
+    } else {
+      renderTutorialStep(true);
+    }
+  }, 200);
+}
+
+function renderTutorialStep(fadeIn) {
+  const step = TUTORIAL_STEPS[tutorialStep];
+  const total = TUTORIAL_STEPS.length;
+
+  document.getElementById('tut-tag').textContent = step.tag;
+  document.getElementById('tut-title').textContent = step.title;
+  document.getElementById('tut-body').innerHTML = step.body;
+  document.getElementById('tut-dots').innerHTML = TUTORIAL_STEPS.map((_, i) =>
+    `<div class="tut-dot ${i === tutorialStep ? 'active' : ''}"></div>`
+  ).join('');
+
+  const isLast = tutorialStep === total - 1;
+  document.getElementById('tut-next').textContent = isLast ? '✓ Done' : 'Next →';
+  document.getElementById('tut-skip').style.display = isLast ? 'none' : '';
+
+  // Position first (invisible), then fade in
+  positionTutorial(step, fadeIn);
+}
+
+function positionTutorial(step, fadeIn) {
+  const highlight = document.getElementById('tut-highlight');
+  const arrow  = document.getElementById('tut-arrow');
+  const card   = document.getElementById('tut-card');
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const PAD    = 14;
+  const ARROW_H = 14;
+  const MARGIN = 8;
+
+  arrow.classList.remove('visible');
+  card.style.transform = 'translateX(-50%)';
+
+  const centreCard = () => {
+    card.style.top = '50%';
+    card.style.bottom = 'auto';
+    card.style.transform = 'translate(-50%, -50%)';
+  };
+
+  // No target — full dark, centred card
+  if (!step.target || step.position === 'centre') {
+    highlight.style.left = '50vw'; highlight.style.top = '50vh';
+    highlight.style.width = '1px'; highlight.style.height = '1px';
+    highlight.classList.add('visible');
+    centreCard();
+    if (fadeIn) setTimeout(() => card.classList.add('visible'), 30);
+    return;
+  }
+
+  const el = document.querySelector(step.target);
+  if (!el) {
+    highlight.style.left = '50vw'; highlight.style.top = '50vh';
+    highlight.style.width = '1px'; highlight.style.height = '1px';
+    highlight.classList.add('visible');
+    centreCard();
+    if (fadeIn) setTimeout(() => card.classList.add('visible'), 30);
+    return;
+  }
+
+  // Scroll element into view first if needed, then reposition after scroll settles
+  const rect = el.getBoundingClientRect();
+  if (rect.top < 80 || rect.bottom > vh - 80) {
+    el.scrollIntoView({behavior: 'smooth', block: 'center'});
+    setTimeout(() => {
+      const r2 = el.getBoundingClientRect();
+      placeHighlightAndCard(r2);
+    }, 450);
+  } else {
+    placeHighlightAndCard(rect);
+  }
+
+  function placeHighlightAndCard(rect) {
+    // Move highlight
+    highlight.style.left   = (rect.left   - MARGIN) + 'px';
+    highlight.style.top    = (rect.top    - MARGIN) + 'px';
+    highlight.style.width  = (rect.width  + MARGIN * 2) + 'px';
+    highlight.style.height = (rect.height + MARGIN * 2) + 'px';
+    highlight.classList.add('visible');
+
+    const spaceBelow = vh - rect.bottom - MARGIN - PAD * 2;
+    const spaceAbove = rect.top - MARGIN - PAD * 2;
+    const placeBelow = spaceBelow >= spaceAbove;
+
+    const arrowX = Math.min(Math.max(rect.left + rect.width / 2 - 10, PAD), vw - PAD - 20);
+
+    if (placeBelow) {
+      // Clamp so card doesn't go off bottom of screen
+      const top = Math.min(rect.bottom + MARGIN + ARROW_H + PAD, vh - 200);
+      card.style.top    = top + 'px';
+      card.style.bottom = 'auto';
+      arrow.className   = 'tut-arrow up';
+      arrow.style.left   = arrowX + 'px';
+      arrow.style.top    = (rect.bottom + MARGIN + PAD) + 'px';
+      arrow.style.bottom = 'auto';
+    } else {
+      // Clamp so card doesn't go off top of screen
+      const bottom = Math.min(vh - rect.top + MARGIN + ARROW_H + PAD, vh - 200);
+      card.style.bottom = bottom + 'px';
+      card.style.top    = 'auto';
+      arrow.className   = 'tut-arrow down';
+      arrow.style.left   = arrowX + 'px';
+      arrow.style.bottom = (vh - rect.top + MARGIN + PAD) + 'px';
+      arrow.style.top    = 'auto';
+    }
+
+    if (fadeIn) setTimeout(() => { card.classList.add('visible'); arrow.classList.add('visible'); }, 30);
+  }
+}
+
+window.addEventListener('scroll', () => { if (tutorialActive) positionTutorial(TUTORIAL_STEPS[tutorialStep], false); }, {passive:true});
+window.addEventListener('resize', () => { if (tutorialActive) positionTutorial(TUTORIAL_STEPS[tutorialStep], false); }, {passive:true});
 
 // ── GAS STATUS ──
 function toggleGas() {
@@ -1431,6 +1905,11 @@ if (savedPlate) {
 renderHomeStats();
 renderGasBtn();
 fetchWeather();
+
+// Show tutorial on first launch
+if (!localStorage.getItem('rv_tutorial_done')) {
+  setTimeout(startTutorial, 600);
+}
 
 // ── PWA SERVICE WORKER (inline — no extra file needed) ──
 if ('serviceWorker' in navigator) {
