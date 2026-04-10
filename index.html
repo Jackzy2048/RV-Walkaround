@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="RV Walkaround"/>
+  <meta name="theme-color" content="#0d1117"/>
+  <title>RV Walkaround</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚐</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230d1117'/><text y='.9em' font-size='80'>🚐</text></svg>">
+  <link rel="manifest" href="data:application/json,{%22name%22:%22RV%20Walkaround%22,%22short_name%22:%22RV%20Check%22,%22description%22:%22NZ%20South%20Island%20RV%20checklist%20system%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%230d1117%22,%22theme_color%22:%22%230d1117%22,%22orientation%22:%22portrait%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'><rect%20width='100'%20height='100'%20fill='%230d1117'/><text%20y='.9em'%20font-size='80'>🚐</text></svg>%22,%22sizes%22:%22any%22,%22type%22:%22image/svg+xml%22}]}">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0d1117; --panel:#131920; --border:#1e2d3d;
+      --amber:#f5a623; --amber-dim:#7a5010;
+      --green:#00e676; --green-dim:#004d26;
+      --red:#ff4444; --blue:#4fc3f7; --blue-dim:#0d3a52;
+      --purple:#ce93d8; --purple-dim:#3d1a4a;
+      --teal:#4db6ac; --teal-dim:#0d3330;
+      --text:#c9d8e8; --muted:#4a6070;
+      --mono:'Share Tech Mono',monospace;
+      --display:'Bebas Neue',sans-serif;
+      --body:'DM Sans',sans-serif;
+    }
+    body.light-mode {
+      --bg:#f0f2f5; --panel:#ffffff; --border:#d0d8e4;
+      --amber:#c47d00; --amber-dim:#f5d79e;
+      --green:#00a854; --green-dim:#b3f0d4;
+      --red:#d93025; --blue:#0277bd; --blue-dim:#b3d9f5;
+      --purple:#7b1fa2; --purple-dim:#e8c9f5;
+      --teal:#00796b; --teal-dim:#b2dfdb;
+      --text:#1a2632; --muted:#7a92a8;
+    }
+    body.light-mode { background-image:radial-gradient(ellipse at 20% 0%,rgba(196,125,0,.07) 0%,transparent 60%),radial-gradient(ellipse at 80% 100%,rgba(0,168,84,.05) 0%,transparent 60%) }
+    body.light-mode::after { display:none }
+
+    /* THEME TOGGLE */
+    .theme-toggle{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:1rem}
+    .theme-toggle-track{width:48px;height:26px;border-radius:13px;background:var(--border);border:1px solid var(--border);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+    .theme-toggle-track.on{background:var(--amber-dim)}
+    .theme-toggle-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--amber);transition:transform .2s}
+    .theme-toggle-track.on .theme-toggle-thumb{transform:translateX(22px)}
+    .theme-toggle-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+
+    /* GAS TOGGLE */
+    .gas-btn{width:100%;padding:14px 16px;border:2px solid var(--border);background:var(--panel);cursor:pointer;font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);transition:all .2s;text-align:center;margin-bottom:1.25rem;position:relative;-webkit-tap-highlight-color:transparent}
+    .gas-btn.on{border-color:var(--amber);background:rgba(245,166,35,.08);color:var(--amber)}
+    .gas-btn.off{border-color:var(--green);background:rgba(0,230,118,.06);color:var(--green)}
+    .gas-status{font-size:10px;letter-spacing:3px;display:block;margin-top:4px;opacity:.8}
+
+    /* WAKE LOCK BUTTON */
+    .wake-btn{padding:10px 16px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
+    .wake-btn.active{border-color:var(--amber);color:var(--amber)}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;
+      background-image:radial-gradient(ellipse at 20% 0%,rgba(245,166,35,.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 100%,rgba(0,230,118,.04) 0%,transparent 60%)}
+    body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:100}
+    .screen{display:none} .screen.active{display:block;animation:fadeIn .3s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .cockpit{max-width:600px;margin:0 auto;padding:2rem 1.25rem 4rem}
+
+    /* HEADER */
+    .header{border:1px solid var(--border);border-bottom:3px solid var(--amber);background:var(--panel);padding:1.5rem 1.5rem 1.25rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+    .header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--amber),transparent);opacity:.6}
+    .airline-tag{font-family:var(--mono);font-size:10px;color:var(--amber);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;opacity:.8}
+    .header-title{font-family:var(--display);font-size:44px;letter-spacing:2px;color:#fff;line-height:1;margin-bottom:4px}
+    .header-sub{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px}
+    .header-rv{position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);font-size:52px;opacity:.15}
+
+    /* TYPE SELECT */
+    .select-intro{text-align:center;margin-bottom:2rem}
+    .select-intro-label{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+    .select-intro-title{font-family:var(--display);font-size:28px;color:var(--text);letter-spacing:2px}
+    .type-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.5rem}
+    .type-card{border:1px solid var(--border);background:var(--panel);padding:2rem 1.25rem;cursor:pointer;transition:all .2s;text-align:center;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
+    .type-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .2s}
+    .type-card.campsite::before{background:linear-gradient(90deg,transparent,var(--amber),transparent)}
+    .type-card.quickstop::before{background:linear-gradient(90deg,transparent,var(--blue),transparent)}
+    .type-card:hover{transform:translateY(-2px)}
+    .type-card.campsite:hover{border-color:var(--amber-dim)}
+    .type-card.quickstop:hover{border-color:var(--blue-dim)}
+    .type-card:hover::before{opacity:1}
+    .type-emoji{font-size:36px;margin-bottom:12px;display:block}
+    .type-name{font-family:var(--display);font-size:24px;letter-spacing:2px;margin-bottom:6px}
+    .type-card.campsite .type-name{color:var(--amber)}
+    .type-card.quickstop .type-name{color:var(--blue)}
+    .type-desc{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;line-height:1.6}
+    .type-tag{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:9px;letter-spacing:2px;padding:3px 10px;border:1px solid}
+    .type-card.campsite .type-tag{border-color:var(--amber-dim);color:var(--amber)}
+    .type-card.quickstop .type-tag{border-color:var(--blue-dim);color:var(--blue)}
+
+    /* HOME BTNS */
+    .home-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem}
+    .home-btn{border:1px solid var(--border);background:var(--panel);padding:14px;cursor:pointer;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);transition:all .15s;text-align:center;-webkit-tap-highlight-color:transparent}
+    .home-btn:hover{border-color:var(--amber);color:var(--amber)}
+
+    /* PLATE */
+    .plate-row{display:flex;align-items:center;gap:12px;border:1px solid var(--border);background:var(--panel);padding:10px 16px;margin-bottom:1.5rem}
+    .plate-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted);white-space:nowrap}
+    .plate-input{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--amber);font-family:var(--display);font-size:22px;letter-spacing:4px;padding:6px 10px;outline:none;text-transform:uppercase}
+    .plate-input:focus{border-color:var(--amber)}
+    .plate-input::placeholder{color:var(--muted);font-size:14px;letter-spacing:2px}
+
+    /* WEATHER */
+    .weather-strip{border:1px solid var(--border);background:var(--panel);padding:10px 16px;display:flex;align-items:center;gap:14px;margin-bottom:1.5rem}
+    .weather-icon{font-size:24px;flex-shrink:0}
+    .weather-info{flex:1}
+    .weather-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+    .weather-val{font-family:var(--mono);font-size:12px;color:var(--text)}
+    .weather-rec{font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:3px 10px;border:1px solid var(--amber-dim);color:var(--amber);white-space:nowrap;flex-shrink:0}
+    .weather-retry{background:transparent;border:1px solid var(--amber-dim);color:var(--amber);font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:4px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+
+    /* CONFIRM MODAL */
+    .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;align-items:center;justify-content:center;padding:1rem}
+    .confirm-overlay.open{display:flex;animation:fadeIn .2s ease}
+    .confirm-box{background:var(--panel);border:1px solid var(--red);padding:2rem;width:100%;max-width:380px;text-align:center}
+    .confirm-title{font-family:var(--display);font-size:28px;color:var(--red);letter-spacing:3px;margin-bottom:8px}
+    .confirm-msg{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px;line-height:1.8;margin-bottom:1.5rem}
+    .confirm-btns{display:flex;gap:10px}
+    .confirm-yes{flex:1;padding:12px;border:1px solid var(--red);background:transparent;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--red);cursor:pointer;transition:all .15s}
+    .confirm-yes:hover{background:rgba(255,68,68,.1)}
+    .confirm-no{flex:1;padding:12px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .15s}
+    .confirm-no:hover{color:var(--text)}
+
+    /* NOTE MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:1rem}
+    .modal-overlay.open{display:flex;animation:fadeIn .2s ease}
+    .modal{background:var(--panel);border:1px solid var(--border);padding:1.5rem;width:100%;max-width:420px}
+    .modal-title{font-family:var(--display);font-size:22px;color:var(--amber);letter-spacing:2px;margin-bottom:4px}
+    .modal-item-name{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:1rem}
+    .modal textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:13px;padding:10px;resize:none;height:80px;outline:none;letter-spacing:.5px}
+    .modal textarea:focus{border-color:var(--amber)}
+    .modal-btns{display:flex;gap:8px;margin-top:12px}
+    .modal-btn{flex:1;padding:10px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .15s}
+    .modal-btn.save:hover{border-color:var(--green);color:var(--green)}
+    .modal-btn.cancel:hover{border-color:var(--red);color:var(--red)}
+
+    /* SUB MODE */
+    .sub-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:2rem}
+    .sub-card{border:1px solid var(--border);background:var(--panel);padding:1.5rem 1rem;cursor:pointer;transition:all .2s;text-align:center;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
+    .sub-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .2s}
+    .sub-card.arrive::before{background:linear-gradient(90deg,transparent,var(--green),transparent)}
+    .sub-card.depart::before{background:linear-gradient(90deg,transparent,var(--red),transparent)}
+    .sub-card.pullin::before{background:linear-gradient(90deg,transparent,var(--teal),transparent)}
+    .sub-card.pullout::before{background:linear-gradient(90deg,transparent,var(--purple),transparent)}
+    .sub-card.secure::before{background:linear-gradient(90deg,transparent,var(--purple),transparent)}
+    .sub-card.morning::before{background:linear-gradient(90deg,transparent,var(--amber),transparent)}
+    .sub-card:hover{transform:translateY(-2px)}
+    .sub-card.arrive:hover{border-color:var(--green-dim)}
+    .sub-card.depart:hover{border-color:#4a1010}
+    .sub-card.pullin:hover{border-color:var(--teal-dim)}
+    .sub-card.pullout:hover{border-color:var(--purple-dim)}
+    .sub-card.secure:hover{border-color:var(--purple-dim)}
+    .sub-card.morning:hover{border-color:var(--amber-dim)}
+    .sub-card:hover::before{opacity:1}
+    .sub-emoji{font-size:36px;margin-bottom:12px;display:block}
+    .sub-name{font-family:var(--display);font-size:22px;letter-spacing:2px;margin-bottom:6px}
+    .sub-card.arrive .sub-name{color:var(--green)}
+    .sub-card.depart .sub-name{color:var(--red)}
+    .sub-card.pullin .sub-name{color:var(--teal)}
+    .sub-card.pullout .sub-name{color:var(--purple)}
+    .sub-card.secure .sub-name{color:var(--purple)}
+    .sub-card.morning .sub-name{color:var(--amber)}
+    .sub-desc{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;line-height:1.6}
+    .sub-tag{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:9px;letter-spacing:2px;padding:3px 10px;border:1px solid}
+    .sub-card.arrive .sub-tag{border-color:var(--green-dim);color:var(--green)}
+    .sub-card.depart .sub-tag{border-color:#4a1010;color:var(--red)}
+    .sub-card.pullin .sub-tag{border-color:var(--teal-dim);color:var(--teal)}
+    .sub-card.pullout .sub-tag{border-color:var(--purple-dim);color:var(--purple)}
+    .sub-card.secure .sub-tag{border-color:var(--purple-dim);color:var(--purple)}
+    .sub-card.morning .sub-tag{border-color:var(--amber-dim);color:var(--amber)}
+
+    /* BREADCRUMB */
+    .breadcrumb{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+    .breadcrumb span{color:var(--amber)}
+
+    /* STATUS BAR */
+    .status-bar{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:1.5rem}
+    .stat{background:var(--panel);border:1px solid var(--border);padding:10px 12px;position:relative}
+    .stat-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+    .stat-value{font-family:var(--display);font-size:22px;color:var(--amber);line-height:1}
+    .stat-value.green{color:var(--green)} .stat-value.red{color:var(--red)}
+    .stat-dot{position:absolute;top:8px;right:8px;width:6px;height:6px;border-radius:50%;background:var(--amber);animation:blink 2s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+    /* SECTION LABEL */
+    .section-label{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--amber);text-transform:uppercase;padding:6px 0 6px 2px;margin-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+    .section-label::before{content:'▶';font-size:7px}
+
+    /* ITEM */
+    .item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-left:3px solid transparent;background:var(--panel);margin-bottom:6px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;touch-action:pan-y;user-select:none}
+    .item:hover{background:#161e28;border-color:#2a3d52;border-left-color:var(--amber)}
+    .item.checked{border-color:var(--green-dim);border-left-color:var(--green);background:rgba(0,230,118,.04)}
+    .item.swiping{background:rgba(0,230,118,.08)}
+    .item-num{font-family:var(--mono);font-size:10px;color:var(--muted);min-width:22px;flex-shrink:0}
+    .item.checked .item-num{color:var(--green-dim)}
+    .check-box{width:20px;height:20px;border:1px solid var(--muted);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+    .item.checked .check-box{border-color:var(--green);background:var(--green)}
+    .check-icon{display:none} .item.checked .check-icon{display:block}
+    .item-body{flex:1;min-width:0}
+    .label{font-size:13px;color:var(--text);letter-spacing:.3px;text-transform:uppercase;font-family:var(--mono)}
+    .item.checked .label{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--green-dim)}
+    .item-note{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .item-status{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);flex-shrink:0}
+    .note-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:4px 6px;transition:color .15s;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .note-btn:hover{color:var(--amber)}
+
+    /* ALL DONE */
+    .all-done{display:none;text-align:center;padding:2rem;border:1px solid var(--green);background:rgba(0,230,118,.05);margin-top:1.5rem;position:relative;overflow:hidden}
+    .all-done::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent)}
+    .all-done.show{display:block;animation:fadeIn .4s ease}
+    .all-done-title{font-family:var(--display);font-size:32px;color:var(--green);letter-spacing:3px;margin-bottom:4px}
+    .all-done-sub{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:2px}
+
+    /* BUTTONS */
+    .btn-row{display:flex;gap:10px;margin-top:1rem}
+    .reset-btn{flex:1;padding:12px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .15s}
+    .reset-btn:hover{border-color:var(--red);color:var(--red)}
+    .back-btn{padding:12px 20px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .15s}
+    .back-btn:hover{border-color:var(--amber);color:var(--amber)}
+
+    /* TRIP LOG */
+    .log-entry{border:1px solid var(--border);background:var(--panel);padding:14px 16px;margin-bottom:8px;position:relative}
+    .log-type{font-family:var(--display);font-size:18px;color:var(--amber);letter-spacing:2px;margin-bottom:2px}
+    .log-time{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px}
+    .log-delete{position:absolute;top:10px;right:10px;background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:16px;transition:color .15s;padding:4px}
+    .log-delete:hover{color:var(--red)}
+    .log-empty{text-align:center;padding:3rem;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:2px;line-height:2}
+
+    /* STATS */
+    .stat-card{background:var(--panel);border:1px solid var(--border);padding:14px 16px;margin-bottom:8px}
+    .stat-card-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+    .stat-card-val{font-family:var(--display);font-size:28px;color:var(--amber);letter-spacing:2px}
+    .stat-card-sub{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:2px}
+
+    /* EDITOR */
+    .editor-section{margin-bottom:1.5rem}
+    .editor-section-title{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--amber);text-transform:uppercase;padding:6px 0;margin-bottom:8px;border-bottom:1px solid var(--border)}
+    .editor-item{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+    .editor-item input{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:8px 10px;outline:none;text-transform:uppercase;letter-spacing:.5px}
+    .editor-item input:focus{border-color:var(--amber)}
+    .editor-del{background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;padding:8px 10px;font-size:12px;transition:all .15s}
+    .editor-del:hover{border-color:var(--red);color:var(--red)}
+    .editor-add{width:100%;padding:10px;border:1px dashed var(--border);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;margin-top:4px;transition:all .15s}
+    .editor-add:hover{border-color:var(--green);color:var(--green)}
+    .editor-save{width:100%;padding:12px;border:1px solid var(--green-dim);background:transparent;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--green);cursor:pointer;margin-top:1rem;transition:all .15s}
+    .editor-save:hover{background:rgba(0,230,118,.08)}
+
+    /* REQUIRED ITEMS */
+    .item.required{border-left-color:var(--red)}
+    .item.required:not(.checked) .label::after{content:' ★';color:var(--red);font-size:10px}
+    .item.required:not(.checked) .check-box{border-color:var(--red)}
+    .required-warning{display:none;background:rgba(255,68,68,.08);border:1px solid var(--red);padding:12px 16px;margin-top:1rem;font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:1px;text-align:center}
+    .required-warning.show{display:block;animation:fadeIn .3s ease}
+
+    /* STREAK & DAY COUNTER */
+    .home-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1.25rem}
+    .home-stat{background:var(--panel);border:1px solid var(--border);padding:10px 12px;text-align:center}
+    .home-stat-label{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
+    .home-stat-value{font-family:var(--display);font-size:26px;color:var(--amber);line-height:1}
+    .home-stat-sub{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:1px;margin-top:2px}
+
+    /* EDITOR REQUIRED TOGGLE */
+    .editor-req{background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;padding:8px 10px;font-size:11px;transition:all .15s;white-space:nowrap}
+    .editor-req.on{border-color:var(--red);color:var(--red)}
+    .editor-req.on::before{content:'★ '}
+    .editor-req:not(.on)::before{content:'☆ '}
+    .swipe-hint{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;text-align:center;padding:6px 0 10px;opacity:.6;animation:fadeIn .5s ease}
+
+    /* CHECK ALL */
+    .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+    .check-all-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:3px 8px;cursor:pointer;transition:all .15s;text-transform:uppercase}
+    .check-all-btn:hover{border-color:var(--green);color:var(--green)}
+
+    /* JOURNAL MODAL */
+    .journal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:1rem}
+    .journal-overlay.open{display:flex;animation:fadeIn .2s ease}
+    .journal-box{background:var(--panel);border:1px solid var(--amber-dim);padding:1.5rem;width:100%;max-width:420px}
+    .journal-title{font-family:var(--display);font-size:22px;color:var(--amber);letter-spacing:2px;margin-bottom:4px}
+    .journal-sub{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:1rem}
+    .journal-field{margin-bottom:10px}
+    .journal-field label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px}
+    .journal-field input,.journal-field textarea,.journal-field select{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:8px 10px;outline:none;letter-spacing:.5px}
+    .journal-field input:focus,.journal-field textarea:focus{border-color:var(--amber)}
+    .journal-field textarea{resize:none;height:70px}
+    .journal-stars{display:flex;gap:6px;margin-top:4px}
+    .journal-star{font-size:20px;cursor:pointer;opacity:.3;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
+    .journal-star.active{opacity:1}
+    .log-journal{font-family:var(--mono);font-size:10px;color:var(--text);margin-top:4px;line-height:1.6;white-space:pre-wrap}
+    .log-rating{font-size:13px;margin-top:2px}
+
+    /* WEATHER MANUAL */
+    .weather-manual{display:flex;gap:8px;margin-top:8px}
+    .weather-manual input{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:11px;padding:6px 10px;outline:none;letter-spacing:.5px}
+    .weather-manual input:focus{border-color:var(--amber)}
+    .weather-manual button{background:transparent;border:1px solid var(--amber-dim);color:var(--amber);font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:6px 12px;cursor:pointer;white-space:nowrap}
+
+    /* CONFETTI */
+    #confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:999}
+
+    /* MISC */
+    .divider{text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:1.5rem;display:flex;align-items:center;gap:12px}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+    .footer{margin-top:2rem;text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;opacity:.5}
+  </style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- NOTE MODAL -->
+<div class="modal-overlay" id="noteModal">
+  <div class="modal">
+    <div class="modal-title">ADD NOTE</div>
+    <div class="modal-item-name" id="modal-item-name"></div>
+    <textarea id="modal-textarea" placeholder="Type a note..."></textarea>
+    <div class="modal-btns">
+      <button class="modal-btn save" onclick="saveNote()">Save</button>
+      <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="confirm-overlay" id="confirmModal">
+  <div class="confirm-box">
+    <div class="confirm-title">FACTORY RESET</div>
+    <div class="confirm-msg">This will wipe everything —<br>all progress, trip logs, notes,<br>custom lists and your rego plate.<br><br>Are you sure?</div>
+    <div class="confirm-btns">
+      <button class="confirm-yes" onclick="doFactoryReset()">Yes, reset</button>
+      <button class="confirm-no" onclick="closeConfirmReset()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- JOURNAL MODAL -->
+<div class="journal-overlay" id="journalModal">
+  <div class="journal-box">
+    <div class="journal-title">STOP JOURNAL</div>
+    <div class="journal-sub" id="journal-sub">LOG THIS STOP</div>
+    <div class="journal-field">
+      <label>Site / Location name</label>
+      <input id="journal-location" placeholder="e.g. Queenstown TOP 10..." maxlength="60"/>
+    </div>
+    <div class="journal-field">
+      <label>Site number</label>
+      <input id="journal-sitenum" placeholder="e.g. Site 14A..." maxlength="20"/>
+    </div>
+    <div class="journal-field">
+      <label>Power hookup</label>
+      <select id="journal-power" style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:8px 10px;outline:none;width:100%">
+        <option value="">— Select —</option>
+        <option value="Powered">Powered</option>
+        <option value="Unpowered">Unpowered</option>
+        <option value="Self-contained">Self-contained</option>
+      </select>
+    </div>
+    <div class="journal-field">
+      <label>Rating</label>
+      <div class="journal-stars" id="journal-stars">
+        <span class="journal-star" data-val="1">⭐</span>
+        <span class="journal-star" data-val="2">⭐</span>
+        <span class="journal-star" data-val="3">⭐</span>
+        <span class="journal-star" data-val="4">⭐</span>
+        <span class="journal-star" data-val="5">⭐</span>
+      </div>
+    </div>
+    <div class="journal-field">
+      <label>Notes</label>
+      <textarea id="journal-notes" placeholder="Anything worth remembering about this stop..."></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn save" onclick="saveJournal()">Save</button>
+      <button class="modal-btn cancel" onclick="closeJournal()">Skip</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 1: HOME -->
+<div class="screen active" id="screen-type">
+  <div class="cockpit">
+    <div class="header">
+      <div class="airline-tag">NZ South Island Expedition</div>
+      <div class="header-title">RV WALKAROUND</div>
+      <div class="header-sub" id="plate-display">CHECKLIST SYSTEM · SELECT MODE TO CONTINUE</div>
+      <div class="header-rv">🚐</div>
+    </div>
+    <div id="weather-home"></div>
+    <div class="weather-manual" id="weather-search-bar" style="margin-bottom:1.25rem">
+      <input id="weather-city-input" placeholder="Search town for weather... e.g. Queenstown"/>
+      <button onclick="fetchWeather(document.getElementById('weather-city-input').value)">Search</button>
+    </div>
+    <div class="plate-row">
+      <div class="plate-label">🚐 REGO</div>
+      <input class="plate-input" id="plate-input" placeholder="ENTER PLATE..." maxlength="8" oninput="savePlate(this.value)"/>
+    </div>
+    <button class="gas-btn" id="gas-btn" onclick="toggleGas()">
+      <span id="gas-icon">🔥</span> Gas: <span id="gas-state">UNKNOWN</span>
+      <span class="gas-status" id="gas-sub">Tap to update gas status</span>
+    </button>
+    <div class="home-stats">
+      <div class="home-stat">
+        <div class="home-stat-label">Trip Day</div>
+        <div class="home-stat-value" id="stat-day">—</div>
+        <div class="home-stat-sub">of your adventure</div>
+      </div>
+      <div class="home-stat">
+        <div class="home-stat-label">Depart Streak</div>
+        <div class="home-stat-value" id="stat-streak">—</div>
+        <div class="home-stat-sub">days in a row</div>
+      </div>
+      <div class="home-stat">
+        <div class="home-stat-label">Total Checks</div>
+        <div class="home-stat-value" id="stat-total">—</div>
+        <div class="home-stat-sub">completed</div>
+      </div>
+    </div>
+    <div class="select-intro">
+      <div class="select-intro-label">Select checklist type</div>
+      <div class="select-intro-title">WHERE ARE WE HEADED?</div>
+    </div>
+    <div class="type-cards">
+      <div class="type-card campsite" onclick="selectType('campsite')">
+        <span class="type-emoji">🏕️</span>
+        <div class="type-name">CAMPSITE TO CAMPSITE</div>
+        <div class="type-desc">Full stop.<br>Setting up or packing down camp.</div>
+        <div class="type-tag">FULL CHECK</div>
+      </div>
+      <div class="type-card quickstop" onclick="selectType('quickstop')">
+        <span class="type-emoji">⛽</span>
+        <div class="type-name">QUICK STOP</div>
+        <div class="type-desc">Short stop.<br>Fuel, food, stretch legs.</div>
+        <div class="type-tag">QUICK CHECK</div>
+      </div>
+    </div>
+    <div class="home-btns">
+      <div class="home-btn" onclick="showScreen('screen-log')">📋 Trip Log</div>
+      <div class="home-btn" onclick="showScreen('screen-stats')">📊 Stats</div>
+      <div class="home-btn" onclick="showScreen('screen-editor')">✏️ Edit Lists</div>
+      <div class="home-btn" style="border-color:#4a1010;color:var(--red)" onclick="openConfirmReset()">⚠️ Factory Reset</div>
+    </div>
+    <div class="theme-toggle">
+      <span class="theme-toggle-label">🌙 Dark</span>
+      <div class="theme-toggle-track" id="theme-track" onclick="toggleTheme()">
+        <div class="theme-toggle-thumb"></div>
+      </div>
+      <span class="theme-toggle-label">☀️ Light</span>
+    </div>
+    <div class="divider">RV-SI · SOUTH ISLAND</div>
+    <div class="footer">🚐 ✅ · RV WALKAROUND SYSTEM</div>
+  </div>
+</div>
+
+<!-- SCREEN 2: SUBMODE -->
+<div class="screen" id="screen-submode">
+  <div class="cockpit">
+    <div class="header" id="submode-header">
+      <div class="airline-tag" id="submode-tag"></div>
+      <div class="header-title" id="submode-title"></div>
+      <div class="header-sub">SELECT DIRECTION TO CONTINUE</div>
+      <div class="header-rv" id="submode-emoji"></div>
+    </div>
+    <div class="select-intro">
+      <div class="select-intro-label">Select direction</div>
+      <div class="select-intro-title" id="submode-question"></div>
+    </div>
+    <div class="sub-cards" id="sub-cards"></div>
+    <button class="back-btn" style="width:100%" onclick="showScreen('screen-type')">← Back</button>
+    <div class="footer">🚐 ✅ · RV WALKAROUND SYSTEM</div>
+  </div>
+</div>
+
+<!-- SCREEN 3: CHECKLIST -->
+<div class="screen" id="screen-checklist">
+  <div class="cockpit">
+    <div class="header" id="checklist-header">
+      <div class="airline-tag" id="cl-tag"></div>
+      <div class="header-title" id="cl-title"></div>
+      <div class="header-sub" id="cl-sub"></div>
+      <div class="header-rv" id="cl-emoji"></div>
+    </div>
+    <div id="weather-checklist"></div>
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <div class="status-bar">
+      <div class="stat">
+        <div class="stat-dot" id="stat-dot"></div>
+        <div class="stat-label">Checked</div>
+        <div class="stat-value green" id="stat-checked">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Remaining</div>
+        <div class="stat-value red" id="stat-remaining">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Complete</div>
+        <div class="stat-value" id="stat-pct">0%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Est. Time</div>
+        <div class="stat-value" id="stat-time" style="font-size:18px">—</div>
+      </div>
+    </div>
+    <div id="checklist-body"></div>
+    <div class="required-warning" id="required-warning">⚠ Complete all required items (★) before finishing</div>
+    <div class="all-done" id="allDone">
+      <div class="all-done-title" id="done-title"></div>
+      <div class="all-done-sub" id="done-sub"></div>
+      <div style="margin-top:1.25rem;display:flex;gap:10px;justify-content:center">
+        <button onclick="openJournal()" style="background:transparent;border:1px solid var(--green-dim);color:var(--green);font-family:var(--mono);font-size:10px;letter-spacing:2px;padding:10px 18px;cursor:pointer;text-transform:uppercase">📓 Log Stop</button>
+        <button onclick="shareChecklist()" style="background:transparent;border:1px solid var(--amber-dim);color:var(--amber);font-family:var(--mono);font-size:10px;letter-spacing:2px;padding:10px 18px;cursor:pointer;text-transform:uppercase">📤 Share</button>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="back-btn" onclick="showScreen('screen-submode')">← Back</button>
+      <button class="wake-btn" id="wake-btn" onclick="toggleWakeLock()">☀️ Keep Awake</button>
+      <button class="reset-btn" onclick="resetAll()">Reset</button>
+    </div>
+    <div class="footer">RV-SI · SOUTH ISLAND EXPEDITION</div>
+  </div>
+</div>
+
+<!-- SCREEN 4: TRIP LOG -->
+<div class="screen" id="screen-log">
+  <div class="cockpit">
+    <div class="header">
+      <div class="airline-tag">South Island Expedition</div>
+      <div class="header-title">TRIP LOG</div>
+      <div class="header-sub">COMPLETED CHECKLISTS · YOUR JOURNEY HISTORY</div>
+      <div class="header-rv">📋</div>
+    </div>
+    <div id="log-body"></div>
+    <div class="btn-row" style="margin-top:1.5rem">
+      <button class="back-btn" onclick="showScreen('screen-type')">← Back</button>
+      <button class="reset-btn" onclick="shareLog()">Share</button>
+      <button class="reset-btn" onclick="exportLogCSV()">Export CSV</button>
+      <button class="reset-btn" onclick="clearLog()">Clear</button>
+    </div>
+    <div class="footer">RV-SI · SOUTH ISLAND EXPEDITION</div>
+  </div>
+</div>
+
+<!-- SCREEN 5: STATS -->
+<div class="screen" id="screen-stats">
+  <div class="cockpit">
+    <div class="header">
+      <div class="airline-tag">South Island Expedition</div>
+      <div class="header-title">TRIP STATS</div>
+      <div class="header-sub">YOUR JOURNEY BY THE NUMBERS</div>
+      <div class="header-rv">📊</div>
+    </div>
+    <div id="stats-body"></div>
+    <button class="back-btn" style="width:100%;margin-top:1.5rem" onclick="showScreen('screen-type')">← Back</button>
+    <div class="footer">RV-SI · SOUTH ISLAND EXPEDITION</div>
+  </div>
+</div>
+
+<!-- SCREEN 6: EDITOR -->
+<div class="screen" id="screen-editor">
+  <div class="cockpit">
+    <div class="header">
+      <div class="airline-tag">Checklist Editor</div>
+      <div class="header-title">EDIT LISTS</div>
+      <div class="header-sub">ADD · REMOVE · REORDER YOUR CHECKLIST ITEMS</div>
+      <div class="header-rv">✏️</div>
+    </div>
+    <div style="margin-bottom:1rem">
+      <select id="editor-select" onchange="loadEditor()" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:10px;outline:none;letter-spacing:1px">
+        <option value="campsite|arrive">Campsite — Arrive &amp; Set Up</option>
+        <option value="campsite|depart">Campsite — Pack Up &amp; Depart</option>
+        <option value="campsite|secure">Campsite — Secure for Night</option>
+        <option value="campsite|morning">Campsite — Morning Start Up</option>
+        <option value="quickstop|pullin">Quick Stop — Pulling In</option>
+        <option value="quickstop|pullout">Quick Stop — Pulling Out</option>
+      </select>
+    </div>
+    <div id="editor-body"></div>
+    <button class="back-btn" style="width:100%;margin-top:1rem" onclick="showScreen('screen-type')">← Back</button>
+    <div class="footer">RV-SI · SOUTH ISLAND EXPEDITION</div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const DEFAULT_CHECKLISTS = {
+  campsite: {
+    tag:'Campsite to Campsite — NZ South Island', title:'CAMPSITE STOP', emoji:'🏕️', question:'WHAT ARE WE DOING?',
+    submodes: {
+      arrive: {
+        label:'ARRIVE & SET UP', emoji:'🏕️', desc:'Pull up and get comfortable.', cardClass:'arrive', accentVar:'--green',
+        clTag:'Arrival protocol — NZ South Island', clTitle:'ARRIVE & SET UP', clSub:'CAMPSITE ARRIVAL · GET SETTLED IN', clEmoji:'🏕️',
+        doneTitle:'CAMP IS SET UP', doneSub:"Feet up — you've earned it", estMins:12,
+        required:['Connect electric hookup'],
+        sections: {
+          'Pull up & park':['Find your pitch & park up','Deploy step','Unlock & open all doors'],
+          'External setup':['Roll out awning if weather permits','Set out chairs & table if weather permits'],
+          'Hook up utilities':['Connect electric hookup','Connect any water hose','Turn on gas 30 mins before hot water needed'],
+          'Internal setup':['Open sunroofs if warm','Set up beds if needed','Unpack chargers & plug in']
+        }
+      },
+      depart: {
+        label:'PACK UP & DEPART', emoji:'🚐', desc:'Full pack down before rolling.', cardClass:'depart', accentVar:'--red',
+        clTag:'Departure protocol — NZ South Island', clTitle:'PACK UP & GO', clSub:'FULL DEPARTURE CHECK · COMPLETE BEFORE LEAVING', clEmoji:'🚐',
+        doneTitle:'READY FOR DEPARTURE', doneSub:'South Island — cleared for launch', estMins:15,
+        required:['Step under door','Right cargo door sealed','Left cargo door sealed','Stow awning','All doors closed','All sunroofs closed','Close and lock all cupboards','Turn off campsite breaker','Disconnect power cable','Fold & stow power cable','No other wires connected from campsite','All chargers unplugged','Turn gas off'],
+        sections: {
+          'External checks':['Step under door','Right cargo door sealed','Left cargo door sealed','Ladder stowed','Stow awning','All doors closed'],
+          'Internal checks':['Close and lock all cupboards','Block fridge','All curtains open','Sunroof curtain open','All sunroofs closed','All beds, tables & chairs stowed','Stow stove'],
+          'Power switches':['Lights switch — OFF','Media switch — OFF','Spare switch — OFF (emergency only)','Water heater switch — OFF','Pump switch — OFF','Stove ignition switch — OFF'],
+          'Utilities & services':['Turn off campsite breaker','Disconnect power cable','Fold & stow power cable','No other wires connected from campsite','All chargers unplugged','Turn gas off']
+        }
+      },
+      secure: {
+        label:'SECURE FOR NIGHT', emoji:'🌙', desc:'Lock up and wind down.', cardClass:'secure', accentVar:'--purple',
+        clTag:'Nightly security — NZ South Island', clTitle:'SECURE FOR NIGHT', clSub:'BEDTIME CHECK · SLEEP EASY', clEmoji:'🌙',
+        doneTitle:'ALL SECURE', doneSub:'Sleep well — you\'re locked up tight', estMins:5,
+        required:['Right cargo door sealed','Left cargo door sealed','Close & lock main door','All curtains closed','Sunroof curtain closed','Gas off','Stove ignition switch — OFF','Water heater switch — OFF'],
+        sections: {
+          'External':['Stow awning','Stow chairs & table','Right cargo door sealed','Left cargo door sealed','Close & lock main door','Step stowed'],
+          'Windows & vents':['All curtains closed','Sunroof curtain closed','All windows closed','Sunroof closed or cracked to vent'],
+          'Power switches':['Stove ignition switch — OFF','Water heater switch — OFF','Lights switch — leave on','Pump switch — leave on if needed overnight','Media switch — OFF','Spare switch — OFF (emergency only)'],
+          'Utilities':['Gas off','Ensure electric hookup is stable','All exterior lights off'],
+          'Internal':['Beds made up','All cupboards latched','Valuables out of sight','Phones & devices on charge','Locks checked']
+        }
+      },
+      morning: {
+        label:'MORNING START UP', emoji:'☀️', desc:'Rise and shine — get the day going.', cardClass:'morning', accentVar:'--amber',
+        clTag:'Morning routine — NZ South Island', clTitle:'MORNING START UP', clSub:'RISE & SHINE · GET THE DAY GOING', clEmoji:'☀️',
+        doneTitle:'GOOD MORNING!', doneSub:'Ready for another great day', estMins:8,
+        required:['Pump switch — ON'],
+        sections: {
+          'Open up':['Open sunroof curtain','Open curtains','Open windows if warm','Open sunroof if warm','Deploy step','Unlock & open main door'],
+          'Power switches':['Lights switch — ON','Pump switch — ON','Water heater switch — ON'],
+          'Utilities':['Turn on gas','Check electric hookup is still connected','Check water if on mains'],
+          'Kitchen & breakfast':['Set up stove','Kettle on','Set out breakfast things'],
+          'Personal':['Everyone up & dressed','Phones off charge & stowed','Beds stowed or made neat','Sunscreen & hats ready if sunny']
+        }
+      }
+    }
+  },
+  quickstop: {
+    tag:'Quick Stop — NZ South Island', title:'QUICK STOP', emoji:'⛽', question:'PULLING IN OR PULLING OUT?',
+    submodes: {
+      pullin: {
+        label:'PULLING IN', emoji:'🅿️', desc:'Park up and let everyone out.', cardClass:'pullin', accentVar:'--teal',
+        clTag:'Quick stop arrival — NZ South Island', clTitle:'PULLING IN', clSub:'QUICK STOP · PARK UP AND STRETCH', clEmoji:'🅿️',
+        doneTitle:'STOPPED & SECURE', doneSub:'Go grab that coffee', estMins:3,
+        required:['Handbrake on','Engine off'],
+        sections: {
+          'Stop & secure':['Park up safely','Handbrake on','Engine off','Deploy step','Unlock & open doors','Let everyone out','Lock up if leaving RV']
+        }
+      },
+      pullout: {
+        label:'PULLING OUT', emoji:'▶️', desc:'Quick check before rolling again.', cardClass:'pullout', accentVar:'--purple',
+        clTag:'Quick stop departure — NZ South Island', clTitle:'PULLING OUT', clSub:'QUICK DEPARTURE CHECK · BACK ON THE ROAD', clEmoji:'▶️',
+        doneTitle:'BACK ON THE ROAD', doneSub:'Keep the adventure going', estMins:4,
+        required:['Step stowed','All doors closed','Turn gas off'],
+        sections: {
+          'Before you roll':['Everyone back inside','Step stowed','All doors closed','All cupboards shut','Block fridge','Stow stove','Turn gas off','All chargers unplugged','No wires connected']
+        }
+      }
+    }
+  }
+};
+
+// ── STATE ──
+let CHECKLISTS = JSON.parse(JSON.stringify(DEFAULT_CHECKLISTS));
+let currentType = null, currentSubmode = null;
+let itemState = {}, itemNotes = {};
+let modalItem = null, pendingLogId = null;
+let weather = null, startTime = null;
+
+// ── STORAGE ──
+function saveToStorage() {
+  localStorage.setItem('rv_state_' + currentType + '|' + currentSubmode, JSON.stringify(itemState));
+  localStorage.setItem('rv_notes_' + currentType + '|' + currentSubmode, JSON.stringify(itemNotes));
+}
+function loadFromStorage(type, sub) {
+  const s = localStorage.getItem('rv_state_' + type + '|' + sub);
+  const n = localStorage.getItem('rv_notes_' + type + '|' + sub);
+  itemState = s ? JSON.parse(s) : {};
+  itemNotes = n ? JSON.parse(n) : {};
+}
+function saveCustomLists() { localStorage.setItem('rv_custom_lists', JSON.stringify(CHECKLISTS)); }
+function loadCustomLists() { const s = localStorage.getItem('rv_custom_lists'); if (s) CHECKLISTS = JSON.parse(s); }
+
+// ── TRIP LOG ──
+function getLog() { return JSON.parse(localStorage.getItem('rv_log') || '[]'); }
+function saveLog(log) { localStorage.setItem('rv_log', JSON.stringify(log)); }
+
+function addLogEntry() {
+  const sm = CHECKLISTS[currentType].submodes[currentSubmode];
+  const total = Object.values(sm.sections).flat().length;
+  const elapsed = startTime ? Math.round((Date.now() - startTime) / 60000) : null;
+  const id = Date.now();
+  pendingLogId = id;
+  const entry = {
+    id, type: currentType, submode: currentSubmode,
+    typeLabel: CHECKLISTS[currentType].title, submodeLabel: sm.label,
+    emoji: sm.clEmoji, total, elapsed, location: '', siteNum: '', power: '', rating: 0, notes: '',
+    time: new Date().toLocaleString('en-NZ', {weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})
+  };
+  const log = getLog(); log.unshift(entry); saveLog(log);
+}
+
+// ── JOURNAL ──
+let journalRating = 0;
+function openJournal() {
+  journalRating = 0;
+  document.getElementById('journal-location').value = '';
+  document.getElementById('journal-sitenum').value = '';
+  document.getElementById('journal-power').value = '';
+  document.getElementById('journal-notes').value = '';
+  document.querySelectorAll('.journal-star').forEach(s => s.classList.remove('active'));
+  const sm = CHECKLISTS[currentType].submodes[currentSubmode];
+  document.getElementById('journal-sub').textContent = sm.clTitle + ' · ' + new Date().toLocaleDateString('en-NZ',{day:'numeric',month:'short'});
+  document.querySelectorAll('.journal-star').forEach(star => {
+    star.onclick = () => {
+      journalRating = parseInt(star.dataset.val);
+      document.querySelectorAll('.journal-star').forEach((s,i) => s.classList.toggle('active', i < journalRating));
+    };
+  });
+  document.getElementById('journalModal').classList.add('open');
+}
+function closeJournal() { document.getElementById('journalModal').classList.remove('open'); }
+function saveJournal() {
+  if (!pendingLogId) { closeJournal(); return; }
+  const log = getLog();
+  const e = log.find(x => x.id === pendingLogId);
+  if (e) {
+    e.location = document.getElementById('journal-location').value.trim();
+    e.siteNum = document.getElementById('journal-sitenum').value.trim();
+    e.power = document.getElementById('journal-power').value;
+    e.rating = journalRating;
+    e.notes = document.getElementById('journal-notes').value.trim();
+    saveLog(log);
+  }
+  closeJournal();
+}
+
+function renderLog() {
+  const log = getLog();
+  const body = document.getElementById('log-body');
+  if (!log.length) { body.innerHTML = '<div class="log-empty">NO ENTRIES YET<br><br>Complete a checklist<br>to start your log.</div>'; return; }
+  body.innerHTML = log.map(e => `
+    <div class="log-entry">
+      <div class="log-type">${e.emoji} ${e.typeLabel} · ${e.submodeLabel}</div>
+      ${e.location ? '<div style="font-family:var(--mono);font-size:11px;color:var(--text);margin-bottom:2px">📍 ' + e.location + (e.siteNum ? ' · Site ' + e.siteNum : '') + (e.power ? ' · ' + e.power : '') + '</div>' : ''}
+      ${e.rating ? '<div class="log-rating">' + '⭐'.repeat(e.rating) + '</div>' : ''}
+      ${e.notes ? '<div class="log-journal">' + e.notes + '</div>' : ''}
+      <div class="log-time">${e.time}${e.elapsed ? ' · ' + e.elapsed + ' MIN' : ''} · ${e.total} ITEMS</div>
+      <button class="log-delete" onclick="deleteLogEntry(${e.id})">✕</button>
+    </div>`).join('');
+}
+
+function deleteLogEntry(id) { saveLog(getLog().filter(e => e.id !== id)); renderLog(); }
+function clearLog() { if (confirm('Clear all trip log entries?')) { saveLog([]); renderLog(); } }
+
+function shareLog() {
+  const log = getLog();
+  if (!log.length) { alert('No log entries yet!'); return; }
+  const plate = localStorage.getItem('rv_plate') || 'RV';
+  const lines = ['🚐 ' + plate + ' — South Island Trip Log', ''];
+  log.forEach(e => {
+    lines.push(e.emoji + ' ' + e.submodeLabel);
+    if (e.location) lines.push('📍 ' + e.location + (e.siteNum ? ' · Site ' + e.siteNum : '') + (e.power ? ' · ' + e.power : ''));
+    if (e.rating) lines.push('⭐'.repeat(e.rating));
+    lines.push('🕐 ' + e.time + (e.elapsed ? ' (' + e.elapsed + ' min)' : ''));
+    if (e.notes) lines.push('📝 ' + e.notes);
+    lines.push('');
+  });
+  const text = lines.join('\n');
+  if (navigator.share) { navigator.share({title:'Trip Log', text}).catch(() => {}); }
+  else { navigator.clipboard.writeText(text).then(() => alert('Copied!')).catch(() => alert(text)); }
+}
+
+function shareChecklist() {
+  const sm = CHECKLISTS[currentType].submodes[currentSubmode];
+  const all = Object.values(sm.sections).flat();
+  const lines = ['✅ ' + sm.clTitle + ' — ' + sm.clSub, ''];
+  Object.entries(sm.sections).forEach(([sec, items]) => {
+    lines.push('▶ ' + sec.toUpperCase());
+    items.forEach(label => lines.push((itemState[label] ? '✅' : '⬜') + ' ' + label));
+    lines.push('');
+  });
+  const done = all.filter(l => itemState[l]).length;
+  lines.push(done + '/' + all.length + ' complete');
+  const text = lines.join('\n');
+  if (navigator.share) { navigator.share({title: sm.clTitle, text}).catch(() => {}); }
+  else { navigator.clipboard.writeText(text).then(() => alert('Copied to clipboard!')).catch(() => alert(text)); }
+}
+
+function exportLogCSV() {
+  const log = getLog();
+  if (!log.length) { alert('No log entries yet!'); return; }
+  const rows = [['Date','Type','Submode','Location','Site','Power','Rating','Time (min)','Items','Notes']];
+  log.forEach(e => rows.push([e.time, e.typeLabel, e.submodeLabel, e.location||'', e.siteNum||'', e.power||'', e.rating||'', e.elapsed||'', e.total, (e.notes||'').replace(/\n/g,' ')]));
+  const csv = rows.map(r => r.map(v => '"' + String(v).replace(/"/g,'""') + '"').join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'rv-trip-log.csv';
+  a.click();
+}
+
+// ── STATS ──
+function renderStats() {
+  const log = getLog();
+  const body = document.getElementById('stats-body');
+  if (!log.length) { body.innerHTML = '<div class="log-empty">NO DATA YET<br><br>Complete some checklists<br>to see your stats.</div>'; return; }
+  const withTime = log.filter(e => e.elapsed > 0);
+  const avg = withTime.length ? Math.round(withTime.reduce((a,e) => a + e.elapsed, 0) / withTime.length) : null;
+  const typeCount = {};
+  log.forEach(e => { typeCount[e.submodeLabel] = (typeCount[e.submodeLabel] || 0) + 1; });
+  const top = Object.entries(typeCount).sort((a,b) => b[1]-a[1])[0];
+  const locs = log.filter(e => e.location).map(e => e.location);
+  const sc = (label, val, sub) => '<div class="stat-card"><div class="stat-card-label">' + label + '</div><div class="stat-card-val">' + val + '</div>' + (sub ? '<div class="stat-card-sub">' + sub + '</div>' : '') + '</div>';
+  body.innerHTML =
+    sc('Total checklists', log.length) +
+    sc('Average time', avg !== null ? avg + ' min' : 'N/A') +
+    sc('Most used', top ? top[0] : '—', top ? top[1] + ' times' : '') +
+    sc('Stops tagged', locs.length, locs.slice(0,3).join(', ') || 'None yet') +
+    sc('Campsite checks', log.filter(e => e.type === 'campsite').length) +
+    sc('Quick stop checks', log.filter(e => e.type === 'quickstop').length);
+}
+
+// ── WEATHER ──
+async function fetchWeather(manualCity) {
+  renderWeather();
+  try {
+    let lat, lon;
+    if (manualCity) {
+      const geo = await fetch('https://geocoding-api.open-meteo.com/v1/search?name=' + encodeURIComponent(manualCity) + '&count=1');
+      const gd = await geo.json();
+      if (!gd.results || !gd.results.length) { weather = {noLoc: true, manualFailed: true}; renderWeather(); return; }
+      lat = gd.results[0].latitude; lon = gd.results[0].longitude;
+      weather = weather || {};
+      weather.cityName = gd.results[0].name;
+    } else {
+      const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, {timeout:8000}));
+      lat = pos.coords.latitude; lon = pos.coords.longitude;
+    }
+    const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,weathercode,windspeed_10m&daily=sunrise,sunset&timezone=auto');
+    const d = await r.json();
+    const code = d.current.weathercode;
+    const fmtTime = iso => { const t = new Date(iso); return t.toLocaleTimeString('en-NZ', {hour:'2-digit', minute:'2-digit', hour12:true}); };
+    weather = {
+      icon: code <= 1 ? '☀️' : code <= 3 ? '⛅' : code <= 67 ? '🌧️' : '🌨️',
+      desc: code <= 1 ? 'Clear' : code <= 3 ? 'Partly cloudy' : code <= 67 ? 'Rain' : 'Snow/Ice',
+      temp: Math.round(d.current.temperature_2m),
+      wind: Math.round(d.current.windspeed_10m),
+      good: code <= 3, noLoc: false,
+      cityName: weather && weather.cityName ? weather.cityName : null,
+      sunrise: d.daily && d.daily.sunrise ? fmtTime(d.daily.sunrise[0]) : null,
+      sunset: d.daily && d.daily.sunset ? fmtTime(d.daily.sunset[0]) : null,
+    };
+  } catch(e) {
+    weather = {noLoc: true};
+  }
+  renderWeather();
+}
+
+function weatherHTML() {
+  if (!weather) return '<div class="weather-strip"><div class="weather-icon">⏳</div><div class="weather-info"><div class="weather-label">Weather</div><div class="weather-val">Fetching...</div></div></div>';
+  if (weather.noLoc) return `<div class="weather-strip" style="flex-wrap:wrap"><div class="weather-icon">📍</div><div class="weather-info"><div class="weather-label">Weather</div><div class="weather-val">${weather.manualFailed ? 'Location not found — try again' : 'Allow location or search a town below'}</div></div><button class="weather-retry" onclick="fetchWeather()">GPS</button></div>`;
+  const city = weather.cityName ? ' · ' + weather.cityName : '';
+  const sunRow = (weather.sunrise && weather.sunset)
+    ? `<div style="display:flex;gap:16px;padding:6px 16px 8px;background:var(--panel);border:1px solid var(--border);border-top:none;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px">
+        <span>🌅 Sunrise <span style="color:var(--amber)">${weather.sunrise}</span></span>
+        <span>🌇 Sunset <span style="color:var(--amber)">${weather.sunset}</span></span>
+       </div>` : '';
+  return '<div class="weather-strip" style="border-bottom:none">' +
+    '<div class="weather-icon">' + weather.icon + '</div>' +
+    '<div class="weather-info"><div class="weather-label">Current conditions' + city + '</div>' +
+    '<div class="weather-val">' + weather.desc + ' · ' + weather.temp + '°C · Wind ' + weather.wind + ' km/h</div></div>' +
+    '<div class="weather-rec">' + (weather.good ? 'AWNING OK' : 'STAY IN') + '</div>' +
+    '</div>' + sunRow;
+}
+
+function renderWeather() {
+  ['weather-home','weather-checklist'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = weatherHTML();
+  });
+}
+
+// ── HAPTIC ──
+function haptic(style) {
+  try { if (navigator.vibrate) navigator.vibrate(style === 'light' ? 30 : style === 'success' ? [40,30,80] : 60); } catch(e) {}
+}
+
+// ── SOUND ──
+let audioCtx = null;
+function getAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
+function playDing() {
+  haptic('light');
+  try {
+    const ctx = getAudio(), o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = 880; o.type = 'sine';
+    g.gain.setValueAtTime(0, ctx.currentTime);
+    g.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.3);
+  } catch(e) {}
+}
+function playCompleteSound() {
+  haptic('success');
+  try {
+    const ctx = getAudio();
+    [523,659,784,1047].forEach((freq, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = freq; o.type = 'sine';
+      g.gain.setValueAtTime(0, ctx.currentTime + i * 0.12);
+      g.gain.linearRampToValueAtTime(0.15, ctx.currentTime + i * 0.12 + 0.05);
+      g.gain.linearRampToValueAtTime(0, ctx.currentTime + i * 0.12 + 0.25);
+      o.start(ctx.currentTime + i * 0.12); o.stop(ctx.currentTime + i * 0.12 + 0.3);
+    });
+  } catch(e) {}
+}
+
+// ── CONFETTI ──
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const pieces = Array.from({length:120}, () => ({
+    x: Math.random() * canvas.width, y: -20 - Math.random() * 80,
+    w: 6 + Math.random() * 6, h: 10 + Math.random() * 6,
+    r: Math.random() * Math.PI * 2, dr: (Math.random() - 0.5) * 0.2,
+    vy: 2 + Math.random() * 4, vx: (Math.random() - 0.5) * 3,
+    color: ['#f5a623','#00e676','#4fc3f7','#ce93d8','#ff4444','#ffffff'][Math.floor(Math.random()*6)],
+    alpha: 1
+  }));
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p => {
+      p.y += p.vy; p.x += p.vx; p.r += p.dr;
+      if (frame > 80) p.alpha = Math.max(0, p.alpha - 0.015);
+      ctx.save(); ctx.globalAlpha = p.alpha; ctx.translate(p.x, p.y); ctx.rotate(p.r);
+      ctx.fillStyle = p.color; ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h); ctx.restore();
+    });
+    frame++;
+    if (frame < 140) requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  draw();
+}
+
+// ── SWIPE ──
+function setupSwipe(div, label) {
+  let startX = 0, startY = 0, tracking = false;
+  div.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; tracking = true; }, {passive:true});
+  div.addEventListener('touchmove', e => {
+    if (!tracking) return;
+    if (Math.abs(e.touches[0].clientY - startY) > 20) { tracking = false; div.classList.remove('swiping'); return; }
+    if (e.touches[0].clientX - startX > 20) div.classList.add('swiping');
+    else div.classList.remove('swiping');
+  }, {passive:true});
+  div.addEventListener('touchend', e => {
+    div.classList.remove('swiping');
+    if (tracking && e.changedTouches[0].clientX - startX > 60 && !itemState[label]) {
+      itemState[label] = true;
+      div.className = itemClass(label, true);
+      const num = div.querySelector('.item-num').textContent;
+      div.innerHTML = itemInnerHTML(label, num, true);
+      setupItemEvents(div, label);
+      playDing(); updateStats(); saveToStorage();
+    }
+    tracking = false;
+  }, {passive:true});
+}
+
+// ── NOTE MODAL ──
+function openModal(label) {
+  modalItem = label;
+  document.getElementById('modal-item-name').textContent = label;
+  document.getElementById('modal-textarea').value = itemNotes[label] || '';
+  document.getElementById('noteModal').classList.add('open');
+  setTimeout(() => document.getElementById('modal-textarea').focus(), 100);
+}
+function closeModal() { document.getElementById('noteModal').classList.remove('open'); modalItem = null; }
+function saveNote() {
+  if (!modalItem) return;
+  const note = document.getElementById('modal-textarea').value.trim();
+  if (note) itemNotes[modalItem] = note; else delete itemNotes[modalItem];
+  saveToStorage();
+  // refresh the item row to show/hide note preview
+  document.querySelectorAll('.item').forEach(div => {
+    const lbl = div.querySelector('.label');
+    if (lbl && lbl.textContent === modalItem) {
+      const noteEl = div.querySelector('.item-note');
+      if (noteEl) noteEl.textContent = note || '';
+    }
+  });
+  closeModal();
+}
+
+// ── ITEM HTML ──
+function isRequired(label) {
+  if (!currentType || !currentSubmode) return false;
+  const sm = CHECKLISTS[currentType].submodes[currentSubmode];
+  return sm.required && sm.required.includes(label);
+}
+
+function itemInnerHTML(label, num, checked) {
+  const note = itemNotes[label] || '';
+  const req = isRequired(label);
+  return `
+    <div class="item-num">${num}</div>
+    <div class="check-box"><svg class="check-icon" width="12" height="10" viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1" stroke="#0d1117" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="item-body">
+      <div class="label">${label}</div>
+      ${note ? '<div class="item-note">📝 ' + note + '</div>' : '<div class="item-note"></div>'}
+    </div>
+    <button class="note-btn" onclick="event.stopPropagation();openModal('${label.replace(/'/g,"\\'")}')">📝</button>
+    <div class="item-status">${checked ? 'DONE' : ''}</div>
+  `;
+}
+
+function itemClass(label, checked) {
+  let cls = 'item';
+  if (checked) cls += ' checked';
+  if (isRequired(label)) cls += ' required';
+  return cls;
+}
+
+function setupItemEvents(div, label) {
+  div.onclick = () => {
+    const wasChecked = itemState[label];
+    itemState[label] = !wasChecked;
+    div.className = itemClass(label, itemState[label]);
+    const num = div.querySelector('.item-num').textContent;
+    div.innerHTML = itemInnerHTML(label, num, itemState[label]);
+    setupItemEvents(div, label);
+    if (itemState[label]) playDing();
+    updateStats();
+    saveToStorage();
+  };
+  setupSwipe(div, label);
+}
+
+// ── RENDER CHECKLIST ──
+function renderChecklist() {
+  const sm = CHECKLISTS[currentType].submodes[currentSubmode];
+  document.getElementById('cl-tag').textContent = sm.clTag;
+  document.getElementById('cl-title').textContent = sm.clTitle;
+  document.getElementById('cl-sub').textContent = sm.clSub;
+  document.getElementById('cl-emoji').textContent = sm.clEmoji;
+  document.getElementById('breadcrumb').innerHTML =
+    CHECKLISTS[currentType].title + ' <span>›</span> ' + sm.label;
+
+  const hasTouch = navigator.maxTouchPoints > 0;
+  let html = hasTouch ? '<div class="swipe-hint">← swipe right on any item to check it</div>' : '';
+  let globalNum = 1;
+  Object.entries(sm.sections).forEach(([sec, items]) => {
+    const secId = 'sec_' + sec.replace(/\s+/g,'_');
+    html += `<div class="section-header"><div class="section-label" style="flex:1;margin-bottom:0">${sec}</div><button class="check-all-btn" onclick="checkAllSection('${sec.replace(/'/g,"\\'")}')">Check all</button></div>`;
+    items.forEach(label => {
+      const checked = !!itemState[label];
+      html += '<div class="' + itemClass(label, checked) + '" data-label="' + label.replace(/"/g,'&quot;') + '">' + itemInnerHTML(label, globalNum, checked) + '</div>';
+      globalNum++;
+    });
+  });
+  document.getElementById('checklist-body').innerHTML = html;
+
+  document.querySelectorAll('#checklist-body .item').forEach(div => {
+    const label = div.dataset.label;
+    setupItemEvents(div, label);
+  });
+
+  updateStats();
+  renderWeather();
+}
+
+// Which checklist to auto-reset when this one completes: [type, submode]
+const NEXT_RESET = {
+  'campsite|arrive':   ['campsite', 'depart'],
+  'campsite|depart':   ['campsite', 'arrive'],
+  'campsite|secure':   ['campsite', 'morning'],
+  'campsite|morning':  ['campsite', 'secure'],
+  'quickstop|pullin':  ['quickstop', 'pullout'],
+  'quickstop|pullout': ['quickstop', 'pullin'],
+};
+
+function resetOtherChecklist(type, sub) {
+  // Clear stored state for the paired checklist silently
+  localStorage.removeItem('rv_state_' + type + '|' + sub);
+  localStorage.removeItem('rv_notes_' + type + '|' + sub);
+}
+
+function updateStats() {
+  const sm = CHECKLISTS[currentType].submodes[currentSubmode];
+  const all = Object.values(sm.sections).flat();
+  const total = all.length;
+  const done = all.filter(l => itemState[l]).length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('stat-checked').textContent = done;
+  document.getElementById('stat-remaining').textContent = total - done;
+  document.getElementById('stat-pct').textContent = pct + '%';
+  const elapsed = startTime ? Math.round((Date.now() - startTime) / 60000) : 0;
+  document.getElementById('stat-time').textContent = elapsed ? elapsed + ' min' : sm.estMins + ' min';
+
+  // Check required items
+  const required = sm.required || [];
+  const missingRequired = required.filter(l => !itemState[l]);
+  const reqWarning = document.getElementById('required-warning');
+  const allDone = document.getElementById('allDone');
+
+  if (done === total && total > 0) {
+    if (missingRequired.length > 0) {
+      // All ticked but somehow required missing — shouldn't happen, but guard anyway
+      reqWarning.classList.add('show');
+      allDone.classList.remove('show');
+    } else {
+      reqWarning.classList.remove('show');
+      if (!allDone.classList.contains('show')) {
+        allDone.classList.add('show');
+        document.getElementById('done-title').textContent = sm.doneTitle;
+        document.getElementById('done-sub').textContent = sm.doneSub;
+        playCompleteSound();
+        launchConfetti();
+        addLogEntry();
+        const key = currentType + '|' + currentSubmode;
+        if (NEXT_RESET[key]) resetOtherChecklist(NEXT_RESET[key][0], NEXT_RESET[key][1]);
+      }
+    }
+  } else {
+    allDone.classList.remove('show');
+    // Show required warning only if all non-required are done but required still missing
+    if (done > 0 && missingRequired.length > 0 && done >= total - missingRequired.length) {
+      reqWarning.classList.add('show');
+    } else {
+      reqWarning.classList.remove('show');
+    }
+  }
+}
+
+function checkAllSection(sec) {
+  const sm = CHECKLISTS[currentType].submodes[currentSubmode];
+  const items = sm.sections[sec];
+  if (!items) return;
+  items.forEach(label => { itemState[label] = true; });
+  haptic('light');
+  saveToStorage();
+  renderChecklist();
+}
+
+function resetAll() {
+  itemState = {}; itemNotes = {};
+  saveToStorage();
+  startTime = Date.now();
+  pendingLogId = null;
+  document.getElementById('allDone').classList.remove('show');
+  renderChecklist();
+}
+
+// ── NAVIGATION ──
+function showScreen(id) {
+  if (id !== 'screen-checklist') releaseWakeLock();
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if (id === 'screen-type') { renderHomeStats(); renderGasBtn(); }
+  if (id === 'screen-log') renderLog();
+  if (id === 'screen-stats') renderStats();
+  if (id === 'screen-editor') loadEditor();
+}
+
+function selectType(type) {
+  currentType = type;
+  const cl = CHECKLISTS[type];
+  document.getElementById('submode-tag').textContent = cl.tag;
+  document.getElementById('submode-title').textContent = cl.title;
+  document.getElementById('submode-emoji').textContent = cl.emoji;
+  document.getElementById('submode-question').textContent = cl.question;
+
+  const cards = Object.entries(cl.submodes).map(([key, sm]) => `
+    <div class="sub-card ${sm.cardClass}" onclick="selectSubmode('${key}')">
+      <span class="sub-emoji">${sm.emoji}</span>
+      <div class="sub-name">${sm.label}</div>
+      <div class="sub-desc">${sm.desc}</div>
+      <div class="sub-tag">${sm.label}</div>
+    </div>`).join('');
+  document.getElementById('sub-cards').innerHTML = cards;
+  showScreen('screen-submode');
+}
+
+function selectSubmode(sub) {
+  currentSubmode = sub;
+  loadFromStorage(currentType, sub);
+  startTime = Date.now();
+  pendingLogId = null;
+  renderChecklist();
+  showScreen('screen-checklist');
+}
+
+// ── PLATE ──
+function savePlate(val) {
+  const v = val.toUpperCase();
+  localStorage.setItem('rv_plate', v);
+  document.getElementById('plate-display').textContent = v || 'CHECKLIST SYSTEM · SELECT MODE TO CONTINUE';
+}
+
+// ── EDITOR ──
+function loadEditor() {
+  const val = document.getElementById('editor-select').value;
+  const [type, sub] = val.split('|');
+  const sm = CHECKLISTS[type].submodes[sub];
+  const required = sm.required || [];
+  let html = '';
+  Object.entries(sm.sections).forEach(([sec, items]) => {
+    html += '<div class="editor-section"><div class="editor-section-title">' + sec + '</div>';
+    items.forEach((item, i) => {
+      const isReq = required.includes(item);
+      html += `<div class="editor-item">
+        <input type="text" value="${item.replace(/"/g,'&quot;')}" data-sec="${sec}" data-idx="${i}"/>
+        <button class="editor-req ${isReq ? 'on' : ''}" title="Required item" onclick="editorToggleRequired('${val}','${item.replace(/'/g,"\\'")}',this)">Req</button>
+        <button class="editor-del" onclick="editorDelete('${val}','${sec.replace(/'/g,"\\'")}',${i})">✕</button>
+      </div>`;
+    });
+    html += `<button class="editor-add" onclick="editorAdd('${val}','${sec.replace(/'/g,"\\'")}')">+ Add item</button></div>`;
+  });
+  html += `<div style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:8px;margin-bottom:4px">★ = Required item — must be checked before checklist can complete</div>`;
+  html += `<button class="editor-save" onclick="editorSave('${val}')">💾 Save changes</button>`;
+  document.getElementById('editor-body').innerHTML = html;
+}
+
+function editorToggleRequired(val, item, btn) {
+  const [type, sub] = val.split('|');
+  const sm = CHECKLISTS[type].submodes[sub];
+  if (!sm.required) sm.required = [];
+  const idx = sm.required.indexOf(item);
+  if (idx === -1) { sm.required.push(item); btn.classList.add('on'); }
+  else { sm.required.splice(idx, 1); btn.classList.remove('on'); }
+  saveCustomLists();
+}
+
+function editorSave(val) {
+  const [type, sub] = val.split('|');
+  const sm = CHECKLISTS[type].submodes[sub];
+  const oldRequired = sm.required || [];
+  const newRequired = [];
+  document.querySelectorAll('#editor-body .editor-item').forEach(row => {
+    const inp = row.querySelector('input');
+    const reqBtn = row.querySelector('.editor-req');
+    const sec = inp.dataset.sec, idx = parseInt(inp.dataset.idx);
+    const oldVal = sm.sections[sec] && sm.sections[sec][idx];
+    if (sm.sections[sec] && inp.value.trim()) {
+      const newVal = inp.value.trim().toUpperCase();
+      sm.sections[sec][idx] = newVal;
+      if (reqBtn && reqBtn.classList.contains('on')) newRequired.push(newVal);
+    }
+  });
+  sm.required = newRequired;
+  saveCustomLists();
+  loadEditor();
+}
+
+function editorDelete(val, sec, idx) {
+  const [type, sub] = val.split('|');
+  CHECKLISTS[type].submodes[sub].sections[sec].splice(idx, 1);
+  saveCustomLists(); loadEditor();
+}
+
+function editorAdd(val, sec) {
+  const [type, sub] = val.split('|');
+  CHECKLISTS[type].submodes[sub].sections[sec].push('NEW ITEM');
+  saveCustomLists(); loadEditor();
+}
+
+// ── FACTORY RESET ──
+function openConfirmReset() { document.getElementById('confirmModal').classList.add('open'); }
+function closeConfirmReset() { document.getElementById('confirmModal').classList.remove('open'); }
+function doFactoryReset() {
+  Object.keys(localStorage).filter(k => k.startsWith('rv_')).forEach(k => localStorage.removeItem(k));
+  CHECKLISTS = JSON.parse(JSON.stringify(DEFAULT_CHECKLISTS));
+  currentType = null; currentSubmode = null;
+  itemState = {}; itemNotes = {};
+  document.getElementById('plate-input').value = '';
+  document.getElementById('plate-display').textContent = 'CHECKLIST SYSTEM · SELECT MODE TO CONTINUE';
+  renderGasBtn();
+  closeConfirmReset();
+  showScreen('screen-type');
+}
+
+// ── THEME ──
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light-mode');
+  document.getElementById('theme-track').classList.toggle('on', isLight);
+  localStorage.setItem('rv_theme', isLight ? 'light' : 'dark');
+}
+function applyTheme() {
+  const saved = localStorage.getItem('rv_theme');
+  if (saved === 'light') {
+    document.body.classList.add('light-mode');
+    document.getElementById('theme-track').classList.add('on');
+  }
+}
+
+// ── WAKE LOCK ──
+let wakeLock = null;
+async function toggleWakeLock() {
+  const btn = document.getElementById('wake-btn');
+  if (wakeLock) {
+    await wakeLock.release();
+    wakeLock = null;
+    btn.textContent = '☀️ Keep Awake';
+    btn.classList.remove('active');
+  } else {
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      btn.textContent = '🔆 Screen On';
+      btn.classList.add('active');
+      wakeLock.addEventListener('release', () => {
+        wakeLock = null;
+        btn.textContent = '☀️ Keep Awake';
+        btn.classList.remove('active');
+      });
+    } catch(e) {
+      btn.textContent = '☀️ Not supported';
+    }
+  }
+}
+// Release wake lock when leaving checklist screen
+function releaseWakeLock() {
+  if (wakeLock) { wakeLock.release(); wakeLock = null; }
+  const btn = document.getElementById('wake-btn');
+  if (btn) { btn.textContent = '☀️ Keep Awake'; btn.classList.remove('active'); }
+}
+
+// ── GAS STATUS ──
+function toggleGas() {
+  const current = localStorage.getItem('rv_gas') || 'unknown';
+  let next;
+  if (current === 'unknown' || current === 'off') next = 'on';
+  else next = 'off';
+  localStorage.setItem('rv_gas', next);
+  renderGasBtn();
+  haptic('light');
+}
+
+function renderGasBtn() {
+  const state = localStorage.getItem('rv_gas') || 'unknown';
+  const btn = document.getElementById('gas-btn');
+  const stateEl = document.getElementById('gas-state');
+  const iconEl = document.getElementById('gas-icon');
+  const subEl = document.getElementById('gas-sub');
+  if (!btn) return;
+  btn.className = 'gas-btn ' + (state === 'on' ? 'on' : state === 'off' ? 'off' : '');
+  if (state === 'on') {
+    iconEl.textContent = '🔥';
+    stateEl.textContent = 'ON';
+    subEl.textContent = 'Gas is currently ON — tap when you turn it off';
+  } else if (state === 'off') {
+    iconEl.textContent = '✅';
+    stateEl.textContent = 'OFF';
+    subEl.textContent = 'Gas is currently OFF — tap when you turn it on';
+  } else {
+    iconEl.textContent = '❓';
+    stateEl.textContent = 'UNKNOWN';
+    subEl.textContent = 'Tap to set gas status';
+  }
+}
+
+// ── DAY COUNTER & STREAK ──
+function renderHomeStats() {
+  const log = getLog();
+
+  // Trip day — based on date of first ever log entry (oldest = last in array)
+  const dayEl = document.getElementById('stat-day');
+  const streakEl = document.getElementById('stat-streak');
+  const totalEl = document.getElementById('stat-total');
+
+  // Total checks
+  if (totalEl) totalEl.textContent = log.length || '0';
+
+  if (!log.length) {
+    if (dayEl) dayEl.textContent = '1';
+    if (streakEl) streakEl.textContent = '0';
+    return;
+  }
+
+  // Day counter — days since first log entry
+  const firstEntry = log[log.length - 1];
+  const firstDate = new Date(firstEntry.id); // id is Date.now() timestamp
+  const today = new Date();
+  const diffMs = today - firstDate;
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+  if (dayEl) dayEl.textContent = diffDays;
+
+  // Depart streak — consecutive calendar days with a depart or pullout checklist completed
+  const departDays = new Set();
+  log.forEach(e => {
+    if (e.submode === 'depart' || e.submode === 'pullout') {
+      const d = new Date(e.id);
+      departDays.add(d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate());
+    }
+  });
+
+  let streak = 0;
+  const check = new Date();
+  // Start from today and walk backwards
+  for (let i = 0; i < 365; i++) {
+    const key = check.getFullYear() + '-' + check.getMonth() + '-' + check.getDate();
+    if (departDays.has(key)) {
+      streak++;
+      check.setDate(check.getDate() - 1);
+    } else {
+      // Allow today to not have one yet without breaking streak
+      if (i === 0) { check.setDate(check.getDate() - 1); continue; }
+      break;
+    }
+  }
+  if (streakEl) streakEl.textContent = streak;
+}
+
+// ── INIT ──
+loadCustomLists();
+applyTheme();
+const savedPlate = localStorage.getItem('rv_plate');
+if (savedPlate) {
+  document.getElementById('plate-input').value = savedPlate;
+  document.getElementById('plate-display').textContent = savedPlate;
+}
+renderHomeStats();
+renderGasBtn();
+fetchWeather();
+
+// ── PWA SERVICE WORKER (inline — no extra file needed) ──
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'rv-walkaround-v1';
+    const FONTS = [
+      'https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap'
+    ];
+    self.addEventListener('install', e => {
+      e.waitUntil(
+        caches.open(CACHE).then(c => c.addAll(FONTS).catch(() => {}))
+      );
+      self.skipWaiting();
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(caches.keys().then(keys =>
+        Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      ));
+      self.clients.claim();
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(
+        caches.match(e.request).then(cached => {
+          if (cached) return cached;
+          return fetch(e.request).then(res => {
+            if (res && res.status === 200 && e.request.method === 'GET') {
+              const clone = res.clone();
+              caches.open(CACHE).then(c => c.put(e.request, clone));
+            }
+            return res;
+          }).catch(() => cached);
+        })
+      );
+    });
+  `;
+  const blob = new Blob([swCode], {type: 'application/javascript'});
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(() => {});
+}
+
+</script>
+</body>
+</html>
