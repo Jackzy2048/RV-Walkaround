@@ -105,6 +105,95 @@
     .splash-bar-fill{height:100%;background:var(--amber);animation:splash-load 1.2s ease forwards}
     @keyframes splash-load{from{width:0}to{width:100%}}
 
+    /* PHOTO JOURNAL */
+    .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+    .photo-card{position:relative;background:var(--panel);border:1px solid var(--border);overflow:hidden;cursor:pointer}
+    .photo-card img{width:100%;height:140px;object-fit:cover;display:block}
+    .photo-card-info{padding:8px 10px}
+    .photo-card-title{font-family:var(--mono);font-size:10px;color:var(--text);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .photo-card-sub{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.5px;margin-top:2px}
+    .photo-card-rating{font-size:11px;margin-top:2px}
+    .photo-empty{text-align:center;padding:3rem 1rem;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:1px;line-height:2.2}
+    .photo-lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:400;flex-direction:column;align-items:center;justify-content:center;padding:1rem}
+    .photo-lightbox.open{display:flex;animation:fadeIn .2s ease}
+    .photo-lightbox img{max-width:100%;max-height:65vh;object-fit:contain;border:1px solid var(--border)}
+    .photo-lightbox-info{margin-top:12px;text-align:center}
+    .photo-lightbox-title{font-family:var(--display);font-size:22px;color:#fff;letter-spacing:2px}
+    .photo-lightbox-sub{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:4px}
+    .photo-lightbox-close{margin-top:16px;padding:10px 24px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer}
+
+    /* ITEM HINTS */
+    .item-hint-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:2px 4px;flex-shrink:0;-webkit-tap-highlight-color:transparent;opacity:.7}
+    .item-hint{display:none;font-family:var(--mono);font-size:10px;color:var(--muted);background:rgba(79,195,247,.06);border-left:2px solid var(--blue-dim);padding:6px 10px;margin-top:5px;line-height:1.7;letter-spacing:.3px}
+    .item-hint.show{display:block;animation:fadeIn .2s ease}
+
+    /* TONIGHT'S CAMP */
+    .tonight-camp{border:1px solid var(--border);background:var(--panel);padding:10px 14px;margin-bottom:1.25rem}
+    .tonight-camp-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+    .tonight-camp-row{display:flex;gap:8px;align-items:center}
+    .tonight-camp-row input{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:7px 10px;outline:none;letter-spacing:.5px}
+    .tonight-camp-row input:focus{border-color:var(--amber)}
+    .map-btn{background:transparent;border:1px solid var(--amber-dim);color:var(--amber);font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:7px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+    .drive-btn{width:100%;padding:10px;border:1px solid var(--blue-dim);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);cursor:pointer;margin-top:6px;transition:all .15s}
+    .drive-btn:hover{background:rgba(79,195,247,.08)}
+    /* TRIP TOOLS TABS */
+    .tools-tabs{display:flex;gap:0;margin-bottom:1.25rem;border:1px solid var(--border)}
+    .tools-tab{flex:1;padding:10px;border:none;background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-right:1px solid var(--border)}
+    .tools-tab:last-child{border-right:none}
+    .tools-tab.active{background:var(--amber);color:#0d1117}
+    /* SHOPPING LIST */
+    .shop-input-row{display:flex;gap:8px;margin-bottom:1rem}
+    .shop-input-row input{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:8px 10px;outline:none;letter-spacing:.5px}
+    .shop-input-row input:focus{border-color:var(--amber)}
+    .shop-add-btn{background:transparent;border:1px solid var(--green-dim);color:var(--green);font-family:var(--mono);font-size:11px;padding:8px 14px;cursor:pointer;letter-spacing:1px}
+    .shop-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--border);background:var(--panel);margin-bottom:5px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .shop-item.done{opacity:.45}
+    .shop-item.done .shop-label{text-decoration:line-through}
+    .shop-check{width:18px;height:18px;border:1px solid var(--muted);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px}
+    .shop-item.done .shop-check{background:var(--green);border-color:var(--green);color:#0d1117}
+    .shop-label{flex:1;font-family:var(--mono);font-size:12px;color:var(--text)}
+    .shop-del{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px 6px}
+    /* FUEL LOG */
+    .fuel-entry{background:var(--panel);border:1px solid var(--border);padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;position:relative}
+    .fuel-entry-main{font-family:var(--mono);font-size:11px;color:var(--text)}
+    .fuel-entry-sub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px}
+    .fuel-total{background:var(--panel);border:1px solid var(--border);padding:10px 14px;margin-bottom:1rem;display:flex;justify-content:space-between}
+    .fuel-total-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+    .fuel-total-val{font-family:var(--display);font-size:20px;color:var(--amber)}
+    /* BUDGET TRACKER */
+    .budget-day{background:var(--panel);border:1px solid var(--border);padding:12px 14px;margin-bottom:8px}
+    .budget-day-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+    .budget-day-date{font-family:var(--mono);font-size:10px;color:var(--amber);letter-spacing:2px}
+    .budget-day-total{font-family:var(--display);font-size:20px;color:var(--text)}
+    .budget-cats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+    .budget-cat{display:flex;flex-direction:column;gap:3px}
+    .budget-cat-label{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+    .budget-cat input{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:5px 8px;outline:none;width:100%}
+    .budget-cat input:focus{border-color:var(--amber)}
+    .budget-grand{background:var(--panel);border:1px solid var(--amber-dim);padding:12px 14px;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center}
+    /* VAN TOOLS */
+    .van-tool{background:var(--panel);border:1px solid var(--border);padding:14px 16px;margin-bottom:10px}
+    .van-tool-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+    .level-btns{display:flex;gap:8px}
+    .level-btn{flex:1;padding:10px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .15s}
+    .level-btn.active-low{border-color:var(--red);color:var(--red);background:rgba(255,68,68,.08)}
+    .level-btn.active-half{border-color:var(--amber);color:var(--amber);background:rgba(245,166,35,.08)}
+    .level-btn.active-full{border-color:var(--green);color:var(--green);background:rgba(0,230,118,.06)}
+    .lpg-counter{display:flex;align-items:center;gap:12px}
+    .lpg-val{font-family:var(--display);font-size:40px;color:var(--amber);min-width:60px;text-align:center}
+    .lpg-btn{background:transparent;border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:20px;padding:8px 18px;cursor:pointer;transition:all .15s;line-height:1}
+    .lpg-btn:hover{border-color:var(--amber);color:var(--amber)}
+    /* CHANGELOG MODAL */
+    .changelog-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:600;align-items:center;justify-content:center;padding:1rem}
+    .changelog-overlay.open{display:flex;animation:fadeIn .3s ease}
+    .changelog-box{background:var(--panel);border:1px solid var(--amber-dim);border-top:3px solid var(--amber);padding:1.5rem;width:100%;max-width:440px;max-height:80vh;overflow-y:auto}
+    .changelog-title{font-family:var(--display);font-size:28px;color:var(--amber);letter-spacing:3px;margin-bottom:4px}
+    .changelog-version{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:1.25rem;text-transform:uppercase}
+    .changelog-section{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin:12px 0 6px}
+    .changelog-item{font-family:var(--mono);font-size:11px;color:var(--text);padding:5px 0;border-bottom:1px solid var(--border);letter-spacing:.3px;line-height:1.7}
+    .changelog-item:last-of-type{border-bottom:none}
+    .changelog-item b{color:var(--amber)}
+
     /* NEXT STOP NOTE */
     .next-stop{border:1px solid var(--border);background:var(--panel);padding:10px 14px;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
     .next-stop-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;white-space:nowrap}
@@ -168,7 +257,7 @@
     .type-card.quickstop .type-tag{border-color:var(--blue-dim);color:var(--blue)}
 
     /* HOME BTNS */
-    .home-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem}
+    .home-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:1.5rem}
     .home-btn{border:1px solid var(--border);background:var(--panel);padding:14px;cursor:pointer;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);transition:all .15s;text-align:center;-webkit-tap-highlight-color:transparent}
     .home-btn:hover{border-color:var(--amber);color:var(--amber)}
 
@@ -267,7 +356,16 @@
     .stat-dot{position:absolute;top:8px;right:8px;width:6px;height:6px;border-radius:50%;background:var(--amber);animation:blink 2s infinite}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-    /* SECTION LABEL */
+    /* COLLAPSIBLE SECTIONS */
+    .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .section-collapse-btn{background:transparent;border:none;color:var(--muted);font-size:11px;padding:2px 6px;cursor:pointer;flex-shrink:0;transition:transform .2s}
+    .section-collapse-btn.collapsed{transform:rotate(-90deg)}
+    .section-items{transition:none}
+    .section-items.collapsed{display:none}
+
+    /* STANDALONE PHOTO CAPTURE */
+    .photo-capture-btn{width:100%;padding:12px;border:1px dashed var(--amber-dim);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);cursor:pointer;margin-bottom:1.25rem;transition:all .15s}
+    .photo-capture-btn:hover{background:rgba(245,166,35,.06)}
     .section-label{font-family:var(--mono);font-size:11px;letter-spacing:3px;color:var(--amber);text-transform:uppercase;padding:6px 0 6px 2px;margin-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
     .section-label::before{content:'▶';font-size:8px}
 
@@ -453,6 +551,16 @@
       </select>
     </div>
     <div class="journal-field">
+      <label>Site amperage</label>
+      <select id="journal-amp" style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:8px 10px;outline:none;width:100%">
+        <option value="">— Select if powered —</option>
+        <option value="6A">6A — basic (kettle only)</option>
+        <option value="10A">10A — standard</option>
+        <option value="15A">15A — good</option>
+        <option value="16A">16A — full power</option>
+      </select>
+    </div>
+    <div class="journal-field">
       <label>Rating</label>
       <div class="journal-stars" id="journal-stars">
         <span class="journal-star" data-val="1">⭐</span>
@@ -502,6 +610,16 @@
       </select>
     </div>
     <div class="journal-field">
+      <label>Site amperage</label>
+      <select id="log-edit-amp" style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:8px 10px;outline:none;width:100%">
+        <option value="">— Select if powered —</option>
+        <option value="6A">6A — basic (kettle only)</option>
+        <option value="10A">10A — standard</option>
+        <option value="15A">15A — good</option>
+        <option value="16A">16A — full power</option>
+      </select>
+    </div>
+    <div class="journal-field">
       <label>Rating</label>
       <div class="journal-stars" id="log-edit-stars">
         <span class="journal-star" data-val="1">⭐</span>
@@ -542,7 +660,7 @@
       <span onclick="toggleWeatherSearch()" style="font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px">🔍 search by town</span>
     </div>
     <div class="weather-manual" id="weather-search-bar" style="display:none;margin-bottom:1.25rem">
-      <input id="weather-city-input" placeholder="e.g. Queenstown..."/>
+      <input id="weather-city-input" placeholder="e.g. Queenstown..." onkeydown="if(event.key==='Enter')fetchWeather(this.value)"/>
       <button onclick="fetchWeather(document.getElementById('weather-city-input').value)">Search</button>
     </div>
     <div class="plate-row">
@@ -553,11 +671,26 @@
       <span id="gas-icon">❓</span> Gas: <span id="gas-state">NOT SET</span>
       <span class="gas-status" id="gas-sub">Tap to set gas status</span>
     </button>
-    <div class="next-stop">
-      <div class="next-stop-label">📍 Next stop</div>
-      <input id="next-stop-input" placeholder="e.g. Lake Tekapo..." maxlength="60" oninput="saveNextStop(this.value)"/>
+    <div id="gas-nudge" style="display:none;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.5px;background:rgba(79,195,247,.06);border-left:2px solid var(--blue-dim);padding:8px 12px;margin-top:-14px;margin-bottom:1.25rem;line-height:1.7">💡 Not sure? Ask your hire company whether the gas is currently on before you drive away.</div>
+    <div class="tonight-camp">
+      <div class="tonight-camp-label">🧭 Heading to</div>
+      <div class="tonight-camp-row">
+        <input id="tonight-input" placeholder="Campsite name or next stop..." maxlength="80" oninput="saveTonightCamp(this.value)"/>
+        <button class="map-btn" onclick="openInMaps()">🗺️ Maps</button>
+      </div>
+      <button class="drive-btn" onclick="openDriveTime()">Get Directions from Current Location</button>
     </div>
     <div class="last-depart" id="last-depart"></div>
+    <div id="van-status-strip" style="display:none;flex-direction:row;gap:8px;margin-bottom:1.25rem">
+      <div style="flex:1;background:var(--panel);border:1px solid var(--border);padding:10px 12px;text-align:center;cursor:pointer" onclick="showScreen('screen-tools');setTimeout(()=>switchToolsTab('van'),50)">
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:3px">LPG Days Left</div>
+        <div style="font-family:var(--display);font-size:22px;line-height:1" id="home-lpg">—</div>
+      </div>
+      <div style="flex:1;background:var(--panel);border:1px solid var(--border);padding:10px 12px;text-align:center;cursor:pointer" onclick="showScreen('screen-tools');setTimeout(()=>switchToolsTab('van'),50)">
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:3px">Water Tank</div>
+        <div style="font-family:var(--display);font-size:22px;line-height:1" id="home-water">—</div>
+      </div>
+    </div>
     <div class="home-stats" id="home-stats" style="display:none">
       <div class="home-stat">
         <div class="home-stat-label">Trip Day</div>
@@ -596,6 +729,8 @@
     </div>
     <div class="home-btns">
       <div class="home-btn" onclick="showScreen('screen-log')">📋 Trip Log & Stats</div>
+      <div class="home-btn" onclick="showScreen('screen-tools')">🛠️ Trip Tools</div>
+      <div class="home-btn" onclick="showScreen('screen-photos')">📸 Photo Journal</div>
       <div class="home-btn" onclick="showScreen('screen-editor')">✏️ Customise</div>
       <div class="home-btn" onclick="showScreen('screen-emergency')">🆘 Emergency Info</div>
       <div class="home-btn" onclick="showScreen('screen-help')">❓ Help & Settings</div>
@@ -744,7 +879,7 @@
       <div class="header-rv">🆘</div>
     </div>
 
-    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:1rem;text-transform:uppercase">Fill these in before you leave — tap any field to edit</div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.5px;background:rgba(79,195,247,.06);border-left:2px solid var(--blue-dim);padding:10px 14px;margin-bottom:1.25rem;line-height:1.8">💡 Fill this in gradually — you do not need it all right now. The most important ones to get early are your hire company number and emergency contact.</div>
 
     <div id="emergency-fields"></div>
 
@@ -890,6 +1025,11 @@
     <div class="help-section">
       <div class="help-section-title">⚙️ Settings</div>
       <div class="help-item">
+        <div class="help-item-title"><b>🆘 Emergency Info</b></div>
+        <div class="help-item-desc">Store your RV hire company number, campsite details, insurance policy and emergency contacts. Fill this in before you leave.</div>
+        <button onclick="showScreen('screen-emergency')" style="margin-top:8px;width:100%;padding:10px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer">🆘 Open Emergency Info</button>
+      </div>
+      <div class="help-item">
         <div class="help-item-title"><b>Dark / Light mode</b></div>
         <div class="help-item-desc">Choose your preferred theme. Dark is recommended at night.</div>
         <div class="theme-toggle" style="margin-top:8px;justify-content:flex-start">
@@ -923,6 +1063,162 @@
   </div>
 </div>
 
+<!-- CHANGELOG MODAL -->
+<div class="changelog-overlay" id="changelogModal">
+  <div class="changelog-box">
+    <div class="changelog-title">WHAT'S NEW</div>
+    <div class="changelog-version">Version 3.0 · South Island Update</div>
+    <div class="changelog-section">⚡ For Experienced Travellers</div>
+    <div class="changelog-item"><b>Collapsible checklist sections</b> — tap any section header to collapse it. Required ★ items always stay visible so nothing critical gets hidden. State remembered per checklist</div>
+    <div class="changelog-item"><b>Standalone photo capture</b> — add a photo from the Photo Journal screen without completing a checklist. Perfect for views, sunsets, or van life moments</div>
+    <div class="changelog-item"><b>Fuel economy (L/100km)</b> — enter km driven since last fill and the app calculates economy per fill and running average across the trip</div>
+    <div class="changelog-item"><b>Site amperage</b> — log the hookup amperage (6A/10A/15A/16A) when you arrive. Shown in trip log so you remember which sites run everything vs just a kettle</div>
+    <div class="changelog-item"><b>Tolls category</b> — added to the daily budget tracker alongside camp, fuel, food and activities</div>
+    <div class="changelog-section">💡 First-Timer Improvements</div>
+    <div class="changelog-item"><b>Item hints</b> — tap ℹ️ on confusing items like "Level the van", "Block fridge", "Check water if on mains" for a plain-English explanation</div>
+    <div class="changelog-item"><b>LPG Set to Full</b> — one tap sets your gas counter to 14 days (typical NZ hire van). Context added explaining what a full tank means</div>
+    <div class="changelog-item"><b>Fuel tank size</b> — enter your van's tank capacity in the Fuel Log so you always know how full you are</div>
+    <div class="changelog-item"><b>Gas nudge</b> — if gas is Not Set when you open the app, a tip reminds you to ask the hire company before driving away</div>
+    <div class="changelog-item"><b>Emergency Info helper</b> — friendly prompt explaining you don't need all the fields right now</div>
+    <div class="changelog-section">✨ Simplifications</div>
+    <div class="changelog-item"><b>Heading To</b> — Next Stop and Tonight's Camp merged into one field with Maps and Directions buttons</div>
+    <div class="changelog-item"><b>LPG & Water on home screen</b> — status strip shows gas days and water level on the home screen. Tap to update in Van tools</div>
+    <div class="changelog-item"><b>Emergency Info</b> — also accessible from Help & Settings</div>
+    <div class="changelog-section">🐛 Fixes</div>
+    <div class="changelog-item"><b>Weather town search</b> — NZ town search now works reliably. Enter key supported. Search bar collapses after a successful result</div>
+    <div class="changelog-item"><b>Checklist wording</b> — "Handbrake off when ready to roll" → "Confirm handbrake released before moving". "Locks checked" → "Main door locked — handle tested"</div>
+    <div class="changelog-item"><b>Quick stop completion</b> — Log Stop and Share buttons hidden for quick stops. Back to Menu button made more prominent</div>
+    <div class="changelog-section">📸 Photo Journal (new screen)</div>
+    <div class="changelog-item"><b>Visual trip diary</b> — all photos from your stop journal as a grid. Tap any photo to expand full screen with location, rating and notes</div>
+    <div class="changelog-section">🛠️ Trip Tools (new screen)</div>
+    <div class="changelog-item"><b>Shopping list</b> — add items, tick them off at the supermarket, clear when done</div>
+    <div class="changelog-item"><b>Fuel log</b> — log each fill-up with litres, cost and km. Shows cost per litre and L/100km economy</div>
+    <div class="changelog-item"><b>Daily budget</b> — track camp, fuel, food, activities and tolls per day with running trip total</div>
+    <div class="changelog-item"><b>Dump station finder</b> — quick links to CamperMate NZ and Freedom Camping NZ</div>
+    <div class="changelog-item"><b>LPG days remaining</b> — tap +/− to track gas. Set to Full sets 14 days. Colour coded green/amber/red</div>
+    <div class="changelog-item"><b>Water tank level</b> — Low / Half / Full toggle</div>
+    <div class="changelog-section">🏕️ Home Screen</div>
+    <div class="changelog-item"><b>Heading To</b> — single field for next stop or tonight's camp with 🗺️ Maps and Get Directions buttons</div>
+    <div class="changelog-section">📋 Checklists</div>
+    <div class="changelog-item"><b>Level the van</b> — first required item in Arrive & Set Up</div>
+    <div class="changelog-item"><b>Leave no trace</b> — added to Final Walkaround in Pack Up & Depart</div>
+    <div class="changelog-section">📓 Trip Log</div>
+    <div class="changelog-item"><b>Edit log entries</b> — tap ✏️ on any entry to update location, rating, notes or photo</div>
+    <div class="changelog-item"><b>Photo per stop</b> — attach a photo when logging a stop, shown as thumbnail in log</div>
+    <button onclick="closeChangelog()" style="width:100%;margin-top:1.25rem;padding:12px;border:1px solid var(--amber);background:transparent;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);cursor:pointer">Got it — let's go!</button>
+  </div>
+</div>
+
+<!-- SCREEN: TRIP TOOLS -->
+<div class="screen" id="screen-tools">
+  <div class="cockpit">
+    <div class="header">
+      <div class="airline-tag">NZ South Island Expedition</div>
+      <div class="header-title">TRIP TOOLS</div>
+      <div class="header-sub">DAILY TOOLS · VAN STATUS</div>
+      <div class="header-rv">🛠️</div>
+    </div>
+    <div class="tools-tabs">
+      <button class="tools-tab active" id="tools-tab-daily" onclick="switchToolsTab('daily')">📋 Daily</button>
+      <button class="tools-tab" id="tools-tab-van" onclick="switchToolsTab('van')">🚐 Van</button>
+    </div>
+
+    <!-- DAILY TAB -->
+    <div id="tools-daily">
+      <!-- Shopping List -->
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--amber);text-transform:uppercase;margin-bottom:8px">🛒 Shopping List</div>
+      <div class="shop-input-row">
+        <input id="shop-input" placeholder="Add item..." maxlength="60" onkeydown="if(event.key==='Enter')addShopItem()"/>
+        <button class="shop-add-btn" onclick="addShopItem()">+ Add</button>
+      </div>
+      <div id="shop-list"></div>
+      <button onclick="clearDoneShop()" style="font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--muted);background:transparent;border:none;cursor:pointer;padding:4px 0 1rem">clear ticked items</button>
+
+      <!-- Fuel Log -->
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--amber);text-transform:uppercase;margin-bottom:8px;border-top:1px solid var(--border);padding-top:1rem">⛽ Fuel Log</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--muted);white-space:nowrap">Tank size:</div>
+        <input id="fuel-tank-size" type="number" placeholder="e.g. 80 L" style="width:90px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:11px;padding:6px 8px;outline:none" oninput="localStorage.setItem('rv_tank_size',this.value)"/>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--muted)">litres — check hire docs</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:8px">
+        <div><div style="font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--muted);margin-bottom:3px">LOCATION</div><input id="fuel-loc" placeholder="e.g. Tekapo" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:11px;padding:6px 8px;outline:none"/></div>
+        <div><div style="font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--muted);margin-bottom:3px">LITRES</div><input id="fuel-litres" type="number" placeholder="0.0" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:11px;padding:6px 8px;outline:none"/></div>
+        <div><div style="font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--muted);margin-bottom:3px">COST $</div><input id="fuel-cost" type="number" placeholder="0.00" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:11px;padding:6px 8px;outline:none"/></div>
+        <div><div style="font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--muted);margin-bottom:3px">KM SINCE</div><input id="fuel-km" type="number" placeholder="0" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:11px;padding:6px 8px;outline:none"/></div>
+      </div>
+      <button onclick="addFuelEntry()" style="width:100%;padding:9px;border:1px solid var(--green-dim);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green);cursor:pointer;margin-bottom:10px">+ Log Fill-up</button>
+      <div id="fuel-totals"></div>
+      <div id="fuel-list"></div>
+
+      <!-- Budget -->
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--amber);text-transform:uppercase;margin-bottom:8px;border-top:1px solid var(--border);padding-top:1rem">💰 Daily Budget</div>
+      <div id="budget-grand"></div>
+      <div id="budget-list"></div>
+      <button onclick="addBudgetDay()" style="width:100%;padding:9px;border:1px dashed var(--border);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;margin-bottom:1rem">+ Add Today</button>
+    </div>
+
+    <!-- VAN TAB -->
+    <div id="tools-van" style="display:none">
+      <div class="van-tool">
+        <div class="van-tool-label">🔥 LPG Days Remaining</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:10px;line-height:1.7">Most NZ hire vans have enough gas for 10-14 days of normal use. Tap + or − to adjust as you go, or set to full when you swap bottles.</div>
+        <div class="lpg-counter">
+          <button class="lpg-btn" onclick="adjustLPG(-1)">−</button>
+          <div class="lpg-val" id="lpg-val">—</div>
+          <button class="lpg-btn" onclick="adjustLPG(1)">+</button>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px">days est.<br>remaining</div>
+        </div>
+        <button onclick="setLPGFull()" style="width:100%;margin-top:10px;padding:9px;border:1px solid var(--green-dim);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green);cursor:pointer">🔋 Set to Full (14 days)</button>
+      </div>
+      <div class="van-tool">
+        <div class="van-tool-label">💧 Water Tank Level</div>
+        <div class="level-btns">
+          <button class="level-btn" id="water-low" onclick="setLevel('water','low')">🔴 Low</button>
+          <button class="level-btn" id="water-half" onclick="setLevel('water','half')">🟡 Half</button>
+          <button class="level-btn" id="water-full" onclick="setLevel('water','full')">🟢 Full</button>
+        </div>
+      </div>
+      <div class="van-tool">
+        <div class="van-tool-label">🚽 Dump Station</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.7">Find your nearest dump station, freedom camping spot, or powered site on CamperMate.</div>
+        <button onclick="window.open('https://www.campermate.co.nz','_blank')" style="width:100%;padding:11px;border:1px solid var(--teal-dim);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--teal);cursor:pointer">🗺️ Open CamperMate NZ</button>
+        <button onclick="window.open('https://www.freedomcamping.org/find-a-site','_blank')" style="width:100%;padding:11px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;margin-top:6px">🏕️ Freedom Camping NZ</button>
+      </div>
+    </div>
+
+    <button class="back-btn" style="width:100%;margin-top:1rem" onclick="showScreen('screen-type')">← Back</button>
+    <div class="footer">RV-SI · SOUTH ISLAND EXPEDITION</div>
+  </div>
+</div>
+
+<!-- PHOTO LIGHTBOX -->
+<div class="photo-lightbox" id="photoLightbox" onclick="closePhotoLightbox()">
+  <img id="lightbox-img" src=""/>
+  <div class="photo-lightbox-info">
+    <div class="photo-lightbox-title" id="lightbox-title"></div>
+    <div class="photo-lightbox-sub" id="lightbox-sub"></div>
+  </div>
+  <button class="photo-lightbox-close">✕ Close</button>
+</div>
+
+<!-- SCREEN: PHOTO JOURNAL -->
+<div class="screen" id="screen-photos">
+  <div class="cockpit">
+    <div class="header">
+      <div class="airline-tag">NZ South Island Expedition</div>
+      <div class="header-title">PHOTO JOURNAL</div>
+      <div class="header-sub">YOUR TRIP IN PICTURES</div>
+      <div class="header-rv">📸</div>
+    </div>
+    <input type="file" id="standalone-photo-input" accept="image/*" capture="environment" style="display:none" onchange="addStandalonePhoto(this)"/>
+    <button class="photo-capture-btn" onclick="document.getElementById('standalone-photo-input').click()">📷 Add Photo from Camera or Gallery</button>
+    <div id="photo-grid-container"></div>
+    <button class="back-btn" style="width:100%;margin-top:1rem" onclick="showScreen('screen-type')">← Back</button>
+    <div class="footer">RV-SI · SOUTH ISLAND EXPEDITION</div>
+  </div>
+</div>
+
 <script>
 // ── DATA ──
 const DEFAULT_CHECKLISTS = {
@@ -951,7 +1247,7 @@ const DEFAULT_CHECKLISTS = {
           'Internal checks':['Close and lock all cupboards','Block fridge (latch to stop door swinging)','All curtains open','Sunroof curtain open','All sunroofs closed','All beds, tables & chairs stowed','Stow stove'],
           'Power switches':['Lights switch — OFF','Media switch — OFF','Spare switch — OFF (emergency only)','Water heater switch — OFF','Pump switch — OFF','Stove ignition switch — OFF'],
           'Utilities & services':['Turn off campsite breaker','Disconnect power cable','Fold & stow power cable','No external wires or hoses connected','All chargers unplugged','Turn gas off'],
-          'Final walkaround':['Walk around outside — check tyres, roof, nothing trailing','Nothing left at pitch (chairs, mats, pegs)','Leave no trace — check site for rubbish','Mirrors adjusted','Handbrake off when ready to roll']
+          'Final walkaround':['Walk around outside — check tyres, roof, nothing trailing','Nothing left at pitch (chairs, mats, pegs)','Leave no trace — check site for rubbish','Mirrors adjusted','Confirm handbrake released before moving']
         }
       },
       secure: {
@@ -964,7 +1260,7 @@ const DEFAULT_CHECKLISTS = {
           'Windows & vents':['All curtains closed','Sunroof curtain closed','All windows closed','Sunroof closed or cracked to vent'],
           'Power switches':['Stove ignition switch — OFF','Water heater switch — OFF','Lights switch — leave on','Pump switch — leave on if needed overnight','Media switch — OFF','Spare switch — OFF (emergency only)'],
           'Utilities':['Gas off','Ensure electric hookup is stable','All exterior lights off'],
-          'Internal':['Beds made up','All cupboards latched','Fridge running and set cold','Valuables out of sight','Phones & devices on charge','Locks checked']
+          'Internal':['Beds made up','All cupboards latched','Fridge running and set cold','Valuables out of sight','Phones & devices on charge','Main door locked — handle tested']
         }
       },
       morning: {
@@ -1071,12 +1367,335 @@ function addLogEntry() {
   const log = getLog(); log.unshift(entry); saveLog(log);
 }
 
-// ── NEXT STOP ──
+// ── PHOTO JOURNAL ──
+function addStandalonePhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const img = new Image();
+  const url = URL.createObjectURL(file);
+  img.onload = () => {
+    const MAX = 800;
+    const scale = img.width > MAX ? MAX / img.width : 1;
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width * scale;
+    canvas.height = img.height * scale;
+    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+    const photoData = canvas.toDataURL('image/jpeg', 0.75);
+    URL.revokeObjectURL(url);
+    // Create a standalone log entry with just the photo
+    const log = getLog();
+    log.unshift({
+      id: Date.now(),
+      type: 'photo', typeLabel: 'Photo', submodeLabel: 'Standalone',
+      emoji: '📸', time: new Date().toLocaleString('en-NZ', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),
+      total: 0, photo: photoData, location: '', notes: ''
+    });
+    saveLog(log);
+    input.value = '';
+    renderPhotoJournal();
+    haptic('light');
+  };
+  img.src = url;
+}
+function renderPhotoJournal() {
+  const log = getLog();
+  const photos = log.filter(e => e.photo);
+  const container = document.getElementById('photo-grid-container');
+  if (!container) return;
+  if (!photos.length) {
+    container.innerHTML = '<div class="photo-empty">NO PHOTOS YET<br><br>Complete a checklist and tap<br>📓 Log Stop to add a photo.<br><br>Photos appear here as a visual<br>diary of your trip.</div>';
+    return;
+  }
+  container.innerHTML = `
+    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px;text-transform:uppercase">${photos.length} photo${photos.length !== 1 ? 's' : ''} from your trip</div>
+    <div class="photo-grid">
+      ${photos.map(e => `
+        <div class="photo-card" onclick="openPhotoLightbox('${e.id}')">
+          <img src="${e.photo}" loading="lazy"/>
+          <div class="photo-card-info">
+            <div class="photo-card-title">${e.location || e.submodeLabel}</div>
+            <div class="photo-card-sub">${e.time.split(',')[0]}</div>
+            ${e.rating ? '<div class="photo-card-rating">' + '⭐'.repeat(e.rating) + '</div>' : ''}
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function openPhotoLightbox(id) {
+  const log = getLog();
+  const e = log.find(x => x.id === parseInt(id));
+  if (!e || !e.photo) return;
+  document.getElementById('lightbox-img').src = e.photo;
+  document.getElementById('lightbox-title').textContent = e.location || e.submodeLabel;
+  document.getElementById('lightbox-sub').textContent = e.time + (e.rating ? ' · ' + '⭐'.repeat(e.rating) : '') + (e.notes ? '\n' + e.notes : '');
+  document.getElementById('photoLightbox').classList.add('open');
+}
+
+function closePhotoLightbox() {
+  document.getElementById('photoLightbox').classList.remove('open');
+}
+
+// ── TONIGHT'S CAMP ──
+function saveTonightCamp(val) { localStorage.setItem('rv_tonight', val); }
+function loadTonightCamp() {
+  const el = document.getElementById('tonight-input');
+  if (el) el.value = localStorage.getItem('rv_tonight') || '';
+}
+function openInMaps() {
+  const val = document.getElementById('tonight-input').value.trim();
+  if (!val) { alert('Enter a campsite name or address first.'); return; }
+  window.open('https://maps.apple.com/?q=' + encodeURIComponent(val + ' New Zealand'), '_blank');
+}
+function openDriveTime() {
+  const val = document.getElementById('tonight-input').value.trim();
+  if (!val) { alert('Enter tonight\'s camp first.'); return; }
+  // Opens Maps with directions from current location
+  window.open('https://maps.apple.com/?daddr=' + encodeURIComponent(val + ' New Zealand') + '&dirflg=d', '_blank');
+}
+
+// ── TRIP TOOLS ──
+function switchToolsTab(tab) {
+  document.getElementById('tools-daily').style.display = tab === 'daily' ? '' : 'none';
+  document.getElementById('tools-van').style.display = tab === 'van' ? '' : 'none';
+  document.getElementById('tools-tab-daily').classList.toggle('active', tab === 'daily');
+  document.getElementById('tools-tab-van').classList.toggle('active', tab === 'van');
+}
+
+function renderTools() {
+  renderShopList();
+  renderFuelList();
+  renderBudgetList();
+  renderVanTools();
+  // Load saved tank size
+  const ts = document.getElementById('fuel-tank-size');
+  if (ts) ts.value = localStorage.getItem('rv_tank_size') || '';
+}
+
+// ── SHOPPING LIST ──
+function getShopList() { return JSON.parse(localStorage.getItem('rv_shop') || '[]'); }
+function saveShopList(list) { localStorage.setItem('rv_shop', JSON.stringify(list)); }
+
+function addShopItem() {
+  const input = document.getElementById('shop-input');
+  const val = input.value.trim();
+  if (!val) return;
+  const list = getShopList();
+  list.push({ id: Date.now(), text: val, done: false });
+  saveShopList(list);
+  input.value = '';
+  renderShopList();
+  haptic('light');
+}
+
+function toggleShopItem(id) {
+  const list = getShopList();
+  const item = list.find(x => x.id === id);
+  if (item) item.done = !item.done;
+  saveShopList(list);
+  renderShopList();
+  haptic('light');
+}
+
+function deleteShopItem(id) {
+  saveShopList(getShopList().filter(x => x.id !== id));
+  renderShopList();
+}
+
+function clearDoneShop() {
+  saveShopList(getShopList().filter(x => !x.done));
+  renderShopList();
+}
+
+function renderShopList() {
+  const list = getShopList();
+  const el = document.getElementById('shop-list');
+  if (!el) return;
+  if (!list.length) { el.innerHTML = '<div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:10px 0">No items yet — add something above.</div>'; return; }
+  el.innerHTML = list.map(item => `
+    <div class="shop-item ${item.done ? 'done' : ''}" onclick="toggleShopItem(${item.id})">
+      <div class="shop-check">${item.done ? '✓' : ''}</div>
+      <div class="shop-label">${item.text}</div>
+      <button class="shop-del" onclick="event.stopPropagation();deleteShopItem(${item.id})">✕</button>
+    </div>`).join('');
+}
+
+// ── FUEL LOG ──
+function getFuelLog() { return JSON.parse(localStorage.getItem('rv_fuel') || '[]'); }
+function saveFuelLog(log) { localStorage.setItem('rv_fuel', JSON.stringify(log)); }
+
+function addFuelEntry() {
+  const loc = document.getElementById('fuel-loc').value.trim();
+  const litres = parseFloat(document.getElementById('fuel-litres').value) || 0;
+  const cost = parseFloat(document.getElementById('fuel-cost').value) || 0;
+  const km = parseFloat(document.getElementById('fuel-km').value) || 0;
+  if (!litres && !cost) return;
+  const log = getFuelLog();
+  const economy = (km > 0 && litres > 0) ? ((litres / km) * 100).toFixed(1) : null;
+  log.unshift({ id: Date.now(), loc: loc || 'Unknown', litres, cost, km, economy, date: new Date().toLocaleDateString('en-NZ', {day:'numeric',month:'short'}) });
+  saveFuelLog(log);
+  document.getElementById('fuel-loc').value = '';
+  document.getElementById('fuel-litres').value = '';
+  document.getElementById('fuel-cost').value = '';
+  document.getElementById('fuel-km').value = '';
+  renderFuelList();
+  haptic('light');
+}
+
+function renderFuelList() {
+  const log = getFuelLog();
+  const totalsEl = document.getElementById('fuel-totals');
+  const listEl = document.getElementById('fuel-list');
+  if (!totalsEl || !listEl) return;
+  const totalL = log.reduce((a, e) => a + e.litres, 0);
+  const totalC = log.reduce((a, e) => a + e.cost, 0);
+  const totalKm = log.reduce((a, e) => a + (e.km || 0), 0);
+  const avgEconomy = (totalKm > 0 && totalL > 0) ? ((totalL / totalKm) * 100).toFixed(1) : null;
+  if (log.length) {
+    const tankSize = parseInt(localStorage.getItem('rv_tank_size') || '0');
+    const tankInfo = tankSize ? ` · Tank: ${tankSize}L` : '';
+    totalsEl.innerHTML = `<div class="fuel-total">
+      <div><div class="fuel-total-label">Total Litres</div><div class="fuel-total-val">${totalL.toFixed(1)}L${tankInfo}</div></div>
+      ${totalKm ? `<div style="text-align:center"><div class="fuel-total-label">Economy</div><div class="fuel-total-val">${avgEconomy || '—'}L/100km</div></div>` : ''}
+      <div style="text-align:right"><div class="fuel-total-label">Total Cost</div><div class="fuel-total-val">$${totalC.toFixed(2)}</div></div>
+    </div>`;
+  } else { totalsEl.innerHTML = ''; }
+  listEl.innerHTML = log.map(e => `
+    <div class="fuel-entry">
+      <div>
+        <div class="fuel-entry-main">📍 ${e.loc} · ${e.litres}L · $${e.cost.toFixed(2)}${e.km ? ' · ' + e.km + 'km' : ''}</div>
+        <div class="fuel-entry-sub">${e.date}${e.litres && e.cost ? ' · $' + (e.cost/e.litres).toFixed(3) + '/L' : ''}${e.economy ? ' · ' + e.economy + 'L/100km' : ''}</div>
+      </div>
+      <button onclick="deleteFuelEntry(${e.id})" style="background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:4px 6px">✕</button>
+    </div>`).join('') || '<div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:10px 0">No fill-ups logged yet.</div>';
+}
+
+function deleteFuelEntry(id) { saveFuelLog(getFuelLog().filter(e => e.id !== id)); renderFuelList(); }
+
+// ── BUDGET TRACKER ──
+function getBudget() { return JSON.parse(localStorage.getItem('rv_budget') || '[]'); }
+function saveBudget(b) { localStorage.setItem('rv_budget', JSON.stringify(b)); }
+
+function addBudgetDay() {
+  const b = getBudget();
+  const today = new Date().toLocaleDateString('en-NZ', {weekday:'short', day:'numeric', month:'short'});
+  b.unshift({ id: Date.now(), date: today, camp: 0, fuel: 0, food: 0, activities: 0 });
+  saveBudget(b);
+  renderBudgetList();
+}
+
+function updateBudget(id, cat, val) {
+  const b = getBudget();
+  const day = b.find(x => x.id === id);
+  if (day) day[cat] = parseFloat(val) || 0;
+  saveBudget(b);
+  renderBudgetList();
+}
+
+function deleteBudgetDay(id) { saveBudget(getBudget().filter(x => x.id !== id)); renderBudgetList(); }
+
+function renderBudgetList() {
+  const b = getBudget();
+  const grandEl = document.getElementById('budget-grand');
+  const listEl = document.getElementById('budget-list');
+  if (!grandEl || !listEl) return;
+  const grand = b.reduce((a, d) => a + d.camp + d.fuel + d.food + d.activities + (d.tolls||0), 0);
+  if (b.length) {
+    grandEl.innerHTML = `<div class="budget-grand"><div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase">Trip Total</div><div style="font-family:var(--display);font-size:26px;color:var(--amber)">$${grand.toFixed(2)}</div></div>`;
+  } else { grandEl.innerHTML = ''; }
+  listEl.innerHTML = b.map(day => {
+    const total = day.camp + day.fuel + day.food + day.activities + (day.tolls||0);
+    return `<div class="budget-day">
+      <div class="budget-day-header">
+        <div class="budget-day-date">${day.date}</div>
+        <div class="budget-day-total">$${total.toFixed(2)}</div>
+        <button onclick="deleteBudgetDay(${day.id})" style="background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:13px">✕</button>
+      </div>
+      <div class="budget-cats">
+        ${['camp','fuel','food','activities','tolls'].map(cat => `
+          <div class="budget-cat">
+            <div class="budget-cat-label">${cat.charAt(0).toUpperCase()+cat.slice(1)}</div>
+            <input type="number" value="${day[cat] || ''}" placeholder="$0" oninput="updateBudget(${day.id},'${cat}',this.value)"/>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('') || '';
+}
+
+// ── VAN TOOLS ──
+function adjustLPG(delta) {
+  let val = parseInt(localStorage.getItem('rv_lpg') || '0') + delta;
+  if (val < 0) val = 0;
+  localStorage.setItem('rv_lpg', val);
+  renderVanTools();
+  haptic('light');
+}
+
+function setLevel(type, level) {
+  localStorage.setItem('rv_' + type + '_level', level);
+  renderVanTools();
+  haptic('light');
+}
+
+function renderVanTools() {
+  const lpgEl = document.getElementById('lpg-val');
+  if (lpgEl) {
+    const val = parseInt(localStorage.getItem('rv_lpg') || '0');
+    lpgEl.textContent = val;
+    lpgEl.style.color = val <= 2 ? 'var(--red)' : val <= 5 ? 'var(--amber)' : 'var(--green)';
+  }
+  ['water'].forEach(type => {
+    const level = localStorage.getItem('rv_' + type + '_level') || '';
+    ['low','half','full'].forEach(l => {
+      const btn = document.getElementById(type + '-' + l);
+      if (btn) { btn.className = 'level-btn' + (level === l ? ' active-' + l : ''); }
+    });
+  });
+  renderVanStatusStrip();
+}
+
+function renderVanStatusStrip() {
+  const strip = document.getElementById('van-status-strip');
+  const lpgHome = document.getElementById('home-lpg');
+  const waterHome = document.getElementById('home-water');
+  if (!strip) return;
+
+  const lpg = parseInt(localStorage.getItem('rv_lpg') || '0');
+  const water = localStorage.getItem('rv_water_level') || '';
+
+  // Only show strip if at least one is set
+  const hasData = lpg > 0 || water;
+  strip.style.display = hasData ? 'flex' : 'none';
+
+  if (lpgHome) {
+    lpgHome.textContent = lpg > 0 ? lpg + 'd' : '—';
+    lpgHome.style.color = lpg <= 2 && lpg > 0 ? 'var(--red)' : lpg <= 5 && lpg > 0 ? 'var(--amber)' : 'var(--green)';
+  }
+  if (waterHome) {
+    const waterMap = { low: '🔴 Low', half: '🟡 Half', full: '🟢 Full' };
+    waterHome.textContent = waterMap[water] || '—';
+    waterHome.style.fontSize = water ? '14px' : '22px';
+  }
+}
+
+// ── CHANGELOG ──
+const CHANGELOG_VERSION = '3.0';
+function checkChangelog() {
+  // Don't show changelog on first ever open — tutorial handles onboarding
+  if (!localStorage.getItem('rv_tutorial_done')) return;
+  const seen = localStorage.getItem('rv_changelog');
+  if (seen !== CHANGELOG_VERSION) {
+    setTimeout(() => document.getElementById('changelogModal').classList.add('open'), 800);
+  }
+}
+function closeChangelog() {
+  document.getElementById('changelogModal').classList.remove('open');
+  localStorage.setItem('rv_changelog', CHANGELOG_VERSION);
+}
+
+// ── NEXT STOP (merged into Heading To) ──
 function saveNextStop(val) { localStorage.setItem('rv_next_stop', val); }
 function loadNextStop() {
-  const val = localStorage.getItem('rv_next_stop') || '';
-  const el = document.getElementById('next-stop-input');
-  if (el) el.value = val;
+  // Legacy — no longer a separate field, handled by loadTonightCamp
 }
 
 // ── LAST DEPART TIMESTAMP ──
@@ -1101,6 +1720,7 @@ function openJournal() {
   document.getElementById('journal-location').value = '';
   document.getElementById('journal-sitenum').value = '';
   document.getElementById('journal-power').value = '';
+  document.getElementById('journal-amp').value = '';
   document.getElementById('journal-notes').value = '';
   document.getElementById('journal-photo-input').value = '';
   const preview = document.getElementById('journal-photo-preview');
@@ -1148,6 +1768,7 @@ function saveJournal() {
     e.location = document.getElementById('journal-location').value.trim();
     e.siteNum = document.getElementById('journal-sitenum').value.trim();
     e.power = document.getElementById('journal-power').value;
+    e.amp = document.getElementById('journal-amp').value;
     e.rating = journalRating;
     e.notes = document.getElementById('journal-notes').value.trim();
     if (journalPhotoData) e.photo = journalPhotoData;
@@ -1163,7 +1784,7 @@ function renderLog() {
   body.innerHTML = log.map(e => `
     <div class="log-entry">
       <div class="log-type">${e.emoji} ${e.typeLabel} · ${e.submodeLabel}</div>
-      ${e.location ? '<div style="font-family:var(--mono);font-size:11px;color:var(--text);margin-bottom:2px">📍 ' + e.location + (e.siteNum ? ' · Site ' + e.siteNum : '') + (e.power ? ' · ' + e.power : '') + '</div>' : ''}
+      ${e.location ? '<div style="font-family:var(--mono);font-size:11px;color:var(--text);margin-bottom:2px">📍 ' + e.location + (e.siteNum ? ' · Site ' + e.siteNum : '') + (e.power ? ' · ' + e.power : '') + (e.amp ? ' · ' + e.amp : '') + '</div>' : ''}
       ${e.rating ? '<div class="log-rating">' + '⭐'.repeat(e.rating) + '</div>' : ''}
       ${e.notes ? '<div class="log-journal">' + e.notes + '</div>' : ''}
       ${e.photo ? '<img class="log-photo" src="' + e.photo + '" onclick="this.style.maxHeight=this.style.maxHeight===\'none\'?\'160px\':\'none\'"/>' : ''}
@@ -1190,6 +1811,7 @@ function openLogEdit(id) {
   document.getElementById('log-edit-location').value = e.location || '';
   document.getElementById('log-edit-sitenum').value = e.siteNum || '';
   document.getElementById('log-edit-power').value = e.power || '';
+  document.getElementById('log-edit-amp').value = e.amp || '';
   document.getElementById('log-edit-notes').value = e.notes || '';
   const preview = document.getElementById('log-edit-photo-preview');
   if (e.photo) { preview.src = e.photo; preview.style.display = 'block'; }
@@ -1240,6 +1862,7 @@ function saveLogEdit() {
     e.location = document.getElementById('log-edit-location').value.trim();
     e.siteNum = document.getElementById('log-edit-sitenum').value.trim();
     e.power = document.getElementById('log-edit-power').value;
+    e.amp = document.getElementById('log-edit-amp').value;
     e.notes = document.getElementById('log-edit-notes').value.trim();
     e.rating = document.querySelectorAll('#log-edit-stars .journal-star.active').length;
     if (editPhotoData) e.photo = editPhotoData;
@@ -1322,28 +1945,40 @@ async function fetchWeather(manualCity) {
   renderWeather();
   try {
     let lat, lon;
-    if (manualCity) {
-      const geo = await fetch('https://geocoding-api.open-meteo.com/v1/search?name=' + encodeURIComponent(manualCity) + '&count=1');
+    if (manualCity && manualCity.trim()) {
+      const geo = await fetch('https://geocoding-api.open-meteo.com/v1/search?name=' + encodeURIComponent(manualCity.trim()) + '&count=1&language=en&countryCode=NZ');
       const gd = await geo.json();
-      if (!gd.results || !gd.results.length) { weather = {noLoc: true, manualFailed: true}; renderWeather(); return; }
-      lat = gd.results[0].latitude; lon = gd.results[0].longitude;
-      weather = weather || {};
-      weather.cityName = gd.results[0].name;
+      if (!gd.results || !gd.results.length) {
+        // Try without country restriction in case they search somewhere outside NZ
+        const geo2 = await fetch('https://geocoding-api.open-meteo.com/v1/search?name=' + encodeURIComponent(manualCity.trim()) + '&count=1&language=en');
+        const gd2 = await geo2.json();
+        if (!gd2.results || !gd2.results.length) { weather = {noLoc: true, manualFailed: true}; renderWeather(); return; }
+        lat = gd2.results[0].latitude; lon = gd2.results[0].longitude;
+        weather = { cityName: gd2.results[0].name };
+      } else {
+        lat = gd.results[0].latitude; lon = gd.results[0].longitude;
+        weather = { cityName: gd.results[0].name };
+      }
+      // Collapse search bar after successful search
+      const bar = document.getElementById('weather-search-bar');
+      if (bar) bar.style.display = 'none';
     } else {
       const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, {timeout:8000}));
       lat = pos.coords.latitude; lon = pos.coords.longitude;
+      weather = {};
     }
     const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,weathercode,windspeed_10m&daily=sunrise,sunset&timezone=auto');
     const d = await r.json();
     const code = d.current.weathercode;
     const fmtTime = iso => { const t = new Date(iso); return t.toLocaleTimeString('en-NZ', {hour:'2-digit', minute:'2-digit', hour12:true}); };
+    const prevCity = weather.cityName;
     weather = {
       icon: code <= 1 ? '☀️' : code <= 3 ? '⛅' : code <= 67 ? '🌧️' : '🌨️',
       desc: code <= 1 ? 'Clear' : code <= 3 ? 'Partly cloudy' : code <= 67 ? 'Rain' : 'Snow/Ice',
       temp: Math.round(d.current.temperature_2m),
       wind: Math.round(d.current.windspeed_10m),
       good: code <= 3, noLoc: false,
-      cityName: weather && weather.cityName ? weather.cityName : null,
+      cityName: prevCity || null,
       sunrise: d.daily && d.daily.sunrise ? fmtTime(d.daily.sunrise[0]) : null,
       sunset: d.daily && d.daily.sunset ? fmtTime(d.daily.sunset[0]) : null,
     };
@@ -1510,17 +2145,47 @@ function isRequired(label) {
   return sm.required && sm.required.includes(label);
 }
 
+// ── ITEM HINTS ──
+const ITEM_HINTS = {
+  'Level the van': 'Use a spirit level app on your phone, or the van\'s built-in bubble level if it has one. Place wooden chocks or levelling ramps under the low wheels. A level van means better sleep, fridge performance and door swing.',
+  'Block fridge (latch to stop door swinging)': 'The fridge door can swing open while driving and damage the seal. Most vans have a latch or clip — check the top or side of the door. Some use a simple rubber band or bungee.',
+  'Check water if on mains': 'If the campsite has a direct water hookup (a hose connection), check the connection isn\'t leaking and pressure is OK. If you\'re on your own tank, check it hasn\'t run low overnight.',
+  'Fridge running and set cold': 'Check the fridge display shows it\'s on and cooling. If it\'s been off, it takes 1-2 hours to get cold. Feel inside — should be noticeably cool. Make sure it\'s set to fridge mode, not "travel" or "off".',
+  'Connect any water hose': 'Some campsites offer a direct hose connection to fill your onboard tank or run water continuously. Not all sites have this — check when you check in. If no connection, use the onsite tap to fill your tank manually.',
+  'Turn on gas 30 mins before hot water needed': 'Most RV hot water systems are gas-powered and take 20-30 mins to heat up. Turn the gas on at the external bottle valve, then switch on the water heater switch inside. Check with your hire company if unsure.',
+  'Deploy step': 'The fold-out step at the door makes getting in and out easier and safer. Push or pull it out before anyone exits. Remember to stow it before driving — it\'s a required item for a reason.',
+  'Block fridge': 'The fridge door can swing open while driving. Most vans have a latch or clip — check the top or side of the door.',
+  'Pump switch — ON': 'The pump pressurises your water system. Without it on, taps won\'t work. If you\'re on a mains water connection the pump may not be needed, but it\'s good practice to leave it on.',
+  'Pump switch — leave on if needed overnight': 'The pump is safe to leave on overnight. Some people turn it off to avoid noise if a tap drips — up to you.',
+  'Stow awning': 'Roll the awning back in and lock it closed before driving or high winds. An open awning in wind can cause serious damage in seconds.',
+  'All windows closed': 'In a busy car park or tourist town, close all windows for security. At a quiet campsite you might leave one cracked for ventilation — your call based on where you\'re parked.',
+  'Confirm handbrake released before moving': 'Give the handbrake lever a firm push down before pulling away. Easy to forget after a long setup. Driving with the handbrake on causes brake wear quickly.',
+};
+
+function getItemHint(label) {
+  return ITEM_HINTS[label] || null;
+}
+
+function toggleItemHint(e, hintId) {
+  e.stopPropagation();
+  const el = document.getElementById(hintId);
+  if (el) el.classList.toggle('show');
+}
+
 function itemInnerHTML(label, num, checked) {
   const note = itemNotes[label] || '';
-  const req = isRequired(label);
+  const hint = getItemHint(label);
+  const hintId = 'hint-' + num;
   return `
     <div class="item-num">${num}</div>
     <div class="check-box"><svg class="check-icon" width="12" height="10" viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1" stroke="#0d1117" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div class="item-body">
       <div class="label">${label}</div>
       ${note ? '<div class="item-note">📝 ' + note + '</div>' : '<div class="item-note"></div>'}
+      ${hint ? '<div class="item-hint" id="' + hintId + '">' + hint + '</div>' : ''}
     </div>
-    <button class="note-btn" onclick="event.stopPropagation();openModal('${label.replace(/'/g,"\\'")}')">📝</button>
+    ${hint ? '<button class="item-hint-btn" onclick="toggleItemHint(event,\'' + hintId + '\')">ℹ️</button>' : ''}
+    <button class="note-btn" onclick="event.stopPropagation();openModal(\'${label.replace(/'/g,"\\'")}\')" >📝</button>
     <div class="item-status">${checked ? 'DONE' : ''}</div>
   `;
 }
@@ -1561,13 +2226,35 @@ function renderChecklist() {
   let html = hasTouch ? '<div class="swipe-hint">→ swipe right to check · swipe left to uncheck</div>' : '';
   let globalNum = 1;
   Object.entries(sm.sections).forEach(([sec, items]) => {
-    const secId = 'sec_' + sec.replace(/\s+/g,'_');
-    html += `<div class="section-header"><div class="section-label" style="flex:1;margin-bottom:0">${sec}</div><button class="check-all-btn" onclick="checkAllSection('${sec.replace(/'/g,"\\'")}')">Check all</button></div>`;
-    items.forEach(label => {
+    const secKey = 'sec_collapsed_' + currentType + '_' + currentSubmode + '_' + sec.replace(/\s+/g,'_');
+    const isCollapsed = localStorage.getItem(secKey) === '1';
+    const doneCount = items.filter(l => itemState[l]).length;
+    const allDone = doneCount === items.length;
+    const required = sm.required || [];
+    const requiredItems = items.filter(l => required.includes(l));
+    const optionalItems = items.filter(l => !required.includes(l));
+
+    html += `<div class="section-header" onclick="toggleSection('${secKey}','sec-items-${secKey.replace(/[^a-z0-9]/gi,'_')}','sec-btn-${secKey.replace(/[^a-z0-9]/gi,'_')}')">
+      <div class="section-label" style="flex:1;margin-bottom:0">${sec} <span style="font-size:8px;color:${allDone ? 'var(--green)' : 'var(--muted)'}">${doneCount}/${items.length}</span></div>
+      <button class="check-all-btn" onclick="event.stopPropagation();checkAllSection('${sec.replace(/'/g,"\\'")}')">Check all</button>
+      <button class="section-collapse-btn ${isCollapsed ? 'collapsed' : ''}" id="sec-btn-${secKey.replace(/[^a-z0-9]/gi,'_')}">▼</button>
+    </div>`;
+
+    // Required items always visible
+    requiredItems.forEach(label => {
       const checked = !!itemState[label];
       html += '<div class="' + itemClass(label, checked) + '" data-label="' + label.replace(/"/g,'&quot;') + '">' + itemInnerHTML(label, globalNum, checked) + '</div>';
       globalNum++;
     });
+
+    // Optional items inside collapsible div
+    html += `<div class="section-items ${isCollapsed ? 'collapsed' : ''}" id="sec-items-${secKey.replace(/[^a-z0-9]/gi,'_')}">`;
+    optionalItems.forEach(label => {
+      const checked = !!itemState[label];
+      html += '<div class="' + itemClass(label, checked) + '" data-label="' + label.replace(/"/g,'&quot;') + '">' + itemInnerHTML(label, globalNum, checked) + '</div>';
+      globalNum++;
+    });
+    html += '</div>';
   });
   document.getElementById('checklist-body').innerHTML = html;
 
@@ -1673,6 +2360,16 @@ function checkAllSection(sec) {
   renderChecklist();
 }
 
+function toggleSection(storageKey, itemsId, btnId) {
+  const items = document.getElementById(itemsId);
+  const btn = document.getElementById(btnId);
+  if (!items) return;
+  const isNowCollapsed = !items.classList.contains('collapsed');
+  items.classList.toggle('collapsed', isNowCollapsed);
+  if (btn) btn.classList.toggle('collapsed', isNowCollapsed);
+  localStorage.setItem(storageKey, isNowCollapsed ? '1' : '0');
+}
+
 function resetAll() {
   itemState = {}; itemNotes = {};
   saveToStorage();
@@ -1690,10 +2387,12 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
-  if (id === 'screen-type') { renderHomeStats(); renderGasBtn(); }
+  if (id === 'screen-type') { renderHomeStats(); renderGasBtn(); renderVanStatusStrip(); }
   if (id === 'screen-log') { switchLogTab('log'); }
   if (id === 'screen-editor') loadEditor();
   if (id === 'screen-emergency') renderEmergencyFields();
+  if (id === 'screen-tools') renderTools();
+  if (id === 'screen-photos') renderPhotoJournal();
 }
 
 function switchLogTab(tab) {
@@ -1874,6 +2573,8 @@ function doFactoryReset() {
   document.getElementById('plate-display').textContent = 'CHECKLIST SYSTEM · SELECT MODE TO CONTINUE';
   const ns = document.getElementById('next-stop-input');
   if (ns) ns.value = '';
+  const tc = document.getElementById('tonight-input');
+  if (tc) tc.value = '';
   renderGasBtn();
   renderHomeStats();
   closeConfirmReset();
@@ -1932,40 +2633,50 @@ function releaseWakeLock() {
 const TUTORIAL_STEPS = [
   {
     target: null, position: 'centre', screen: 'screen-type',
-    tag: 'Welcome · 1 of 7', title: 'WELCOME TO RV WALKAROUND',
+    tag: 'Welcome · 1 of 9', title: 'WELCOME TO RV WALKAROUND',
     body: `Your checklist system for the <b>NZ South Island</b> road trip.<br><br>This quick tour covers the non-obvious stuff — the rest is self-explanatory. Tap <b>Next</b> to go.<br><br><span class="tut-tip">💡 Works offline once loaded. All data stays on your device.</span>`
   },
   {
     target: '#gas-btn', position: 'below', screen: 'screen-type',
-    tag: 'Important · 2 of 7', title: 'GAS STATUS — KEEP THIS UPDATED',
+    tag: 'Important · 2 of 9', title: 'GAS STATUS — KEEP THIS UPDATED',
     body: `This is the most important button on the home screen.<br><br>Tap it when you <b>turn the gas on</b> — amber. Tap when you <b>turn it off</b> — green. If gas is on when you open a night or departure checklist, you'll see a warning banner.<br><br><span class="tut-tip">💡 State persists even when you close the app.</span>`
   },
   {
     target: '.type-cards', position: 'below', screen: 'screen-type',
-    tag: 'Checklists · 3 of 7', title: 'TWO TYPES OF CHECKLIST',
+    tag: 'Checklists · 3 of 9', title: 'TWO TYPES OF CHECKLIST',
     body: `<b>Campsite to Campsite</b> — 6 modes for a full stay: Arrive, Depart, Secure for Night, Morning, Leaving the RV, and Back at the RV.<br><br><b>Quick Stop</b> — Pull In and Pull Out for fuel stops and short breaks.<br><br><span class="tut-tip">💡 Completing one checklist auto-resets its pair.</span>`
   },
   {
     target: '.item', position: 'auto', screen: 'screen-checklist',
     prepScreen: () => { currentType='campsite'; currentSubmode='arrive'; loadFromStorage('campsite','arrive'); startTime=Date.now(); renderChecklist(); },
-    tag: 'Checklists · 4 of 7', title: 'CHECKING ITEMS OFF',
+    tag: 'Checklists · 4 of 9', title: 'CHECKING ITEMS OFF',
     body: `<b>Tap</b> to check. <b>Tap again</b> to uncheck. On mobile, <b>swipe right</b> to check and <b>swipe left</b> to uncheck.<br><br>Items in <b>red ★</b> are required — the checklist won't complete until every required item is ticked.<br><br><span class="tut-tip">💡 Tap 📝 on any item to add a personal note.</span>`
   },
   {
     target: '.status-bar', position: 'auto', screen: 'screen-checklist',
     prepScreen: null,
-    tag: 'Checklists · 5 of 7', title: 'PROGRESS & CONTROLS',
+    tag: 'Checklists · 5 of 9', title: 'PROGRESS & CONTROLS',
     body: `The bar tracks <b>checked, remaining, percentage</b> and time.<br><br>Use <b>☀️ Keep Awake</b> in the button row to stop your screen locking mid-checklist — essential when your hands are full.<br><br><span class="tut-tip">💡 Confetti and a completion sound fire when you hit 100%!</span>`
   },
   {
     target: '.home-btns', position: 'above', screen: 'screen-type',
-    tag: 'Features · 6 of 7', title: 'WHAT ELSE IS IN HERE',
-    body: `<b>📋 Trip Log & Stats</b> — log every stop with location, rating and notes. View stats and export as CSV.<br><b>✏️ Customise</b> — edit any checklist item or toggle required ★ status.<br><b>🆘 Emergency Info</b> — store hire company number, campsite details, insurance info.<br><b>❓ Help & Settings</b> — this guide, dark mode, factory reset.`
+    tag: 'Features · 6 of 9', title: 'WHAT ELSE IS IN HERE',
+    body: `<b>📋 Trip Log & Stats</b> — log every stop with photo, rating and notes.<br><b>🛠️ Trip Tools</b> — shopping list, fuel log, budget tracker, dump station, LPG and water level.<br><b>🆘 Emergency Info</b> — hire company, campsite, insurance details.<br><b>❓ Help & Settings</b> — dark mode, factory reset, tutorial.`
+  },
+  {
+    target: '.tonight-camp', position: 'below', screen: 'screen-type',
+    tag: 'Home Screen · 7 of 9', title: "TONIGHT'S CAMP",
+    body: `Enter where you're sleeping tonight — tap <b>🗺️ Maps</b> to open it in Apple Maps, or <b>Get Directions</b> to navigate there from your current location.<br><br><span class="tut-tip">💡 The Next Stop field above is for your next driving waypoint — Tonight's Camp is specifically for your overnight destination.</span>`
+  },
+  {
+    target: '.gas-btn', position: 'below', screen: 'screen-type',
+    tag: 'Home Screen · 8 of 9', title: 'GAS STATUS — MOST IMPORTANT',
+    body: `Keep this updated throughout the trip. Tap when you <b>turn gas on</b> — glows amber. Tap when you <b>turn it off</b> — green.<br><br>If gas is on when you open a night or departure checklist, a warning banner will appear at the top.<br><br><span class="tut-tip">💡 State saves even when you close the app.</span>`
   },
   {
     target: null, position: 'centre', screen: 'screen-type',
-    tag: 'Done · 7 of 7', title: "YOU'RE ALL SET! 🚐",
-    body: `<b>Install as an app:</b><br>• iPhone: Safari → Share → "Add to Home Screen"<br>• Android: Chrome → three dots → "Add to Home Screen"<br><br>Fill in <b>🆘 Emergency Info</b> before you leave — it takes 2 minutes and you'll be glad you did.<br><br><span class="tut-tip">💡 Have an amazing South Island trip! 🏔️</span>`
+    tag: 'Done · 9 of 9', title: "YOU'RE ALL SET! 🚐",
+    body: `<b>Install as an app:</b><br>• iPhone: Safari → Share → "Add to Home Screen"<br>• Android: Chrome → three dots → "Add to Home Screen"<br><br>Fill in <b>🆘 Emergency Info</b> before you leave and check out <b>🛠️ Trip Tools</b> for the shopping list and fuel tracker.<br><br><span class="tut-tip">💡 Have an amazing South Island trip! 🏔️</span>`
   }
 ];
 
@@ -2216,21 +2927,31 @@ function renderGasBtn() {
   const stateEl = document.getElementById('gas-state');
   const iconEl = document.getElementById('gas-icon');
   const subEl = document.getElementById('gas-sub');
+  const nudge = document.getElementById('gas-nudge');
   if (!btn) return;
   btn.className = 'gas-btn ' + (state === 'on' ? 'on' : state === 'off' ? 'off' : '');
   if (state === 'on') {
     iconEl.textContent = '🔥';
     stateEl.textContent = 'ON';
     subEl.textContent = 'Gas is currently ON — tap when you turn it off';
+    if (nudge) nudge.style.display = 'none';
   } else if (state === 'off') {
     iconEl.textContent = '✅';
     stateEl.textContent = 'OFF';
     subEl.textContent = 'Gas is currently OFF — tap when you turn it on';
+    if (nudge) nudge.style.display = 'none';
   } else {
     iconEl.textContent = '❓';
     stateEl.textContent = 'NOT SET';
     subEl.textContent = 'Tap to set gas status';
+    if (nudge) nudge.style.display = 'block';
   }
+}
+
+function setLPGFull() {
+  localStorage.setItem('rv_lpg', '14');
+  renderVanTools();
+  haptic('light');
 }
 
 // ── DAY COUNTER & STREAK ──
@@ -2292,8 +3013,11 @@ if (savedPlate) {
 }
 renderHomeStats();
 renderGasBtn();
+renderVanStatusStrip();
 loadNextStop();
+loadTonightCamp();
 fetchWeather();
+checkChangelog();
 
 // Dismiss splash after 1.4s (matches loading bar animation)
 setTimeout(() => {
