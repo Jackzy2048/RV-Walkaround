@@ -191,8 +191,8 @@
     .modal-btn.cancel:hover{border-color:var(--red);color:var(--red)}
 
     /* SUB MODE */
-    .sub-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:2rem}
-    .sub-card{border:1px solid var(--border);background:var(--panel);padding:1.5rem 1rem;cursor:pointer;transition:all .2s;text-align:center;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
+    .sub-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+    .sub-card{border:1px solid var(--border);background:var(--panel);padding:1rem .75rem;cursor:pointer;transition:all .2s;text-align:center;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
     .sub-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .2s}
     .sub-card.arrive::before{background:linear-gradient(90deg,transparent,var(--green),transparent)}
     .sub-card.depart::before{background:linear-gradient(90deg,transparent,var(--red),transparent)}
@@ -207,15 +207,19 @@
     .sub-card.pullout:hover{border-color:var(--purple-dim)}
     .sub-card.secure:hover{border-color:var(--purple-dim)}
     .sub-card.morning:hover{border-color:var(--amber-dim)}
+    .sub-card.leaving:hover{border-color:var(--blue-dim)}
+    .sub-card.returning:hover{border-color:var(--teal-dim)}
     .sub-card:hover::before{opacity:1}
-    .sub-emoji{font-size:36px;margin-bottom:12px;display:block}
-    .sub-name{font-family:var(--display);font-size:22px;letter-spacing:2px;margin-bottom:6px}
+    .sub-emoji{font-size:28px;margin-bottom:8px;display:block}
+    .sub-name{font-family:var(--display);font-size:18px;letter-spacing:2px;margin-bottom:4px}
     .sub-card.arrive .sub-name{color:var(--green)}
     .sub-card.depart .sub-name{color:var(--red)}
     .sub-card.pullin .sub-name{color:var(--teal)}
     .sub-card.pullout .sub-name{color:var(--purple)}
     .sub-card.secure .sub-name{color:var(--purple)}
     .sub-card.morning .sub-name{color:var(--amber)}
+    .sub-card.leaving .sub-name{color:var(--blue)}
+    .sub-card.returning .sub-name{color:var(--teal)}
     .sub-desc{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;line-height:1.6}
     .sub-tag{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:9px;letter-spacing:2px;padding:3px 10px;border:1px solid}
     .sub-card.arrive .sub-tag{border-color:var(--green-dim);color:var(--green)}
@@ -224,6 +228,8 @@
     .sub-card.pullout .sub-tag{border-color:var(--purple-dim);color:var(--purple)}
     .sub-card.secure .sub-tag{border-color:var(--purple-dim);color:var(--purple)}
     .sub-card.morning .sub-tag{border-color:var(--amber-dim);color:var(--amber)}
+    .sub-card.leaving .sub-tag{border-color:var(--blue-dim);color:var(--blue)}
+    .sub-card.returning .sub-tag{border-color:var(--teal-dim);color:var(--teal)}
 
     /* BREADCRUMB */
     .breadcrumb{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:2px;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
@@ -308,6 +314,10 @@
     .item.required:not(.checked) .check-box{border-color:var(--red)}
     .required-warning{display:none;background:rgba(255,68,68,.08);border:1px solid var(--red);padding:12px 16px;margin-top:1rem;font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:1px;text-align:center}
     .required-warning.show{display:block;animation:fadeIn .3s ease}
+
+    /* GAS WARNING BANNER */
+    .gas-warning{display:none;background:rgba(245,166,35,.1);border:1px solid var(--amber);border-left:3px solid var(--amber);padding:10px 14px;margin-bottom:1rem;font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:.5px;line-height:1.7}
+    .gas-warning.show{display:block;animation:fadeIn .3s ease}
 
     /* STREAK & DAY COUNTER */
     .home-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1.25rem}
@@ -450,8 +460,11 @@
       <div class="header-rv">🚐</div>
     </div>
     <div id="weather-home"></div>
-    <div class="weather-manual" id="weather-search-bar" style="margin-bottom:1.25rem">
-      <input id="weather-city-input" placeholder="Search town for weather... e.g. Queenstown"/>
+    <div style="text-align:right;margin-top:-8px;margin-bottom:10px">
+      <span onclick="toggleWeatherSearch()" style="font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px">🔍 search by town</span>
+    </div>
+    <div class="weather-manual" id="weather-search-bar" style="display:none;margin-bottom:1.25rem">
+      <input id="weather-city-input" placeholder="e.g. Queenstown..."/>
       <button onclick="fetchWeather(document.getElementById('weather-city-input').value)">Search</button>
     </div>
     <div class="plate-row">
@@ -459,14 +472,14 @@
       <input class="plate-input" id="plate-input" placeholder="ENTER PLATE..." maxlength="8" oninput="savePlate(this.value)"/>
     </div>
     <button class="gas-btn" id="gas-btn" onclick="toggleGas()">
-      <span id="gas-icon">🔥</span> Gas: <span id="gas-state">UNKNOWN</span>
-      <span class="gas-status" id="gas-sub">Tap to update gas status</span>
+      <span id="gas-icon">❓</span> Gas: <span id="gas-state">NOT SET</span>
+      <span class="gas-status" id="gas-sub">Tap to set gas status</span>
     </button>
-    <div class="home-stats">
+    <div class="home-stats" id="home-stats" style="display:none">
       <div class="home-stat">
         <div class="home-stat-label">Trip Day</div>
         <div class="home-stat-value" id="stat-day">—</div>
-        <div class="home-stat-sub">of your adventure</div>
+        <div class="home-stat-sub" id="stat-day-sub">of your adventure</div>
       </div>
       <div class="home-stat">
         <div class="home-stat-label">Depart Streak</div>
@@ -479,6 +492,7 @@
         <div class="home-stat-sub">completed</div>
       </div>
     </div>
+    <div id="home-stats-empty" style="font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px;text-align:center;padding:10px 0 6px;display:none">Complete your first checklist to start your trip stats 🚐</div>
     <div class="select-intro">
       <div class="select-intro-label">Select checklist type</div>
       <div class="select-intro-title">WHERE ARE WE HEADED?</div>
@@ -498,18 +512,10 @@
       </div>
     </div>
     <div class="home-btns">
-      <div class="home-btn" onclick="showScreen('screen-log')">📋 Trip Log</div>
-      <div class="home-btn" onclick="showScreen('screen-stats')">📊 Stats</div>
+      <div class="home-btn" onclick="showScreen('screen-log')">📋 Trip Log & Stats</div>
       <div class="home-btn" onclick="showScreen('screen-editor')">✏️ Customise</div>
-      <div class="home-btn" onclick="showScreen('screen-help')">❓ Help</div>
-      <div class="home-btn" style="border-color:#4a1010;color:var(--red)" onclick="openConfirmReset()">⚠️ Factory Reset</div>
-    </div>
-    <div class="theme-toggle">
-      <span class="theme-toggle-label">🌙 Dark</span>
-      <div class="theme-toggle-track" id="theme-track" onclick="toggleTheme()">
-        <div class="theme-toggle-thumb"></div>
-      </div>
-      <span class="theme-toggle-label">☀️ Light</span>
+      <div class="home-btn" onclick="showScreen('screen-emergency')">🆘 Emergency Info</div>
+      <div class="home-btn" onclick="showScreen('screen-help')">❓ Help & Settings</div>
     </div>
     <div class="divider">RV-SI · SOUTH ISLAND</div>
     <div class="footer">🚐 ✅ · RV WALKAROUND SYSTEM</div>
@@ -525,11 +531,8 @@
       <div class="header-sub">SELECT DIRECTION TO CONTINUE</div>
       <div class="header-rv" id="submode-emoji"></div>
     </div>
-    <div class="select-intro">
-      <div class="select-intro-label">Select direction</div>
-      <div class="select-intro-title" id="submode-question"></div>
-    </div>
-    <div class="sub-cards" id="sub-cards"></div>
+    <div style="font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted);margin-bottom:1rem" id="submode-question"></div>
+    <div id="sub-cards"></div>
     <button class="back-btn" style="width:100%" onclick="showScreen('screen-type')">← Back</button>
     <div class="footer">🚐 ✅ · RV WALKAROUND SYSTEM</div>
   </div>
@@ -545,6 +548,7 @@
       <div class="header-rv" id="cl-emoji"></div>
     </div>
     <div id="weather-checklist"></div>
+    <div class="gas-warning" id="gas-warning">🔥 Gas is currently ON — make sure you turn it off before finishing this checklist.</div>
     <div class="breadcrumb" id="breadcrumb"></div>
     <div class="status-bar">
       <div class="stat">
@@ -584,37 +588,31 @@
   </div>
 </div>
 
-<!-- SCREEN 4: TRIP LOG -->
+<!-- SCREEN 4: TRIP LOG & STATS (tabbed) -->
 <div class="screen" id="screen-log">
   <div class="cockpit">
     <div class="header">
       <div class="airline-tag">South Island Expedition</div>
       <div class="header-title">TRIP LOG</div>
-      <div class="header-sub">COMPLETED CHECKLISTS · YOUR JOURNEY HISTORY</div>
-      <div class="header-rv">📋</div>
+      <div class="header-sub" id="log-screen-sub">COMPLETED CHECKLISTS · YOUR JOURNEY HISTORY</div>
+      <div class="header-rv" id="log-screen-icon">📋</div>
+    </div>
+    <!-- Tabs -->
+    <div style="display:flex;gap:0;margin-bottom:1.25rem;border:1px solid var(--border)">
+      <button id="tab-log" onclick="switchLogTab('log')" style="flex:1;padding:10px;border:none;background:var(--amber);color:#0d1117;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer">📋 Log</button>
+      <button id="tab-stats" onclick="switchLogTab('stats')" style="flex:1;padding:10px;border:none;background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-left:1px solid var(--border)">📊 Stats</button>
     </div>
     <div id="log-body"></div>
-    <div class="btn-row" style="margin-top:1.5rem">
+    <div id="stats-body" style="display:none"></div>
+    <div class="btn-row" id="log-btns" style="margin-top:1.5rem">
       <button class="back-btn" onclick="showScreen('screen-type')">← Back</button>
       <button class="reset-btn" onclick="shareLog()">Share</button>
       <button class="reset-btn" onclick="exportLogCSV()">Export CSV</button>
       <button class="reset-btn" onclick="clearLog()">Clear</button>
     </div>
-    <div class="footer">RV-SI · SOUTH ISLAND EXPEDITION</div>
-  </div>
-</div>
-
-<!-- SCREEN 5: STATS -->
-<div class="screen" id="screen-stats">
-  <div class="cockpit">
-    <div class="header">
-      <div class="airline-tag">South Island Expedition</div>
-      <div class="header-title">TRIP STATS</div>
-      <div class="header-sub">YOUR JOURNEY BY THE NUMBERS</div>
-      <div class="header-rv">📊</div>
+    <div class="btn-row" id="stats-btns" style="margin-top:1.5rem;display:none">
+      <button class="back-btn" style="width:100%" onclick="showScreen('screen-type')">← Back</button>
     </div>
-    <div id="stats-body"></div>
-    <button class="back-btn" style="width:100%;margin-top:1.5rem" onclick="showScreen('screen-type')">← Back</button>
     <div class="footer">RV-SI · SOUTH ISLAND EXPEDITION</div>
   </div>
 </div>
@@ -634,12 +632,48 @@
         <option value="campsite|depart">Campsite — Pack Up &amp; Depart</option>
         <option value="campsite|secure">Campsite — Secure for Night</option>
         <option value="campsite|morning">Campsite — Morning Start Up</option>
+        <option value="campsite|leaving">Campsite — Leaving the RV</option>
+        <option value="campsite|returning">Campsite — Back at the RV</option>
         <option value="quickstop|pullin">Quick Stop — Pulling In</option>
         <option value="quickstop|pullout">Quick Stop — Pulling Out</option>
       </select>
     </div>
     <div id="editor-body"></div>
     <button class="back-btn" style="width:100%;margin-top:1rem" onclick="showScreen('screen-type')">← Back</button>
+    <div class="footer">RV-SI · SOUTH ISLAND EXPEDITION</div>
+  </div>
+</div>
+
+<!-- SCREEN 8: EMERGENCY INFO -->
+<div class="screen" id="screen-emergency">
+  <div class="cockpit">
+    <div class="header">
+      <div class="airline-tag">NZ South Island Expedition</div>
+      <div class="header-title">EMERGENCY INFO</div>
+      <div class="header-sub">IMPORTANT NUMBERS · NOTES · QUICK ACCESS</div>
+      <div class="header-rv">🆘</div>
+    </div>
+
+    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:1rem;text-transform:uppercase">Fill these in before you leave — tap any field to edit</div>
+
+    <div id="emergency-fields"></div>
+
+    <div style="margin-top:1.25rem">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:8px">📋 NZ Emergency Numbers</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text);line-height:2;background:var(--panel);border:1px solid var(--border);padding:12px 14px">
+        <div>🚨 Emergency — <b style="color:var(--amber)">111</b></div>
+        <div>🏥 Non-urgent health — <b style="color:var(--amber)">1737</b></div>
+        <div>🚗 AA Roadside — <b style="color:var(--amber)">0800 500 222</b></div>
+        <div>🏔️ NZ Mountain Safety — <b style="color:var(--amber)">027 222 3478</b></div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.25rem">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:8px">📝 Notes</div>
+      <textarea id="emergency-notes" placeholder="Insurance policy numbers, campsite bookings, allergies, medications, anything important..." style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:10px;resize:none;height:120px;outline:none;letter-spacing:.5px" oninput="saveEmergencyData()"></textarea>
+    </div>
+
+    <button class="back-btn" style="width:100%;margin-top:1.25rem" onclick="showScreen('screen-type')">← Back</button>
     <div class="footer">RV-SI · SOUTH ISLAND EXPEDITION</div>
   </div>
 </div>
@@ -697,11 +731,13 @@
       <div class="help-section-title">✅ Checklists</div>
       <div class="help-item">
         <div class="help-item-title"><b>Campsite to Campsite</b></div>
-        <div class="help-item-desc">Four modes for a full campsite stay:<br>
+        <div class="help-item-desc">Six modes for a full campsite stay:<br>
           <span class="help-badge green">ARRIVE & SET UP</span> — pull up and get settled in.<br>
           <span class="help-badge red">PACK UP & DEPART</span> — full check before rolling.<br>
           <span class="help-badge">SECURE FOR NIGHT</span> — lock up and wind down.<br>
-          <span class="help-badge">MORNING START UP</span> — rise, open up, get going.
+          <span class="help-badge">MORNING START UP</span> — rise, open up, get going.<br>
+          <span class="help-badge">LEAVING THE RV</span> — heading out to explore, lock up properly.<br>
+          <span class="help-badge">BACK AT THE RV</span> — returning from a day out, open up and settle in.
         </div>
       </div>
       <div class="help-item">
@@ -758,28 +794,36 @@
     </div>
 
     <div class="help-section">
-      <div class="help-section-title">⚙️ Other features</div>
+      <div class="help-section-title">⚙️ Settings</div>
       <div class="help-item">
-        <div class="help-item-title"><b>Trip Stats</b></div>
-        <div class="help-item-desc">See your average checklist time, most used checklist, stops tagged, and a breakdown of campsite vs quick stop checks.</div>
+        <div class="help-item-title"><b>Dark / Light mode</b></div>
+        <div class="help-item-desc">Choose your preferred theme. Dark is recommended at night.</div>
+        <div class="theme-toggle" style="margin-top:8px;justify-content:flex-start">
+          <span class="theme-toggle-label">🌙 Dark</span>
+          <div class="theme-toggle-track" id="theme-track" onclick="toggleTheme()">
+            <div class="theme-toggle-thumb"></div>
+          </div>
+          <span class="theme-toggle-label">☀️ Light</span>
+        </div>
       </div>
       <div class="help-item">
         <div class="help-item-title"><b>Offline use</b></div>
-        <div class="help-item-desc">Once loaded, the app works completely offline. All your data is stored on your device. Only weather and sunrise/sunset need an internet connection.</div>
-      </div>
-      <div class="help-item">
-        <div class="help-item-title"><b>Factory Reset</b></div>
-        <div class="help-item-desc">Wipes everything — all progress, logs, notes, custom lists, rego plate, and gas status. Only use this at the very start of a new trip or if something goes wrong.</div>
+        <div class="help-item-desc">Once loaded, the app works completely offline. Only weather needs internet.</div>
       </div>
       <div class="help-item">
         <div class="help-item-title"><b>Install as an app</b></div>
-        <div class="help-item-desc"><b>iPhone:</b> Open in Safari → tap Share → "Add to Home Screen."<br><b>Android:</b> Open in Chrome → tap the three dots menu → "Add to Home Screen." Once installed it runs fullscreen like a native app.</div>
+        <div class="help-item-desc"><b>iPhone:</b> Safari → Share → "Add to Home Screen."<br><b>Android:</b> Chrome → three dots → "Add to Home Screen."</div>
+      </div>
+      <div class="help-item" style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)">
+        <div class="help-item-title"><b style="color:var(--red)">⚠️ Factory Reset</b></div>
+        <div class="help-item-desc">Wipes everything — logs, notes, custom lists, rego plate and gas status. Use at the start of a new trip.</div>
+        <button onclick="openConfirmReset()" style="margin-top:10px;width:100%;padding:11px;border:1px solid var(--red);background:transparent;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--red);cursor:pointer">⚠️ Factory Reset</button>
       </div>
     </div>
 
     <div style="display:flex;gap:10px;margin-top:1rem">
       <button class="back-btn" style="flex:1" onclick="showScreen('screen-type')">← Back</button>
-      <button class="reset-btn" onclick="startTutorial()">▶ Replay Tutorial</button>
+      <button class="reset-btn" onclick="startTutorial()">▶ Tutorial</button>
     </div>
     <div class="footer">RV-SI · SOUTH ISLAND EXPEDITION</div>
   </div>
@@ -806,13 +850,14 @@ const DEFAULT_CHECKLISTS = {
       depart: {
         label:'PACK UP & DEPART', emoji:'🚐', desc:'Full pack down before rolling.', cardClass:'depart', accentVar:'--red',
         clTag:'Departure protocol — NZ South Island', clTitle:'PACK UP & GO', clSub:'FULL DEPARTURE CHECK · COMPLETE BEFORE LEAVING', clEmoji:'🚐',
-        doneTitle:'READY FOR DEPARTURE', doneSub:'South Island — cleared for launch', estMins:15,
-        required:['Step under door','Right cargo door sealed','Left cargo door sealed','Stow awning','All doors closed','All sunroofs closed','Close and lock all cupboards','Turn off campsite breaker','Disconnect power cable','Fold & stow power cable','No other wires connected from campsite','All chargers unplugged','Turn gas off'],
+        doneTitle:'READY FOR DEPARTURE', doneSub:'South Island — cleared for launch', estMins:18,
+        required:['Step under door','Right cargo door sealed','Left cargo door sealed','Stow awning','All doors closed','All sunroofs closed','Close and lock all cupboards','Turn off campsite breaker','Disconnect power cable','Fold & stow power cable','No external wires or hoses connected','All chargers unplugged','Turn gas off','Walk around outside — check tyres, roof, nothing trailing'],
         sections: {
           'External checks':['Step under door','Right cargo door sealed','Left cargo door sealed','Ladder stowed','Stow awning','All doors closed'],
-          'Internal checks':['Close and lock all cupboards','Block fridge','All curtains open','Sunroof curtain open','All sunroofs closed','All beds, tables & chairs stowed','Stow stove'],
+          'Internal checks':['Close and lock all cupboards','Block fridge (latch to stop door swinging)','All curtains open','Sunroof curtain open','All sunroofs closed','All beds, tables & chairs stowed','Stow stove'],
           'Power switches':['Lights switch — OFF','Media switch — OFF','Spare switch — OFF (emergency only)','Water heater switch — OFF','Pump switch — OFF','Stove ignition switch — OFF'],
-          'Utilities & services':['Turn off campsite breaker','Disconnect power cable','Fold & stow power cable','No other wires connected from campsite','All chargers unplugged','Turn gas off']
+          'Utilities & services':['Turn off campsite breaker','Disconnect power cable','Fold & stow power cable','No external wires or hoses connected','All chargers unplugged','Turn gas off'],
+          'Final walkaround':['Walk around outside — check tyres, roof, nothing trailing','Nothing left at pitch (chairs, mats, pegs)','Mirrors adjusted','Handbrake off when ready to roll']
         }
       },
       secure: {
@@ -825,7 +870,7 @@ const DEFAULT_CHECKLISTS = {
           'Windows & vents':['All curtains closed','Sunroof curtain closed','All windows closed','Sunroof closed or cracked to vent'],
           'Power switches':['Stove ignition switch — OFF','Water heater switch — OFF','Lights switch — leave on','Pump switch — leave on if needed overnight','Media switch — OFF','Spare switch — OFF (emergency only)'],
           'Utilities':['Gas off','Ensure electric hookup is stable','All exterior lights off'],
-          'Internal':['Beds made up','All cupboards latched','Valuables out of sight','Phones & devices on charge','Locks checked']
+          'Internal':['Beds made up','All cupboards latched','Fridge running and set cold','Valuables out of sight','Phones & devices on charge','Locks checked']
         }
       },
       morning: {
@@ -839,6 +884,30 @@ const DEFAULT_CHECKLISTS = {
           'Utilities':['Turn on gas','Check electric hookup is still connected','Check water if on mains'],
           'Kitchen & breakfast':['Set up stove','Kettle on','Set out breakfast things'],
           'Personal':['Everyone up & dressed','Phones off charge & stowed','Beds stowed or made neat','Sunscreen & hats ready if sunny']
+        }
+      },
+      leaving: {
+        label:'LEAVING THE RV', emoji:'🏙️', desc:'Heading out to explore — lock up properly.', cardClass:'leaving', accentVar:'--blue',
+        clTag:'Going out — NZ South Island', clTitle:'LEAVING THE RV', clSub:'HEADING OUT · SECURE BEFORE YOU GO', clEmoji:'🏙️',
+        doneTitle:'RV IS SECURE', doneSub:'Go enjoy your adventure!', estMins:4,
+        required:['All windows closed','Right cargo door sealed','Left cargo door sealed','Close & lock main door','Stow awning','Lock car','Gas off','All exterior lights off'],
+        sections: {
+          'Lock up':['Close & lock main door','Right cargo door sealed','Left cargo door sealed','Step stowed','Stow awning','Lock car'],
+          'Windows & vents':['All windows closed','All curtains closed','Sunroof closed'],
+          'Utilities':['Gas off','Stove off','All interior lights off','All exterior lights off','All chargers unplugged'],
+          'Valuables':['Valuables out of sight','Phones & devices hidden or taken','Keys accounted for']
+        }
+      },
+      returning: {
+        label:'BACK AT THE RV', emoji:'🔑', desc:'Back from exploring — open up and settle in.', cardClass:'returning', accentVar:'--teal',
+        clTag:'Returning to RV — NZ South Island', clTitle:'BACK AT THE RV', clSub:'WELCOME BACK · OPEN UP & SETTLE IN', clEmoji:'🔑',
+        doneTitle:'WELCOME BACK!', doneSub:'Home sweet home on wheels', estMins:4,
+        required:[],
+        sections: {
+          'Check the outside':['Walk around — check for damage or anything unusual','Nothing left on roof or step area','All cargo doors still sealed'],
+          'Open up':['Unlock main door','Deploy step','Open curtains','Open windows if warm','Check nothing moved or disturbed inside'],
+          'Utilities':['Turn on gas if needed','Fridge still running and cold','Check electric hookup still connected'],
+          'Settle in':['Shoes off, bags in','Phones out and charging','Grab a snack — you earned it']
         }
       }
     }
@@ -861,7 +930,7 @@ const DEFAULT_CHECKLISTS = {
         doneTitle:'BACK ON THE ROAD', doneSub:'Keep the adventure going', estMins:4,
         required:['Step stowed','All doors closed','Turn gas off'],
         sections: {
-          'Before you roll':['Everyone back inside','Step stowed','All doors closed','All cupboards shut','Block fridge','Stow stove','Turn gas off','All chargers unplugged','No wires connected']
+          'Before you roll':['Everyone back inside','Step stowed','All doors closed','All cupboards shut','Block fridge (latch to stop door swinging)','Stow stove','Turn gas off','All chargers unplugged','No wires connected']
         }
       }
     }
@@ -1290,16 +1359,30 @@ function renderChecklist() {
 
   updateStats();
   renderWeather();
+
+  // Gas warning — show on night, depart and leaving checklists if gas is on
+  const gasWarning = document.getElementById('gas-warning');
+  const gasOn = localStorage.getItem('rv_gas') === 'on';
+  const gasWarnModes = ['secure', 'depart', 'leaving', 'pullout'];
+  if (gasWarning) {
+    if (gasOn && gasWarnModes.includes(currentSubmode)) {
+      gasWarning.classList.add('show');
+    } else {
+      gasWarning.classList.remove('show');
+    }
+  }
 }
 
 // Which checklist to auto-reset when this one completes: [type, submode]
 const NEXT_RESET = {
-  'campsite|arrive':   ['campsite', 'depart'],
-  'campsite|depart':   ['campsite', 'arrive'],
-  'campsite|secure':   ['campsite', 'morning'],
-  'campsite|morning':  ['campsite', 'secure'],
-  'quickstop|pullin':  ['quickstop', 'pullout'],
-  'quickstop|pullout': ['quickstop', 'pullin'],
+  'campsite|arrive':    ['campsite', 'depart'],
+  'campsite|depart':    ['campsite', 'arrive'],
+  'campsite|secure':    ['campsite', 'morning'],
+  'campsite|morning':   ['campsite', 'secure'],
+  'campsite|leaving':   ['campsite', 'returning'],
+  'campsite|returning': ['campsite', 'leaving'],
+  'quickstop|pullin':   ['quickstop', 'pullout'],
+  'quickstop|pullout':  ['quickstop', 'pullin'],
 };
 
 function resetOtherChecklist(type, sub) {
@@ -1379,14 +1462,50 @@ function resetAll() {
 
 // ── NAVIGATION ──
 function showScreen(id) {
+  // Redirect old stats screen to log screen on stats tab
+  if (id === 'screen-stats') { showScreen('screen-log'); setTimeout(() => switchLogTab('stats'), 50); return; }
   if (id !== 'screen-checklist') releaseWakeLock();
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
   if (id === 'screen-type') { renderHomeStats(); renderGasBtn(); }
-  if (id === 'screen-log') renderLog();
-  if (id === 'screen-stats') renderStats();
+  if (id === 'screen-log') { switchLogTab('log'); }
   if (id === 'screen-editor') loadEditor();
+  if (id === 'screen-emergency') renderEmergencyFields();
+}
+
+function switchLogTab(tab) {
+  const logBody = document.getElementById('log-body');
+  const statsBody = document.getElementById('stats-body');
+  const logBtns = document.getElementById('log-btns');
+  const statsBtns = document.getElementById('stats-btns');
+  const tabLog = document.getElementById('tab-log');
+  const tabStats = document.getElementById('tab-stats');
+  const header = document.getElementById('log-screen-sub');
+  const icon = document.getElementById('log-screen-icon');
+  if (tab === 'log') {
+    logBody.style.display = ''; statsBody.style.display = 'none';
+    logBtns.style.display = ''; statsBtns.style.display = 'none';
+    tabLog.style.background = 'var(--amber)'; tabLog.style.color = '#0d1117';
+    tabStats.style.background = 'var(--panel)'; tabStats.style.color = 'var(--muted)';
+    header.textContent = 'COMPLETED CHECKLISTS · YOUR JOURNEY HISTORY';
+    icon.textContent = '📋';
+    renderLog();
+  } else {
+    logBody.style.display = 'none'; statsBody.style.display = '';
+    logBtns.style.display = 'none'; statsBtns.style.display = '';
+    tabLog.style.background = 'var(--panel)'; tabLog.style.color = 'var(--muted)';
+    tabStats.style.background = 'var(--amber)'; tabStats.style.color = '#0d1117';
+    header.textContent = 'YOUR JOURNEY BY THE NUMBERS';
+    icon.textContent = '📊';
+    renderStats();
+  }
+}
+
+function toggleWeatherSearch() {
+  const bar = document.getElementById('weather-search-bar');
+  bar.style.display = bar.style.display === 'none' ? 'flex' : 'none';
+  if (bar.style.display === 'flex') document.getElementById('weather-city-input').focus();
 }
 
 function selectType(type) {
@@ -1397,13 +1516,40 @@ function selectType(type) {
   document.getElementById('submode-emoji').textContent = cl.emoji;
   document.getElementById('submode-question').textContent = cl.question;
 
-  const cards = Object.entries(cl.submodes).map(([key, sm]) => `
-    <div class="sub-card ${sm.cardClass}" onclick="selectSubmode('${key}')">
-      <span class="sub-emoji">${sm.emoji}</span>
-      <div class="sub-name">${sm.label}</div>
-      <div class="sub-desc">${sm.desc}</div>
-      <div class="sub-tag">${sm.label}</div>
-    </div>`).join('');
+  let cards = '';
+  if (type === 'campsite') {
+    // Group 1: Moving
+    const moving = ['arrive','depart'];
+    const staying = ['secure','morning','leaving','returning'];
+    cards += '<div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;margin-top:2px">Moving</div>';
+    cards += '<div class="sub-cards" style="margin-bottom:.75rem">' + moving.map(key => {
+      const sm = cl.submodes[key];
+      return `<div class="sub-card ${sm.cardClass}" onclick="selectSubmode('${key}')">
+        <span class="sub-emoji">${sm.emoji}</span>
+        <div class="sub-name">${sm.label}</div>
+        <div class="sub-desc">${sm.desc}</div>
+        <div class="sub-tag">~${sm.estMins} MIN</div>
+      </div>`;
+    }).join('') + '</div>';
+    cards += '<div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:6px">At the Campsite</div>';
+    cards += '<div class="sub-cards">' + staying.map(key => {
+      const sm = cl.submodes[key];
+      return `<div class="sub-card ${sm.cardClass}" onclick="selectSubmode('${key}')">
+        <span class="sub-emoji">${sm.emoji}</span>
+        <div class="sub-name">${sm.label}</div>
+        <div class="sub-desc">${sm.desc}</div>
+        <div class="sub-tag">~${sm.estMins} MIN</div>
+      </div>`;
+    }).join('') + '</div>';
+  } else {
+    cards = '<div class="sub-cards">' + Object.entries(cl.submodes).map(([key, sm]) => `
+      <div class="sub-card ${sm.cardClass}" onclick="selectSubmode('${key}')">
+        <span class="sub-emoji">${sm.emoji}</span>
+        <div class="sub-name">${sm.label}</div>
+        <div class="sub-desc">${sm.desc}</div>
+        <div class="sub-tag">~${sm.estMins} MIN</div>
+      </div>`).join('') + '</div>';
+  }
   document.getElementById('sub-cards').innerHTML = cards;
   showScreen('screen-submode');
 }
@@ -1496,6 +1642,9 @@ function openConfirmReset() { document.getElementById('confirmModal').classList.
 function closeConfirmReset() { document.getElementById('confirmModal').classList.remove('open'); }
 function doFactoryReset() {
   Object.keys(localStorage).filter(k => k.startsWith('rv_')).forEach(k => localStorage.removeItem(k));
+  // Also clear emergency fields
+  EMERGENCY_FIELDS.forEach(f => localStorage.removeItem(f.id));
+  localStorage.removeItem('rv_emergency_notes');
   CHECKLISTS = JSON.parse(JSON.stringify(DEFAULT_CHECKLISTS));
   currentType = null; currentSubmode = null;
   itemState = {}; itemNotes = {};
@@ -1558,95 +1707,41 @@ function releaseWakeLock() {
 // screen = screen id to navigate to before showing (null = stay put)
 const TUTORIAL_STEPS = [
   {
-    target: null,
-    position: 'centre',
-    screen: 'screen-type',
-    tag: 'Welcome · 1 of 11',
-    title: 'WELCOME TO RV WALKAROUND',
-    body: `Your complete checklist system for the <b>NZ South Island</b> road trip.<br><br>This tour highlights each part of the app as we go. Tap <b>Next</b> to move through it — takes about 2 minutes.<br><br><span class="tut-tip">💡 Your data is saved on this device and works offline once loaded.</span>`
+    target: null, position: 'centre', screen: 'screen-type',
+    tag: 'Welcome · 1 of 7', title: 'WELCOME TO RV WALKAROUND',
+    body: `Your checklist system for the <b>NZ South Island</b> road trip.<br><br>This quick tour covers the non-obvious stuff — the rest is self-explanatory. Tap <b>Next</b> to go.<br><br><span class="tut-tip">💡 Works offline once loaded. All data stays on your device.</span>`
   },
   {
-    target: '#weather-home',
-    position: 'below',
-    screen: 'screen-type',
-    tag: 'Home Screen · 2 of 11',
-    title: 'WEATHER & SUNRISE',
-    body: `Shows <b>live conditions, wind speed</b>, and whether the awning is safe. Also shows today's <b>sunrise and sunset times</b>.<br><br>Use the <b>search bar below it</b> to look up any NZ town manually if GPS isn't working.<br><br><span class="tut-tip">💡 Weather needs internet — everything else works offline.</span>`
+    target: '#gas-btn', position: 'below', screen: 'screen-type',
+    tag: 'Important · 2 of 7', title: 'GAS STATUS — KEEP THIS UPDATED',
+    body: `This is the most important button on the home screen.<br><br>Tap it when you <b>turn the gas on</b> — amber. Tap when you <b>turn it off</b> — green. If gas is on when you open a night or departure checklist, you'll see a warning banner.<br><br><span class="tut-tip">💡 State persists even when you close the app.</span>`
   },
   {
-    target: '#gas-btn',
-    position: 'below',
-    screen: 'screen-type',
-    tag: 'Home Screen · 3 of 11',
-    title: 'GAS STATUS',
-    body: `Tap this when you <b>turn the gas on</b> — it glows amber. Tap again when you <b>turn it off</b> — it turns green.<br><br>Always check this before doing a night or departure checklist so you know exactly where the gas is at.<br><br><span class="tut-tip">💡 State is saved even when you close the app.</span>`
+    target: '.type-cards', position: 'below', screen: 'screen-type',
+    tag: 'Checklists · 3 of 7', title: 'TWO TYPES OF CHECKLIST',
+    body: `<b>Campsite to Campsite</b> — 6 modes for a full stay: Arrive, Depart, Secure for Night, Morning, Leaving the RV, and Back at the RV.<br><br><b>Quick Stop</b> — Pull In and Pull Out for fuel stops and short breaks.<br><br><span class="tut-tip">💡 Completing one checklist auto-resets its pair.</span>`
   },
   {
-    target: '.home-stats',
-    position: 'below',
-    screen: 'screen-type',
-    tag: 'Home Screen · 4 of 11',
-    title: 'TRIP STATS',
-    body: `<b>Trip Day</b> — counts up from your first ever completed checklist.<br><b>Depart Streak</b> — days in a row you've done a departure check.<br><b>Total Checks</b> — every checklist completed on the trip.<br><br><span class="tut-tip">💡 Streak resets if you skip a day without departing.</span>`
-  },
-  {
-    target: '.type-cards',
-    position: 'below',
-    screen: 'screen-type',
-    tag: 'Checklists · 5 of 11',
-    title: 'CHOOSE YOUR CHECKLIST',
-    body: `<b>Campsite to Campsite</b> — full campsite stay. Four modes: Arrive, Depart, Secure for Night, Morning Start Up.<br><br><b>Quick Stop</b> — short breaks. Pull In and Pull Out. Designed to take under 3 minutes.<br><br><span class="tut-tip">💡 When you finish one checklist, its pair resets automatically.</span>`
-  },
-  {
-    target: '.home-btns',
-    position: 'above',
-    screen: 'screen-type',
-    tag: 'Home Screen · 6 of 11',
-    title: 'HOME BUTTONS',
-    body: `<b>📋 Trip Log</b> — every completed checklist, with journal entries, ratings and notes.<br><b>📊 Stats</b> — deeper breakdown of your trip data.<br><b>✏️ Customise</b> — customise any checklist item, or toggle required items.<br><b>❓ Help</b> — this guide, anytime.<br><br><span class="tut-tip">💡 Factory Reset is there too — wipes everything for a fresh start.</span>`
-  },
-  {
-    target: '.theme-toggle',
-    position: 'above',
-    screen: 'screen-type',
-    tag: 'Home Screen · 7 of 11',
-    title: 'DARK & LIGHT MODE',
-    body: `Toggle between <b>dark cockpit mode</b> and <b>light mode</b>. Your preference is saved.<br><br>Dark is recommended at night — much easier on the eyes at a campsite.<br><br><span class="tut-tip">💡 The app remembers your choice between sessions.</span>`
-  },
-  {
-    target: '.item',
-    position: 'auto',
-    screen: 'screen-checklist',
+    target: '.item', position: 'auto', screen: 'screen-checklist',
     prepScreen: () => { currentType='campsite'; currentSubmode='arrive'; loadFromStorage('campsite','arrive'); startTime=Date.now(); renderChecklist(); },
-    tag: 'Checklists · 8 of 11',
-    title: 'CHECKING ITEMS OFF',
-    body: `<b>Tap any item</b> to check it off. Tap again to uncheck.<br><b>Swipe right</b> on mobile to check quickly.<br><b>★ red items are required</b> — must be ticked before completion.<br><span class="tut-tip">💡 Tap 📝 on any item to add a note.</span>`
+    tag: 'Checklists · 4 of 7', title: 'CHECKING ITEMS OFF',
+    body: `<b>Tap</b> to check. <b>Tap again</b> to uncheck. On mobile, <b>swipe right</b> to check and <b>swipe left</b> to uncheck.<br><br>Items in <b>red ★</b> are required — the checklist won't complete until every required item is ticked.<br><br><span class="tut-tip">💡 Tap 📝 on any item to add a personal note.</span>`
   },
   {
-    target: '.status-bar',
-    position: 'auto',
-    screen: 'screen-checklist',
+    target: '.status-bar', position: 'auto', screen: 'screen-checklist',
     prepScreen: null,
-    tag: 'Checklists · 9 of 11',
-    title: 'PROGRESS BAR',
-    body: `Tracks <b>checked, remaining, percentage</b> and elapsed time.<br><br>The blinking dot means the checklist is active.<br><span class="tut-tip">💡 Confetti fires when you hit 100%!</span>`
+    tag: 'Checklists · 5 of 7', title: 'PROGRESS & CONTROLS',
+    body: `The bar tracks <b>checked, remaining, percentage</b> and time.<br><br>Use <b>☀️ Keep Awake</b> in the button row to stop your screen locking mid-checklist — essential when your hands are full.<br><br><span class="tut-tip">💡 Confetti and a completion sound fire when you hit 100%!</span>`
   },
   {
-    target: '.btn-row',
-    position: 'auto',
-    screen: 'screen-checklist',
-    prepScreen: null,
-    tag: 'Checklists · 10 of 11',
-    title: 'CHECKLIST CONTROLS',
-    body: `<b>← Back</b> — return to mode selection.<br><b>☀️ Keep Awake</b> — stops screen locking mid-checklist.<br><b>Reset</b> — clears all ticks and starts fresh.<br><span class="tut-tip">💡 Keep Awake turns off when you leave.</span>`
+    target: '.home-btns', position: 'above', screen: 'screen-type',
+    tag: 'Features · 6 of 7', title: 'WHAT ELSE IS IN HERE',
+    body: `<b>📋 Trip Log & Stats</b> — log every stop with location, rating and notes. View stats and export as CSV.<br><b>✏️ Customise</b> — edit any checklist item or toggle required ★ status.<br><b>🆘 Emergency Info</b> — store hire company number, campsite details, insurance info.<br><b>❓ Help & Settings</b> — this guide, dark mode, factory reset.`
   },
   {
-    target: null,
-    position: 'centre',
-    screen: 'screen-type',
-    tag: 'Done · 11 of 11',
-    title: "YOU'RE ALL SET! 🚐",
-    body: `Tap <b>❓ Help</b> on the home screen anytime to revisit this guide.<br><br><b>Install as an app:</b><br>• iPhone: Safari → Share → "Add to Home Screen"<br>• Android: Chrome → three dots → "Add to Home Screen"<br><br>Once installed it runs fullscreen like a native app and works fully offline.<br><br><span class="tut-tip">💡 Have an amazing South Island trip! 🏔️</span>`
+    target: null, position: 'centre', screen: 'screen-type',
+    tag: 'Done · 7 of 7', title: "YOU'RE ALL SET! 🚐",
+    body: `<b>Install as an app:</b><br>• iPhone: Safari → Share → "Add to Home Screen"<br>• Android: Chrome → three dots → "Add to Home Screen"<br><br>Fill in <b>🆘 Emergency Info</b> before you leave — it takes 2 minutes and you'll be glad you did.<br><br><span class="tut-tip">💡 Have an amazing South Island trip! 🏔️</span>`
   }
 ];
 
@@ -1843,6 +1938,41 @@ function positionTutorial(step, fadeIn) {
 window.addEventListener('scroll', () => { if (tutorialActive) positionTutorial(TUTORIAL_STEPS[tutorialStep], false); }, {passive:true});
 window.addEventListener('resize', () => { if (tutorialActive) positionTutorial(TUTORIAL_STEPS[tutorialStep], false); }, {passive:true});
 
+// ── EMERGENCY INFO ──
+const EMERGENCY_FIELDS = [
+  { id: 'rv_hire_company', label: 'RV Hire Company', placeholder: 'e.g. Wilderness Motorhomes' },
+  { id: 'rv_hire_phone', label: 'RV Hire Emergency Line', placeholder: 'e.g. 0800 123 456' },
+  { id: 'campsite_name', label: 'Current Campsite', placeholder: 'e.g. Queenstown TOP 10' },
+  { id: 'campsite_phone', label: 'Campsite Phone', placeholder: 'e.g. 03 442 9447' },
+  { id: 'insurance_policy', label: 'Insurance Policy No.', placeholder: 'e.g. NZ-12345678' },
+  { id: 'doctor_phone', label: 'Home Doctor / Medical', placeholder: 'e.g. 09 555 1234' },
+  { id: 'emergency_contact', label: 'Emergency Contact (NZ)', placeholder: 'Name & phone number' },
+];
+
+function renderEmergencyFields() {
+  const html = EMERGENCY_FIELDS.map(f => {
+    const val = localStorage.getItem(f.id) || '';
+    return `<div style="margin-bottom:10px">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px">${f.label}</div>
+      <input data-eid="${f.id}" value="${val.replace(/"/g,'&quot;')}" placeholder="${f.placeholder}"
+        style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:8px 10px;outline:none;letter-spacing:.5px"
+        oninput="saveEmergencyData()" onfocus="this.style.borderColor='var(--amber)'" onblur="this.style.borderColor='var(--border)'"/>
+    </div>`;
+  }).join('');
+  const el = document.getElementById('emergency-fields');
+  if (el) el.innerHTML = html;
+  const notes = document.getElementById('emergency-notes');
+  if (notes) notes.value = localStorage.getItem('rv_emergency_notes') || '';
+}
+
+function saveEmergencyData() {
+  document.querySelectorAll('[data-eid]').forEach(inp => {
+    localStorage.setItem(inp.dataset.eid, inp.value);
+  });
+  const notes = document.getElementById('emergency-notes');
+  if (notes) localStorage.setItem('rv_emergency_notes', notes.value);
+}
+
 // ── GAS STATUS ──
 function toggleGas() {
   const current = localStorage.getItem('rv_gas') || 'unknown';
@@ -1872,7 +2002,7 @@ function renderGasBtn() {
     subEl.textContent = 'Gas is currently OFF — tap when you turn it on';
   } else {
     iconEl.textContent = '❓';
-    stateEl.textContent = 'UNKNOWN';
+    stateEl.textContent = 'NOT SET';
     subEl.textContent = 'Tap to set gas status';
   }
 }
@@ -1880,30 +2010,28 @@ function renderGasBtn() {
 // ── DAY COUNTER & STREAK ──
 function renderHomeStats() {
   const log = getLog();
-
-  // Trip day — based on date of first ever log entry (oldest = last in array)
+  const statsEl = document.getElementById('home-stats');
+  const emptyEl = document.getElementById('home-stats-empty');
   const dayEl = document.getElementById('stat-day');
   const streakEl = document.getElementById('stat-streak');
   const totalEl = document.getElementById('stat-total');
 
-  // Total checks
-  if (totalEl) totalEl.textContent = log.length || '0';
-
   if (!log.length) {
-    if (dayEl) dayEl.textContent = '1';
-    if (streakEl) streakEl.textContent = '0';
+    if (statsEl) statsEl.style.display = 'none';
+    if (emptyEl) emptyEl.style.display = 'block';
     return;
   }
 
-  // Day counter — days since first log entry
+  if (statsEl) statsEl.style.display = 'grid';
+  if (emptyEl) emptyEl.style.display = 'none';
+  if (totalEl) totalEl.textContent = log.length;
+
   const firstEntry = log[log.length - 1];
-  const firstDate = new Date(firstEntry.id); // id is Date.now() timestamp
+  const firstDate = new Date(firstEntry.id);
   const today = new Date();
-  const diffMs = today - firstDate;
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+  const diffDays = Math.floor((today - firstDate) / (1000 * 60 * 60 * 24)) + 1;
   if (dayEl) dayEl.textContent = diffDays;
 
-  // Depart streak — consecutive calendar days with a depart or pullout checklist completed
   const departDays = new Set();
   log.forEach(e => {
     if (e.submode === 'depart' || e.submode === 'pullout') {
@@ -1914,14 +2042,12 @@ function renderHomeStats() {
 
   let streak = 0;
   const check = new Date();
-  // Start from today and walk backwards
   for (let i = 0; i < 365; i++) {
     const key = check.getFullYear() + '-' + check.getMonth() + '-' + check.getDate();
     if (departDays.has(key)) {
       streak++;
       check.setDate(check.getDate() - 1);
     } else {
-      // Allow today to not have one yet without breaking streak
       if (i === 0) { check.setDate(check.getDate() - 1); continue; }
       break;
     }
