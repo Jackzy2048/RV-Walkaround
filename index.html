@@ -21,7 +21,7 @@
       --red:#ff4444; --blue:#4fc3f7; --blue-dim:#0d3a52;
       --purple:#ce93d8; --purple-dim:#3d1a4a;
       --teal:#4db6ac; --teal-dim:#0d3330;
-      --text:#c9d8e8; --muted:#4a6070;
+      --text:#c9d8e8; --muted:#6a8898;
       --mono:'Share Tech Mono',monospace;
       --display:'Bebas Neue',sans-serif;
       --body:'DM Sans',sans-serif;
@@ -55,17 +55,19 @@
     /* TUTORIAL SPOTLIGHT */
     .tut-backdrop{display:none;position:fixed;inset:0;z-index:490;pointer-events:none}
     .tut-backdrop.open{display:block}
-    .tut-highlight{position:fixed;border-radius:6px;border:2px solid var(--amber);z-index:492;pointer-events:none;opacity:0;transition:opacity .25s ease, left .3s ease, top .3s ease, width .3s ease, height .3s ease;box-shadow:0 0 0 9999px rgba(0,0,0,.82)}
+    .tut-highlight{position:fixed;border-radius:6px;border:2px solid var(--amber);z-index:492;pointer-events:none;opacity:0;transition:opacity .15s ease, left .2s ease, top .2s ease, width .2s ease, height .2s ease;box-shadow:0 0 0 9999px rgba(0,0,0,.82)}
     .tut-highlight.visible{opacity:1}
     .tut-pulse-ring{position:absolute;inset:-3px;border-radius:7px;border:2px solid var(--amber);animation:tut-pulse 1.4s infinite;pointer-events:none}
     @keyframes tut-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.04)}}
-    .tut-arrow{position:fixed;width:0;height:0;z-index:494;opacity:0;transition:opacity .22s ease}
+    .tut-arrow{position:fixed;width:0;height:0;z-index:494;opacity:0;transition:opacity .12s ease}
     .tut-arrow.visible{opacity:1}
     .tut-arrow.down{border-left:10px solid transparent;border-right:10px solid transparent;border-top:12px solid var(--amber)}
     .tut-arrow.up{border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:12px solid var(--amber)}
-    .tut-card{position:fixed;left:50%;transform:translateX(-50%);z-index:495;width:calc(100% - 2rem);max-width:520px;max-height:55vh;overflow-y:auto;background:var(--panel);border:1px solid var(--border);border-top:3px solid var(--amber);padding:1.25rem 1.25rem 1rem;display:none;opacity:0;transition:opacity .25s ease}
-    .tut-card.open{display:block}
+    .tut-card{position:fixed;left:50%;transform:translateX(-50%);z-index:495;width:calc(100% - 2rem);max-width:520px;max-height:60vh;display:none;opacity:0;transition:opacity .15s ease;background:var(--panel);border:1px solid var(--border);border-top:3px solid var(--amber);overflow:hidden;flex-direction:column}
+    .tut-card.open{display:flex}
     .tut-card.visible{opacity:1}
+    .tut-card-body{padding:1.25rem 1.25rem 0;overflow-y:auto;flex:1}
+    .tut-card-footer{padding:.75rem 1.25rem 1rem;flex-shrink:0;background:var(--panel);border-top:1px solid var(--border)}
     /* suppress screen transition animation while tutorial is running */
     body.tutorial-active .screen.active{animation:none !important}
     .tut-step-tag{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--amber);text-transform:uppercase;margin-bottom:6px}
@@ -102,6 +104,27 @@
     .splash-bar{width:120px;height:2px;background:var(--border);margin-top:8px;overflow:hidden;border-radius:2px}
     .splash-bar-fill{height:100%;background:var(--amber);animation:splash-load 1.2s ease forwards}
     @keyframes splash-load{from{width:0}to{width:100%}}
+
+    /* NEXT STOP NOTE */
+    .next-stop{border:1px solid var(--border);background:var(--panel);padding:10px 14px;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
+    .next-stop-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;white-space:nowrap}
+    .next-stop input{flex:1;background:transparent;border:none;color:var(--text);font-family:var(--mono);font-size:12px;outline:none;letter-spacing:.5px}
+    .next-stop input::placeholder{color:var(--muted)}
+
+    /* LOG EDIT MODAL */
+    .log-edit-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:1rem}
+    .log-edit-overlay.open{display:flex;animation:fadeIn .2s ease}
+    .log-edit-box{background:var(--panel);border:1px solid var(--amber-dim);padding:1.5rem;width:100%;max-width:420px;max-height:85vh;overflow-y:auto}
+
+    /* PHOTO IN JOURNAL */
+    .photo-preview{width:100%;max-height:180px;object-fit:cover;border:1px solid var(--border);margin-top:6px;display:block}
+    .photo-btn{width:100%;padding:10px;border:1px dashed var(--border);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;margin-top:4px;transition:all .15s;text-align:center}
+    .photo-btn:hover{border-color:var(--amber);color:var(--amber)}
+    .log-photo{width:100%;max-height:160px;object-fit:cover;border:1px solid var(--border);margin-top:6px;border-radius:2px}
+
+    /* DEPART TIMESTAMP */
+    .last-depart{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;text-align:center;padding:4px 0 8px;display:none}
+    .last-depart.show{display:block}
 
     /* WAKE LOCK BUTTON */
     .wake-btn{padding:10px 16px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
@@ -443,9 +466,64 @@
       <label>Notes</label>
       <textarea id="journal-notes" placeholder="Anything worth remembering about this stop..."></textarea>
     </div>
+    <div class="journal-field">
+      <label>Photo</label>
+      <input type="file" id="journal-photo-input" accept="image/*" capture="environment" style="display:none" onchange="handleJournalPhoto(this)"/>
+      <button class="photo-btn" onclick="document.getElementById('journal-photo-input').click()">📷 Take or choose photo</button>
+      <img id="journal-photo-preview" class="photo-preview" style="display:none"/>
+    </div>
     <div class="modal-btns">
       <button class="modal-btn save" onclick="saveJournal()">Save</button>
       <button class="modal-btn cancel" onclick="closeJournal()">Skip</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOG EDIT MODAL -->
+<div class="log-edit-overlay" id="logEditModal">
+  <div class="log-edit-box">
+    <div class="journal-title">EDIT ENTRY</div>
+    <div class="journal-sub" id="log-edit-sub"></div>
+    <div class="journal-field">
+      <label>Site / Location name</label>
+      <input id="log-edit-location" maxlength="60"/>
+    </div>
+    <div class="journal-field">
+      <label>Site number</label>
+      <input id="log-edit-sitenum" maxlength="20"/>
+    </div>
+    <div class="journal-field">
+      <label>Power hookup</label>
+      <select id="log-edit-power" style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:8px 10px;outline:none;width:100%">
+        <option value="">— Select —</option>
+        <option value="Powered">Powered</option>
+        <option value="Unpowered">Unpowered</option>
+        <option value="Self-contained">Self-contained</option>
+      </select>
+    </div>
+    <div class="journal-field">
+      <label>Rating</label>
+      <div class="journal-stars" id="log-edit-stars">
+        <span class="journal-star" data-val="1">⭐</span>
+        <span class="journal-star" data-val="2">⭐</span>
+        <span class="journal-star" data-val="3">⭐</span>
+        <span class="journal-star" data-val="4">⭐</span>
+        <span class="journal-star" data-val="5">⭐</span>
+      </div>
+    </div>
+    <div class="journal-field">
+      <label>Notes</label>
+      <textarea id="log-edit-notes" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:10px;resize:none;height:80px;outline:none;letter-spacing:.5px"></textarea>
+    </div>
+    <div class="journal-field">
+      <label>Photo</label>
+      <input type="file" id="log-edit-photo-input" accept="image/*" capture="environment" style="display:none" onchange="handleEditPhoto(this)"/>
+      <button class="photo-btn" onclick="document.getElementById('log-edit-photo-input').click()">📷 Change photo</button>
+      <img id="log-edit-photo-preview" class="photo-preview" style="display:none"/>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn save" onclick="saveLogEdit()">Save</button>
+      <button class="modal-btn cancel" onclick="closeLogEdit()">Cancel</button>
     </div>
   </div>
 </div>
@@ -475,6 +553,11 @@
       <span id="gas-icon">❓</span> Gas: <span id="gas-state">NOT SET</span>
       <span class="gas-status" id="gas-sub">Tap to set gas status</span>
     </button>
+    <div class="next-stop">
+      <div class="next-stop-label">📍 Next stop</div>
+      <input id="next-stop-input" placeholder="e.g. Lake Tekapo..." maxlength="60" oninput="saveNextStop(this.value)"/>
+    </div>
+    <div class="last-depart" id="last-depart"></div>
     <div class="home-stats" id="home-stats" style="display:none">
       <div class="home-stat">
         <div class="home-stat-label">Trip Day</div>
@@ -516,6 +599,13 @@
       <div class="home-btn" onclick="showScreen('screen-editor')">✏️ Customise</div>
       <div class="home-btn" onclick="showScreen('screen-emergency')">🆘 Emergency Info</div>
       <div class="home-btn" onclick="showScreen('screen-help')">❓ Help & Settings</div>
+    </div>
+    <div class="theme-toggle" style="margin-bottom:1rem">
+      <span class="theme-toggle-label">🌙 Dark</span>
+      <div class="theme-toggle-track" id="theme-track" onclick="toggleTheme()">
+        <div class="theme-toggle-thumb"></div>
+      </div>
+      <span class="theme-toggle-label">☀️ Light</span>
     </div>
     <div class="divider">RV-SI · SOUTH ISLAND</div>
     <div class="footer">🚐 ✅ · RV WALKAROUND SYSTEM</div>
@@ -574,13 +664,13 @@
     <div class="all-done" id="allDone">
       <div class="all-done-title" id="done-title"></div>
       <div class="all-done-sub" id="done-sub"></div>
-      <div style="margin-top:1.25rem;display:flex;gap:10px;justify-content:center">
+      <div style="margin-top:1.25rem;display:flex;gap:10px;justify-content:center" id="done-actions">
         <button onclick="openJournal()" style="background:transparent;border:1px solid var(--green-dim);color:var(--green);font-family:var(--mono);font-size:10px;letter-spacing:2px;padding:10px 18px;cursor:pointer;text-transform:uppercase">📓 Log Stop</button>
         <button onclick="shareChecklist()" style="background:transparent;border:1px solid var(--amber-dim);color:var(--amber);font-family:var(--mono);font-size:10px;letter-spacing:2px;padding:10px 18px;cursor:pointer;text-transform:uppercase">📤 Share</button>
       </div>
     </div>
     <div class="btn-row">
-      <button class="back-btn" onclick="showScreen('screen-submode')">← Back</button>
+      <button class="back-btn" id="checklist-back-btn" onclick="showScreen('screen-submode')" style="flex:1;border-color:var(--amber);color:var(--amber)">← Back to Menu</button>
       <button class="wake-btn" id="wake-btn" onclick="toggleWakeLock()">☀️ Keep Awake</button>
       <button class="reset-btn" onclick="resetAll()">Reset</button>
     </div>
@@ -683,13 +773,17 @@
 <div class="tut-highlight" id="tut-highlight"><div class="tut-pulse-ring"></div></div>
 <div class="tut-arrow" id="tut-arrow"></div>
 <div class="tut-card" id="tut-card">
-  <div class="tut-step-tag" id="tut-tag"></div>
-  <div class="tut-title" id="tut-title"></div>
-  <div class="tut-body" id="tut-body"></div>
-  <div class="tut-dots" id="tut-dots"></div>
-  <div class="tut-btns">
-    <button class="tut-skip" id="tut-skip" onclick="closeTutorial()">Skip</button>
-    <button class="tut-next" id="tut-next" onclick="tutorialNext()">Next →</button>
+  <div class="tut-card-body">
+    <div class="tut-step-tag" id="tut-tag"></div>
+    <div class="tut-title" id="tut-title"></div>
+    <div class="tut-body" id="tut-body"></div>
+  </div>
+  <div class="tut-card-footer">
+    <div class="tut-dots" id="tut-dots" style="margin-bottom:.6rem"></div>
+    <div class="tut-btns">
+      <button class="tut-skip" id="tut-skip" onclick="closeTutorial()">Skip</button>
+      <button class="tut-next" id="tut-next" onclick="tutorialNext()">Next →</button>
+    </div>
   </div>
 </div>
 
@@ -839,9 +933,9 @@ const DEFAULT_CHECKLISTS = {
         label:'ARRIVE & SET UP', emoji:'🏕️', desc:'Pull up and get comfortable.', cardClass:'arrive', accentVar:'--green',
         clTag:'Arrival protocol — NZ South Island', clTitle:'ARRIVE & SET UP', clSub:'CAMPSITE ARRIVAL · GET SETTLED IN', clEmoji:'🏕️',
         doneTitle:'CAMP IS SET UP', doneSub:"Feet up — you've earned it", estMins:12,
-        required:['Connect electric hookup'],
+        required:['Level the van','Connect electric hookup'],
         sections: {
-          'Pull up & park':['Find your pitch & park up','Deploy step','Unlock & open all doors'],
+          'Pull up & park':['Find your pitch & park up','Level the van','Deploy step','Unlock & open all doors'],
           'External setup':['Roll out awning if weather permits','Set out chairs & table if weather permits'],
           'Hook up utilities':['Connect electric hookup','Connect any water hose','Turn on gas 30 mins before hot water needed'],
           'Internal setup':['Open sunroofs if warm','Set up beds if needed','Unpack chargers & plug in']
@@ -857,7 +951,7 @@ const DEFAULT_CHECKLISTS = {
           'Internal checks':['Close and lock all cupboards','Block fridge (latch to stop door swinging)','All curtains open','Sunroof curtain open','All sunroofs closed','All beds, tables & chairs stowed','Stow stove'],
           'Power switches':['Lights switch — OFF','Media switch — OFF','Spare switch — OFF (emergency only)','Water heater switch — OFF','Pump switch — OFF','Stove ignition switch — OFF'],
           'Utilities & services':['Turn off campsite breaker','Disconnect power cable','Fold & stow power cable','No external wires or hoses connected','All chargers unplugged','Turn gas off'],
-          'Final walkaround':['Walk around outside — check tyres, roof, nothing trailing','Nothing left at pitch (chairs, mats, pegs)','Mirrors adjusted','Handbrake off when ready to roll']
+          'Final walkaround':['Walk around outside — check tyres, roof, nothing trailing','Nothing left at pitch (chairs, mats, pegs)','Leave no trace — check site for rubbish','Mirrors adjusted','Handbrake off when ready to roll']
         }
       },
       secure: {
@@ -977,14 +1071,40 @@ function addLogEntry() {
   const log = getLog(); log.unshift(entry); saveLog(log);
 }
 
-// ── JOURNAL ──
+// ── NEXT STOP ──
+function saveNextStop(val) { localStorage.setItem('rv_next_stop', val); }
+function loadNextStop() {
+  const val = localStorage.getItem('rv_next_stop') || '';
+  const el = document.getElementById('next-stop-input');
+  if (el) el.value = val;
+}
+
+// ── LAST DEPART TIMESTAMP ──
+function renderLastDepart() {
+  const log = getLog();
+  const el = document.getElementById('last-depart');
+  if (!el) return;
+  const last = log.find(e => e.submode === 'depart' || e.submode === 'pullout');
+  if (last) {
+    el.textContent = '🚐 Last departed ' + last.time;
+    el.classList.add('show');
+  } else {
+    el.classList.remove('show');
+  }
+}
 let journalRating = 0;
+let journalPhotoData = null;
+
 function openJournal() {
   journalRating = 0;
+  journalPhotoData = null;
   document.getElementById('journal-location').value = '';
   document.getElementById('journal-sitenum').value = '';
   document.getElementById('journal-power').value = '';
   document.getElementById('journal-notes').value = '';
+  document.getElementById('journal-photo-input').value = '';
+  const preview = document.getElementById('journal-photo-preview');
+  preview.style.display = 'none'; preview.src = '';
   document.querySelectorAll('.journal-star').forEach(s => s.classList.remove('active'));
   const sm = CHECKLISTS[currentType].submodes[currentSubmode];
   document.getElementById('journal-sub').textContent = sm.clTitle + ' · ' + new Date().toLocaleDateString('en-NZ',{day:'numeric',month:'short'});
@@ -996,7 +1116,30 @@ function openJournal() {
   });
   document.getElementById('journalModal').classList.add('open');
 }
+
+function handleJournalPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const img = new Image();
+  const url = URL.createObjectURL(file);
+  img.onload = () => {
+    const MAX = 800;
+    const scale = img.width > MAX ? MAX / img.width : 1;
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width * scale;
+    canvas.height = img.height * scale;
+    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+    journalPhotoData = canvas.toDataURL('image/jpeg', 0.75);
+    const preview = document.getElementById('journal-photo-preview');
+    preview.src = journalPhotoData;
+    preview.style.display = 'block';
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+}
+
 function closeJournal() { document.getElementById('journalModal').classList.remove('open'); }
+
 function saveJournal() {
   if (!pendingLogId) { closeJournal(); return; }
   const log = getLog();
@@ -1007,6 +1150,7 @@ function saveJournal() {
     e.power = document.getElementById('journal-power').value;
     e.rating = journalRating;
     e.notes = document.getElementById('journal-notes').value.trim();
+    if (journalPhotoData) e.photo = journalPhotoData;
     saveLog(log);
   }
   closeJournal();
@@ -1022,13 +1166,88 @@ function renderLog() {
       ${e.location ? '<div style="font-family:var(--mono);font-size:11px;color:var(--text);margin-bottom:2px">📍 ' + e.location + (e.siteNum ? ' · Site ' + e.siteNum : '') + (e.power ? ' · ' + e.power : '') + '</div>' : ''}
       ${e.rating ? '<div class="log-rating">' + '⭐'.repeat(e.rating) + '</div>' : ''}
       ${e.notes ? '<div class="log-journal">' + e.notes + '</div>' : ''}
+      ${e.photo ? '<img class="log-photo" src="' + e.photo + '" onclick="this.style.maxHeight=this.style.maxHeight===\'none\'?\'160px\':\'none\'"/>' : ''}
       <div class="log-time">${e.time}${e.elapsed ? ' · ' + e.elapsed + ' MIN' : ''} · ${e.total} ITEMS</div>
       <button class="log-delete" onclick="deleteLogEntry(${e.id})">✕</button>
+      <button class="log-delete" style="right:36px;color:var(--amber)" onclick="openLogEdit(${e.id})">✏️</button>
     </div>`).join('');
 }
 
 function deleteLogEntry(id) { saveLog(getLog().filter(e => e.id !== id)); renderLog(); }
 function clearLog() { if (confirm('Clear all trip log entries?')) { saveLog([]); renderLog(); } }
+
+// ── LOG EDIT ──
+let editingLogId = null;
+let editPhotoData = null;
+
+function openLogEdit(id) {
+  const log = getLog();
+  const e = log.find(x => x.id === id);
+  if (!e) return;
+  editingLogId = id;
+  editPhotoData = e.photo || null;
+  document.getElementById('log-edit-sub').textContent = e.typeLabel + ' · ' + e.submodeLabel + ' · ' + e.time;
+  document.getElementById('log-edit-location').value = e.location || '';
+  document.getElementById('log-edit-sitenum').value = e.siteNum || '';
+  document.getElementById('log-edit-power').value = e.power || '';
+  document.getElementById('log-edit-notes').value = e.notes || '';
+  const preview = document.getElementById('log-edit-photo-preview');
+  if (e.photo) { preview.src = e.photo; preview.style.display = 'block'; }
+  else { preview.style.display = 'none'; preview.src = ''; }
+  // Stars
+  const rating = e.rating || 0;
+  document.querySelectorAll('#log-edit-stars .journal-star').forEach((s, i) => {
+    s.classList.toggle('active', i < rating);
+    s.onclick = () => {
+      editPhotoData = editPhotoData; // keep reference
+      const r = parseInt(s.dataset.val);
+      document.querySelectorAll('#log-edit-stars .journal-star').forEach((x, j) => x.classList.toggle('active', j < r));
+    };
+  });
+  document.getElementById('logEditModal').classList.add('open');
+}
+
+function handleEditPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const img = new Image();
+  const url = URL.createObjectURL(file);
+  img.onload = () => {
+    const MAX = 800;
+    const scale = img.width > MAX ? MAX / img.width : 1;
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width * scale;
+    canvas.height = img.height * scale;
+    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+    editPhotoData = canvas.toDataURL('image/jpeg', 0.75);
+    const preview = document.getElementById('log-edit-photo-preview');
+    preview.src = editPhotoData; preview.style.display = 'block';
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+}
+
+function closeLogEdit() {
+  document.getElementById('logEditModal').classList.remove('open');
+  editingLogId = null; editPhotoData = null;
+}
+
+function saveLogEdit() {
+  if (!editingLogId) { closeLogEdit(); return; }
+  const log = getLog();
+  const e = log.find(x => x.id === editingLogId);
+  if (e) {
+    e.location = document.getElementById('log-edit-location').value.trim();
+    e.siteNum = document.getElementById('log-edit-sitenum').value.trim();
+    e.power = document.getElementById('log-edit-power').value;
+    e.notes = document.getElementById('log-edit-notes').value.trim();
+    e.rating = document.querySelectorAll('#log-edit-stars .journal-star.active').length;
+    if (editPhotoData) e.photo = editPhotoData;
+    saveLog(log);
+  }
+  closeLogEdit();
+  renderLog();
+}
 
 function shareLog() {
   const log = getLog();
@@ -1420,6 +1639,9 @@ function updateStats() {
         allDone.classList.add('show');
         document.getElementById('done-title').textContent = sm.doneTitle;
         document.getElementById('done-sub').textContent = sm.doneSub;
+        // Hide Log/Share for quick stops
+        const doneActions = document.getElementById('done-actions');
+        if (doneActions) doneActions.style.display = currentType === 'quickstop' ? 'none' : 'flex';
         playCompleteSound();
         launchConfetti();
         addLogEntry();
@@ -1650,6 +1872,8 @@ function doFactoryReset() {
   itemState = {}; itemNotes = {};
   document.getElementById('plate-input').value = '';
   document.getElementById('plate-display').textContent = 'CHECKLIST SYSTEM · SELECT MODE TO CONTINUE';
+  const ns = document.getElementById('next-stop-input');
+  if (ns) ns.value = '';
   renderGasBtn();
   renderHomeStats();
   closeConfirmReset();
@@ -1765,15 +1989,14 @@ function startTutorial() {
   document.getElementById('tut-backdrop').classList.add('open');
 
   // Disable transition temporarily so highlight starts in place, not top-left
-  highlight.style.transition = 'opacity .25s ease';
+  highlight.style.transition = 'opacity .15s ease';
   highlight.style.left = '50vw'; highlight.style.top = '50vh';
   highlight.style.width = '1px'; highlight.style.height = '1px';
 
   setTimeout(() => {
-    // Re-enable full transition then render
-    highlight.style.transition = 'opacity .25s ease, left .3s ease, top .3s ease, width .3s ease, height .3s ease';
+    highlight.style.transition = 'opacity .15s ease, left .2s ease, top .2s ease, width .2s ease, height .2s ease';
     renderTutorialStep(true);
-  }, 200);
+  }, 150);
 }
 
 function closeTutorial() {
@@ -1812,19 +2035,18 @@ function tutorialNext() {
     tutorialStep = nextStep;
     if (step.prepScreen) step.prepScreen();
     if (step.screen) {
-      // Snap highlight to centre instantly (no transition) during screen swap
-      highlight.style.transition = 'opacity .25s ease';
+      highlight.style.transition = 'opacity .15s ease';
       highlight.style.left = '50vw'; highlight.style.top = '50vh';
       highlight.style.width = '1px'; highlight.style.height = '1px';
       showScreen(step.screen);
       setTimeout(() => {
-        highlight.style.transition = 'opacity .25s ease, left .3s ease, top .3s ease, width .3s ease, height .3s ease';
+        highlight.style.transition = 'opacity .15s ease, left .2s ease, top .2s ease, width .2s ease, height .2s ease';
         renderTutorialStep(true);
-      }, 320);
+      }, 220);
     } else {
       renderTutorialStep(true);
     }
-  }, 200);
+  }, 150);
 }
 
 function renderTutorialStep(fadeIn) {
@@ -1840,6 +2062,7 @@ function renderTutorialStep(fadeIn) {
 
   const isLast = tutorialStep === total - 1;
   document.getElementById('tut-next').textContent = isLast ? '✓ Done' : 'Next →';
+  document.getElementById('tut-skip').textContent = isLast ? '' : 'End Tutorial';
   document.getElementById('tut-skip').style.display = isLast ? 'none' : '';
 
   // Position first (invisible), then fade in
@@ -1905,6 +2128,7 @@ function positionTutorial(step, fadeIn) {
     highlight.style.height = (rect.height + MARGIN * 2) + 'px';
     highlight.classList.add('visible');
 
+    const cardH = Math.min(card.offsetHeight || 260, vh * 0.6);
     const spaceBelow = vh - rect.bottom - MARGIN - PAD * 2;
     const spaceAbove = rect.top - MARGIN - PAD * 2;
     const placeBelow = spaceBelow >= spaceAbove;
@@ -1912,18 +2136,20 @@ function positionTutorial(step, fadeIn) {
     const arrowX = Math.min(Math.max(rect.left + rect.width / 2 - 10, PAD), vw - PAD - 20);
 
     if (placeBelow) {
-      // Clamp so card doesn't go off bottom of screen
-      const top = Math.min(rect.bottom + MARGIN + ARROW_H + PAD, vh - 200);
-      card.style.top    = top + 'px';
+      // Place below, clamp so card bottom doesn't exceed screen
+      const idealTop = rect.bottom + MARGIN + ARROW_H + PAD;
+      const top = Math.min(idealTop, vh - cardH - PAD);
+      card.style.top    = Math.max(top, PAD) + 'px';
       card.style.bottom = 'auto';
       arrow.className   = 'tut-arrow up';
       arrow.style.left   = arrowX + 'px';
       arrow.style.top    = (rect.bottom + MARGIN + PAD) + 'px';
       arrow.style.bottom = 'auto';
     } else {
-      // Clamp so card doesn't go off top of screen
-      const bottom = Math.min(vh - rect.top + MARGIN + ARROW_H + PAD, vh - 200);
-      card.style.bottom = bottom + 'px';
+      // Place above, clamp so card top doesn't go off screen
+      const idealBottom = vh - rect.top + MARGIN + ARROW_H + PAD;
+      const bottom = Math.min(idealBottom, vh - cardH - PAD);
+      card.style.bottom = Math.max(bottom, PAD) + 'px';
       card.style.top    = 'auto';
       arrow.className   = 'tut-arrow down';
       arrow.style.left   = arrowX + 'px';
@@ -2025,6 +2251,7 @@ function renderHomeStats() {
   if (statsEl) statsEl.style.display = 'grid';
   if (emptyEl) emptyEl.style.display = 'none';
   if (totalEl) totalEl.textContent = log.length;
+  renderLastDepart();
 
   const firstEntry = log[log.length - 1];
   const firstDate = new Date(firstEntry.id);
@@ -2065,6 +2292,7 @@ if (savedPlate) {
 }
 renderHomeStats();
 renderGasBtn();
+loadNextStop();
 fetchWeather();
 
 // Dismiss splash after 1.4s (matches loading bar animation)
